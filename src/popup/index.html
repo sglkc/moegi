@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spotify Lyrics Converter</title>
+    <link rel="stylesheet" href="lib/tailwind-compat.min.css">
+    <script src="lib/uno.global.js"></script>
+    <script src="popup.js" defer></script>
+  </head>
+  <body class="p-4 pb-6 min-w-64 text-sm">
+    <form id="form" class="flex flex-col items-center gap-2">
+      <h1 class="font-bold text-2xl">Moegi</h1>
+
+      <label for="active" class="cursor-pointer">
+        <input id="active" type="checkbox" name="active" />
+        <span>Extension is currently <strong id="status">OFF</strong></span>
+      </label>
+
+      <p><strong>Options:</strong></p>
+      <div class="grid grid-cols-2 gap-2 text-right">
+        <label for="to">To:</label>
+        <select id="to" name="to">
+          <option value="romaji" selected>Romaji</option>
+          <option value="hiragana">Hiragana</option>
+          <option value="katakana">Katakana</option>
+        </select>
+
+        <label for="mode">Mode:</label>
+        <select id="mode" name="mode">
+          <option value="normal">Normal</option>
+          <option value="spaced" selected>Spaced</option>
+          <option value="okurigana">Okurigana</option>
+          <option value="furigana">Furigana</option>
+        </select>
+
+        <label for="romajiSystem">Romaji System:</label>
+        <select id="romajiSystem" name="romajiSystem">
+          <option value="hepburn" selected>Hepburn</option>
+          <option value="nippon">Nippon</option>
+          <option value="passport">Passport</option>
+        </select>
+
+        <label class="col-span-2 text-center cursor-pointer" for="hideOriginal">
+          <input id="hideOriginal" type="checkbox" name="hideOriginal" />
+          <span>Hide Original Lyrics</span>
+        </label>
+      </div>
+
+      <button id="reset" class="p-2" type="reset">
+        Reset to defaults
+      </button>
+    </form>
+  </body>
+</html>
