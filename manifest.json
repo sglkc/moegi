@@ -22,9 +22,14 @@
     "default_popup": "src/popup/index.html"
   },
   "permissions": [
-    "activeTab",
-    "storage"
+    "storage",
+    "tabs"
   ],
+  "background": {
+    "scripts": [
+      "src/background/background.js"
+    ]
+  },
   "content_scripts": [
     {
       "matches": [
