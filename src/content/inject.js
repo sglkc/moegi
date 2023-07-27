@@ -9,14 +9,13 @@ function createScriptElement(options, dataset) {
     Object.entries(dataset).forEach(([k, v]) => (element.dataset[k] = v));
 
   element.type = 'text/javascript';
-  element.async = true;
   element.defer = true;
   document.head.appendChild(element);
 
   return element;
 }
 
-// Inject dependencies
+// Inject dependencies then inject init script when done
 const modules = new Set([
   'lib/kuroshiro@1.2.0/dist/kuroshiro.min.js',
   'lib/kuroshiro-analyzer-kuromoji@1.1.0/dist/kuroshiro-analyzer-kuromoji.min.js'
@@ -24,23 +23,27 @@ const modules = new Set([
 
 modules.forEach((module) => createScriptElement({
   src: chrome.extension.getURL(module),
-  onload: (e) => modules.delete(e.target.dataset.name),
-}, { name: module }));
+  async: true,
+  onload: (e) => {
+    modules.delete(e.target.dataset.name);
 
-// Inject init script
-createScriptElement(
-  { src: chrome.extension.getURL('src/web/init.js') },
-  {
-    dictPath: chrome.extension.getURL('lib/kuromoji@0.1.2/dict/'),
-    extensionPath: chrome.extension.getURL('src/web/extension.js'),
-  }
-);
+    if (modules.size) return;
+
+    createScriptElement(
+      { src: chrome.extension.getURL('src/web/init.js') },
+      {
+        dictPath: chrome.extension.getURL('lib/kuromoji@0.1.2/dict/'),
+        extensionPath: chrome.extension.getURL('src/web/extension.js'),
+      }
+    );
+  },
+}, { name: module }));
 
 // Inject saved options
 chrome.storage.local.get('options', ({ options }) => {
   createScriptElement({
     innerText: `(() => window.__moegiOptions = ${JSON.stringify(options)})();`
-  });
+  }, { moegiOptions: true });
 });
 
 // Forward runtime messages to window

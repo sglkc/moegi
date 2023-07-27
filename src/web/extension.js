@@ -1,7 +1,8 @@
 'use strict';
 
 (() => {
-  // Move lyric text from container element to child node
+  // Move lyric text from container element to child node,
+  // and scroll to active line if found
   function initLyrics() {
     lyricsElements.forEach((originalElement) => {
       const lyricsElement = document.createElement('p');
@@ -22,7 +23,9 @@
 
     if (options.active) await convertLyrics();
 
-    // Hide original element logic
+    // Hide original element logic and scroll to active line if exists
+    let activeElement = null;
+
     lyricsElements.forEach((lyricsElement) => {
       const [original, converted] = lyricsElement.children;
 
@@ -31,7 +34,14 @@
       } else {
         original.style.display = '';
       }
+
+      if (lyricsElement.classList.length > 2) activeElement = lyricsElement;
     });
+
+    setTimeout(() => activeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    }), 100);
   }
 
   // Convert lyric lines using Kuroshiro if they have any Japanese characters
@@ -55,8 +65,11 @@
   const Kuroshiro = window.Kuroshiro.default;
   const kuroshiro = window.__kuroshiro;
 
-  // Get saved options from window object [src/inject.js:22]
+  // Get saved options from window object [src/content/inject.js]
+  // Then delete unused script if exist
   const options = window.__moegiOptions;
+
+  document.querySelector('[data-moegi-options]')?.remove();
 
   // Get lyrics elements from Spotify
   // if haven't loaded then use MutationObserver to detect DOM changes
