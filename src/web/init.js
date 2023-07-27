@@ -54,6 +54,14 @@
   // Listen for history changes and check if user is in lyrics page
   events.forEach((event) => window.addEventListener(event, checkCurrentURL));
 
+  // Listen for options change from popup and assign to global object
+  // [src/popup/popup.js]
+  window.addEventListener('message', (message) => {
+    if (message.data && message.data.type === 'extensionPopup') {
+      Object.assign(window.__moegiOptions, message.data.options);
+    }
+  });
+
   // Trigger check once on load
   checkCurrentURL({
     type: 'pushstate',
