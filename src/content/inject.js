@@ -39,8 +39,24 @@ modules.forEach((module) => createScriptElement({
   },
 }, { name: module }));
 
-// Inject saved options
-chrome.storage.local.get('options', ({ options }) => {
+// Inject default and saved options
+chrome.storage.sync.get('options', (result = {}) => {
+  const defaults = {
+    // active: false, // This should be set to user's current setting
+    to: 'romaji',
+    mode: 'spaced',
+    romajiSystem: 'hepburn',
+    hideOriginal: false,
+  };
+
+  const options = Object.assign(
+    {},
+    { defaults },
+    defaults,
+    result.options,
+  );
+
+  chrome.storage.sync.set({ options });
   createScriptElement({
     innerText: `(() => window.__moegiOptions = ${JSON.stringify(options)})();`
   }, { moegiOptions: true });
@@ -49,5 +65,4 @@ chrome.storage.local.get('options', ({ options }) => {
 // Forward runtime messages to window
 chrome.runtime.onMessage.addListener((request) => {
   window.postMessage(request);
-  return true;
 });

@@ -1,15 +1,7 @@
 'use strict';
 
-const DEFAULT_OPTIONS = {
-  active: false,
-  to: 'romaji',
-  mode: 'spaced',
-  romajiSystem: 'hepburn',
-  hideOriginal: false,
-};
-
 const form = document.getElementById('form');
-const options = structuredClone(DEFAULT_OPTIONS);
+const options = {};
 
 // Use this to modify options
 const proxy = new Proxy(options, {
@@ -44,25 +36,32 @@ let sendMessage = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Get saved options and apply to options via proxy
-  chrome.storage.local.get('options', (result) => {
+  chrome.storage.sync.get('options', (result) => {
     if (!result || !result.options) return;
-
     Object.entries(result.options).forEach(([k, v]) => (proxy[k] = v));
   });
 
   // Listen for any input change and apply to Spotify
   form.addEventListener('change', ({ target }) => {
     proxy[target.name] = target.checked ?? target.value;
-    chrome.storage.local.set({ options: proxy });
+    chrome.storage.sync.set({ options: proxy });
     sendMessage({ options: proxy });
   });
 
-  // Reset button
+  // Reset button and options except for active
   document.getElementById('reset').addEventListener('click', ({ target }) => {
-    chrome.storage.local.clear(() => {
-      Object.entries(DEFAULT_OPTIONS).forEach(([k, v]) => (proxy[k] = v));
-      target.innerText = 'Options reset';
-      sendMessage({ options: proxy });
+    const defaults = structuredClone(options.defaults);
+
+    Object.entries(defaults)
+      .concat([['active', options.active]])
+      .forEach(([k, v]) => (proxy[k] = v));
+
+    chrome.storage.sync.clear(() => {
+      chrome.storage.sync.set({ options: proxy }, () => {
+        proxy.defaults = defaults;
+        target.innerText = 'Options reset';
+        sendMessage({ options: proxy });
+      });
     });
   });
 });
