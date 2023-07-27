@@ -31,12 +31,12 @@
         "*://open.spotify.com/*"
       ],
       "js": [
-        "src/inject.js"
+        "src/content/inject.js"
       ]
     }
   ],
   "web_accessible_resources": [
-    "src/extension.js",
+    "src/web/*",
     "lib/*"
   ]
 }

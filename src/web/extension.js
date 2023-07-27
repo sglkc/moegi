@@ -1,42 +1,6 @@
 'use strict';
 
 {
-  // Initialize libraries
-  const Kuroshiro = window.Kuroshiro.default;
-  const kuroshiro = new Kuroshiro();
-
-  kuroshiro.init(new KuromojiAnalyzer({
-    dictPath: document.querySelector('[data-dict-path]').dataset.dictPath
-  }));
-
-  // Get saved options from window object [src/inject.js:22]
-  const options = window.__moegiOptions;
-
-  // Get lyrics elements from Spotify
-  // if haven't loaded then use MutationObserver to detect DOM changes
-  const lyricsSelector = '[data-testid="fullscreen-lyric"]';
-  const lyricsElements = Array.from(document.querySelectorAll(lyricsSelector));
-
-  if (lyricsElements.length) initLyrics();
-  else {
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeName !== 'DIV') return;
-
-          lyricsElements.splice(0, 0, ...node.querySelectorAll(lyricsSelector));
-
-          if (!lyricsElements.length) return;
-
-          initLyrics();
-          observer.disconnect();
-        });
-      }
-    });
-
-    observer.observe(document.body, { subtree: true, childList: true });
-  }
-
   // Move lyric text from container element to child node
   function initLyrics() {
     lyricsElements.forEach((originalElement) => {
@@ -85,6 +49,43 @@
       convertedElement.classList.add('converted-lyrics');
       lyricsElement.insertAdjacentElement('beforeend', convertedElement);
     }
+  }
+
+  // Initialize libraries
+  const Kuroshiro = window.Kuroshiro.default;
+  const kuroshiro = new Kuroshiro();
+
+  kuroshiro.init(new KuromojiAnalyzer({
+    dictPath: document.querySelector('[data-dict-path]').dataset.dictPath
+  }));
+
+  // Get saved options from window object [src/inject.js:22]
+  const options = window.__moegiOptions;
+
+  // Get lyrics elements from Spotify
+  // if haven't loaded then use MutationObserver to detect DOM changes
+  const lyricsSelector = '[data-testid="fullscreen-lyric"]';
+  const lyricsElements = Array.from(document.querySelectorAll(lyricsSelector));
+
+  if (!lyricsElements.length) {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeName !== 'DIV') return;
+
+          lyricsElements.splice(0, 0, ...node.querySelectorAll(lyricsSelector));
+
+          if (!lyricsElements.length) return;
+
+          initLyrics();
+          observer.disconnect();
+        });
+      }
+    });
+
+    observer.observe(document.body, { subtree: true, childList: true });
+  } else {
+    initLyrics();
   }
 
   // Listen for messages from extension popup
