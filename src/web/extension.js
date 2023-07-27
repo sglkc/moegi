@@ -1,6 +1,6 @@
 'use strict';
 
-{
+(() => {
   // Move lyric text from container element to child node
   function initLyrics() {
     lyricsElements.forEach((originalElement) => {
@@ -53,11 +53,7 @@
 
   // Initialize libraries
   const Kuroshiro = window.Kuroshiro.default;
-  const kuroshiro = new Kuroshiro();
-
-  kuroshiro.init(new KuromojiAnalyzer({
-    dictPath: document.querySelector('[data-dict-path]').dataset.dictPath
-  }));
+  const kuroshiro = window.__kuroshiro;
 
   // Get saved options from window object [src/inject.js:22]
   const options = window.__moegiOptions;
@@ -97,4 +93,4 @@
     Object.assign(options, data.options);
     applyOptions();
   });
-}
+})();
