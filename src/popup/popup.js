@@ -7,26 +7,35 @@ let sendMessage = (data) => console.error('sendMessage not available yet', data)
 // Intercept access to original options Object and send updated options
 const proxy = new Proxy(options, {
   set(target, option, value) {
+    const inputs = form.elements;
+
     target[option] = value;
 
+    // Handle different type of options
     switch (option) {
       case 'active':
         document.querySelector('#status').innerText = (value ? 'ON' : 'OFF');
         break;
       case 'to':
-        form.romajiSystem.disabled = (value !== 'romaji');
+        inputs.romajiSystem.disabled = (value !== 'romaji');
+        break;
+      case 'mode':
+        inputs.delimiter_start.disabled = (value !== 'okurigana');
+        inputs.delimiter_end.disabled = (value !== 'okurigana');
         break;
     }
+        console.log(option, value)
 
-    switch (form[option]?.type) {
+    // Handle different type of inputs
+    switch (inputs[option]?.type) {
       case undefined:
         break;
       case 'radio':
       case 'checkbox':
-        form[option].checked = Boolean(value);
+        inputs[option].checked = Boolean(value);
         break;
       default:
-        form[option].value = value;
+        inputs[option].value = value ?? '';
     }
 
     return true;
@@ -39,12 +48,25 @@ chrome.storage.sync.get('options', (result) => {
   Object.entries(result.options).forEach(([k, v]) => (proxy[k] = v));
 });
 
-// Listen for any input change and apply to Spotify
-form.addEventListener('change', ({ target }) => {
-  proxy[target.name] = target.checked ?? target.value;
-  chrome.storage.sync.set({ options: proxy });
-  sendMessage({ options: proxy });
-});
+// Listen for any input change with debounce function and apply to Spotify
+let formEventHandlerTimeout = null;
+const formEventHandler = ({ target }) => {
+  proxy[target.name] = (target.type === 'checkbox')
+    ? target.checked
+    : target.value;
+
+  clearTimeout(formEventHandlerTimeout);
+
+  formEventHandlerTimeout = setTimeout(() => {
+    formEventHandlerTimeout = null;
+
+    chrome.storage.sync.set({ options: proxy });
+    sendMessage({ options: proxy });
+  }, 100);
+}
+
+form.addEventListener('change', formEventHandler);
+form.addEventListener('input', formEventHandler);
 
 // Reset button and options except for active
 document.getElementById('reset').addEventListener('click', ({ target }) => {

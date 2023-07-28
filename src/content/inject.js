@@ -46,6 +46,8 @@ chrome.storage.sync.get('options', (result = {}) => {
     to: 'romaji',
     mode: 'spaced',
     romajiSystem: 'hepburn',
+    delimiter_start: '(',
+    delimiter_end: ')',
     hideOriginal: false,
   };
 
