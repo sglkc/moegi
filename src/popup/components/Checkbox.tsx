@@ -1,5 +1,5 @@
 import { ComponentChildren } from 'preact'
-import { OptionsKey, options } from '../handler'
+import { OptionsKey, options } from '@/popup/handler'
 
 export type CheckboxProps = {
   children: ComponentChildren

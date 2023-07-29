@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'preact/compat'
-import { OptionsKey, options } from '../handler';
+import { OptionsKey, options } from '@/popup/handler';
 
 export type InputProps = Omit<HTMLAttributes<HTMLInputElement>, 'name'> & {
   name: OptionsKey

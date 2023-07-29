@@ -1,4 +1,4 @@
-import { options as optionss, OptionsKey, Options } from "../handler"
+import { options as optionss, OptionsKey, Options } from '@/popup/handler'
 
 export type SelectProps = {
   label: string

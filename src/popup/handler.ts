@@ -1,5 +1,5 @@
-import { effect, signal } from "@preact/signals"
-import { TargetedEvent } from "preact/compat"
+import { effect, signal } from '@preact/signals'
+import { TargetedEvent } from 'preact/compat'
 
 // Define options and its type and create a signal to manage state
 export type Options = {

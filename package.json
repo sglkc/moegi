@@ -19,6 +19,7 @@
     "@crxjs/vite-plugin": "2.0.0-beta.18",
     "@preact/preset-vite": "^2.5.0",
     "@types/chrome": "^0.0.242",
+    "@types/node": "^20.4.5",
     "typescript": "^5.1.6",
     "unocss": "^0.54.0",
     "vite": "^4.4.5"

@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
 import UnoCSS from 'unocss/vite'
@@ -11,6 +12,14 @@ export default defineConfig({
     UnoCSS(),
     crx({ manifest: manifestConfig }),
   ],
+  resolve: {
+    alias: [
+      {
+        find: '@',
+        replacement: resolve(__dirname, 'src')
+      }
+    ]
+  },
   server: {
     port: 5172,
     strictPort: true,
