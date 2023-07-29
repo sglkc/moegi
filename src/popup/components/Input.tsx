@@ -1,8 +1,8 @@
 import { HTMLAttributes } from 'preact/compat'
-import { OptionsKey, options } from '@/popup/handler';
+import { MoegiOptionsKey, moegiOptions } from '@/services/options'
 
 export type InputProps = Omit<HTMLAttributes<HTMLInputElement>, 'name'> & {
-  name: OptionsKey
+  name: MoegiOptionsKey
 }
 
 export default function Input(props: InputProps) {
@@ -15,7 +15,7 @@ export default function Input(props: InputProps) {
         id={name}
         class="bg-gray-50 disabled:bg-gray-200 p-1 b-1 px-2"
         type="text"
-        defaultValue={options.value[name] as string}
+        defaultValue={moegiOptions.value[name] as string}
         {...props}
       />
     </>

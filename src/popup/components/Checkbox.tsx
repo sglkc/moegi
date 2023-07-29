@@ -1,9 +1,9 @@
 import { ComponentChildren } from 'preact'
-import { OptionsKey, options } from '@/popup/handler'
+import { MoegiOptionsKey, moegiOptions } from '@/services/options'
 
 export type CheckboxProps = {
   children: ComponentChildren
-  name: OptionsKey
+  name: MoegiOptionsKey
 }
 
 export default function Checkbox({ children, name }: CheckboxProps) {
@@ -16,7 +16,7 @@ export default function Checkbox({ children, name }: CheckboxProps) {
         id={name}
         type="checkbox"
         name={name}
-        defaultChecked={options.value[name] as boolean}
+        defaultChecked={moegiOptions.value[name] as boolean}
       />
       <span>{ children }</span>
     </label>

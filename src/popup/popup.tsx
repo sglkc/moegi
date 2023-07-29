@@ -1,8 +1,9 @@
 import { JSX, TargetedEvent } from 'preact/compat'
+import { moegiOptions } from '@/services/options'
 import Checkbox from './components/Checkbox'
 import Input from './components/Input'
 import Select, { SelectProps } from './components/Select'
-import { formInputHandler, options, resetStorageHandler } from './handler'
+import { formInputHandler, resetStorageHandler } from './handler'
 
 type FormEventHandler = JSX.EventHandler<TargetedEvent<HTMLFormElement, Event>>
 
@@ -50,7 +51,7 @@ export default function Popup() {
 
         <Checkbox name="active">
           Extension is currently
-          <strong id="status"> { options.value.active ? 'ON' : 'OFF' }</strong>
+          <strong id="status"> { moegiOptions.value.active ? 'ON' : 'OFF' }</strong>
         </Checkbox>
 
         <p><strong>Options:</strong></p>
