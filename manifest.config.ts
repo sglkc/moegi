@@ -1,4 +1,4 @@
-import { defineManifest } from '@crxjs/vite-plugin'
+import { defineDynamicResource, defineManifest } from '@crxjs/vite-plugin'
 import packageJson from './package.json'
 
 const { name, description, homepage, version } = packageJson
@@ -38,5 +38,16 @@ export default defineManifest((env) => {
       'storage',
       'tabs'
     ],
+    content_scripts: [
+      {
+        js: ['src/content/script.ts'],
+        matches: ['https://crxjs.dev/*']
+      }
+    ],
+    web_accessible_resources: [
+      defineDynamicResource({
+        matches: ['https://crxjs.dev/*']
+      }),
+    ]
   }
 });

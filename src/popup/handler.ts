@@ -32,7 +32,7 @@ let effectTimeout: number | undefined
 
 effect(() => {
   // options.value must be included to trigger effect
-  console.table(options.value)
+  (options.value)
   clearTimeout(effectTimeout)
 
   effectTimeout = setTimeout(() => {
