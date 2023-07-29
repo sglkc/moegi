@@ -6,5 +6,5 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["manifest.config.ts", "vite.config.ts"]
+  "include": ["manifest.config.ts", "package.json", "vite.config.ts"]
 }
