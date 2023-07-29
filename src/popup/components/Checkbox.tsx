@@ -1,8 +1,9 @@
 import { ComponentChildren } from 'preact'
+import { OptionsKey, options } from '../handler'
 
 export type CheckboxProps = {
   children: ComponentChildren
-  name: string
+  name: OptionsKey
 }
 
 export default function Checkbox({ children, name }: CheckboxProps) {
@@ -11,7 +12,12 @@ export default function Checkbox({ children, name }: CheckboxProps) {
       class="my-1 flex justify-center gap-1 text-center cursor-pointer col-span-2"
       for={name}
     >
-      <input id={name} type="checkbox" name={name} />
+      <input
+        id={name}
+        type="checkbox"
+        name={name}
+        defaultChecked={options.value[name] as boolean}
+      />
       <span>{ children }</span>
     </label>
   )

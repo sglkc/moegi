@@ -1,9 +1,11 @@
+import { options as optionss, OptionsKey, Options } from "../handler"
+
 export type SelectProps = {
   label: string
-  name: string
+  name: OptionsKey
   options: Array<{
     text: string
-    value: string
+    value: Options[SelectProps["name"]]
   }>
 }
 
@@ -15,9 +17,10 @@ export default function Select({ label, name, options }: SelectProps) {
         id={name}
         class="bg-gray-50 disabled:bg-gray-200 p-1 b-1"
         name={name}
+        defaultValue={optionss.value[name] as string}
       >
         { options.map(({ text, value }) => (
-          <option value={value}>{ text }</option>)
+          <option value={value as string}>{ text }</option>)
         )
       }
       </select>
