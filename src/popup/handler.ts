@@ -2,19 +2,22 @@ import { TargetedEvent } from 'preact/compat'
 import {
   MoegiOptionsKey,
   moegiOptions,
-  moegiOptionsDefault
+  moegiDefaultOptions
 } from '@/services/options'
+import { effect } from '@preact/signals'
+import syncStorage from '@/utils/sync-storage'
 
-// Get saved user options
-chrome.storage.sync.get('options').then((result) => {
-  moegiOptions.value = Object.assign(
-    {},
-    moegiOptions.value,
-    structuredClone(result.options)
-  )
-})
+// Get current active tab to connect to content script, and send message for
+// every time options changed
+chrome.tabs
+  .query({ active: true, currentWindow: true })
+  .then(([tab]) => {
+    const port = chrome.tabs.connect(tab.id as number, { name: 'popup' })
 
-// Event handler for any input change in popup
+    effect(() => port.postMessage({ options: moegiOptions.value }))
+  })
+
+// Event handler for input changes in popup
 type FormEvent = TargetedEvent<HTMLFormElement, Event> & Readonly<{
   target: Omit<HTMLInputElement & HTMLSelectElement, 'name'> & Readonly<{
     name: MoegiOptionsKey
@@ -30,11 +33,9 @@ export function formInputHandler({ target }: FormEvent) {
     moegiOptions.value,
     { [name]: castValue }
   )
-
-  console.log
 }
 
 export async function resetStorageHandler() {
-  await chrome.storage.sync.clear()
-  await chrome.storage.sync.set({ options: moegiOptionsDefault })
+  await syncStorage.remove('options')
+  await syncStorage.set({ options: moegiDefaultOptions })
 }

@@ -1,4 +1,5 @@
-import { effect, signal } from '@preact/signals'
+import syncStorage from '@/utils/sync-storage'
+import { signal } from '@preact/signals'
 
 // Define moegiOptions and its type and create a signal to manage state
 export type MoegiOptions = {
@@ -13,7 +14,7 @@ export type MoegiOptions = {
 
 export type MoegiOptionsKey = keyof MoegiOptions
 
-export const moegiOptionsDefault: MoegiOptions = {
+export const moegiDefaultOptions: MoegiOptions = {
   active: false,
   to: 'romaji',
   mode: 'spaced',
@@ -23,20 +24,7 @@ export const moegiOptionsDefault: MoegiOptions = {
   hideOriginal: false,
 }
 
-export const moegiOptions = signal<MoegiOptions>(moegiOptionsDefault)
+const savedOptions: MoegiOptions = await syncStorage.get('options')
+const currentOptions = Object.assign({}, moegiDefaultOptions, savedOptions)
 
-// On options change in popup, save to Chrome storage, use debounce function to
-// prevent max write operation errors
-let effectTimeout: ReturnType<typeof setTimeout> | undefined
-
-effect(() => {
-  // moegiOptions.value must be included to trigger effect
-  (moegiOptions.value)
-  clearTimeout(effectTimeout)
-
-  effectTimeout = setTimeout(() => {
-    effectTimeout = undefined
-    chrome.storage.sync.set({ options: moegiOptions.value })
-  }, 250)
-})
-
+export const moegiOptions = signal<MoegiOptions>(currentOptions)

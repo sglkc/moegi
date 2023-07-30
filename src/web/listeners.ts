@@ -1,25 +1,17 @@
-// Modification to window.history will send custom events to window
-const generateProxyOptions: any = (name: string) => ({
-  apply(
-    target: Function & History,
-    thisArg: ThisParameterType<History>,
-    argArray: string[]
-  ) {
-    window.dispatchEvent(new CustomEvent(name, { detail: argArray }));
-
-    return target.apply(thisArg, argArray);
-  }
-});
-
-const events = ['pushstate', 'replacestate', 'popstate'] as const;
+// Replace window.history state functions with a proxy that will send an event
+// for every time state has changed
+const events = ['changestate', 'popstate'] as const;
 const methods = ['pushState', 'replaceState'] as const;
 
-methods.forEach((method, i) => {
-  window.history[method] = new Proxy(
-    window.history[method],
-    generateProxyOptions(events[i])
+methods.forEach((method) => {
+  window.history[method] = new Proxy(window.history[method], {
+    apply(target, thisArg, detail: [data: any, _: string, url?: string | URL]) {
+      window.dispatchEvent(new CustomEvent('changestate', { detail }));
+      return target.apply(thisArg, detail);
+    }
+  }
   );
 });
 
 // Listen for history changes and check if user is in lyrics page
-events.forEach((event) => window.addEventListener(event, console.log));
+events.forEach((event) => window.addEventListener(event, console.log))
