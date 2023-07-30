@@ -1,18 +1,20 @@
-// @ts-ignore
 // Adding the query script and module is not a valid path, it's from crxjs
 // https://dev.to/jacksteamdev/advanced-config-for-rpce-3966
-import listeners from '@/web/listeners?script&module'
+// @ts-ignore
+import initUrl from '@/web/init?script&module'
 import { effect } from '@preact/signals'
-import { MoegiOptions } from '@/services/options'
+import { moegiOptions, MoegiOptions } from '@/services/options'
 import syncStorage from '@/utils/sync-storage'
 
-// Inject web script to current page
-const url = chrome.runtime.getURL(listeners)
-const script = document.createElement('script')
+// Inject initial script to current page with saved options
+const initElement = document.createElement('script');
 
-script.src = url
-script.type = 'module'
-document.head.append(script)
+initElement.src = chrome.runtime.getURL(initUrl)
+initElement.type = 'module'
+initElement.defer = true
+initElement.async = true
+initElement.dataset.moegiOptions = JSON.stringify(moegiOptions)
+document.head.appendChild(initElement);
 
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name !== 'popup') return;
