@@ -7,6 +7,9 @@ import manifestConfig from './manifest.config'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    target: 'esnext'
+  },
   plugins: [
     preact(),
     UnoCSS(),
