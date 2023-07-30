@@ -37,3 +37,14 @@ chrome.runtime.onConnect.addListener((port) => {
   // If popup closed, bypass debounce function and save current options
   port.onDisconnect.addListener(() => syncStorage.set({ options: lastOptions }))
 })
+
+// On storage change, compare options and send it to web
+syncStorage.onChanged.addListener((changes) => {
+  if (!changes.options) return;
+
+  const { newValue, oldValue } = changes.options;
+
+  if (JSON.stringify(newValue) === JSON.stringify(oldValue)) return;
+
+  window.postMessage({ type: 'moegiOptions', options: newValue })
+})

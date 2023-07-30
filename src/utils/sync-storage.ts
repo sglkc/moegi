@@ -14,6 +14,12 @@ async function clear() {
   return chrome.storage.sync.clear()
 }
 
-const syncStorage = { get, set, remove, clear }
+const syncStorage = {
+  onChanged: chrome.storage.sync.onChanged,
+  get,
+  set,
+  remove,
+  clear,
+}
 
 export default syncStorage

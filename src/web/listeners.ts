@@ -15,3 +15,14 @@ methods.forEach((method) => {
 
 // Listen for history changes and check if user is in lyrics page
 events.forEach((event) => window.addEventListener(event, console.log))
+
+// Listen for incoming messages from content script
+window.addEventListener('message', (message) => {
+  if (
+    typeof message.data !== 'object'
+    || !message.data.type
+    || message.data.type !== 'moegiOptions'
+  ) return
+
+  console.log('got it:', message.data.options)
+})
