@@ -1,3 +1,7 @@
+# Dictionaries directory
+# Should be copied from kuromoji directly on build
+public/dict
+
 # Logs
 logs
 *.log

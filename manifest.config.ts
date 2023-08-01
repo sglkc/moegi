@@ -41,12 +41,16 @@ export default defineManifest((env) => {
     content_scripts: [
       {
         js: ['src/content/script.ts'],
-        matches: ['https://crxjs.dev/*']
+        matches: ['*://open.spotify.com/*']
       }
     ],
     web_accessible_resources: [
+      {
+        matches: ['*://open.spotify.com/*'],
+        resources: ['dict/*']
+      },
       defineDynamicResource({
-        matches: ['https://crxjs.dev/*']
+        matches: ['*://open.spotify.com/*']
       }),
     ]
   }

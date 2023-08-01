@@ -13,6 +13,8 @@
   "dependencies": {
     "@preact/signals": "^1.1.5",
     "@unocss/reset": "^0.54.0",
+    "kuroshiro": "github:sglkc/kuroshiro-ts",
+    "kuroshiro-analyzer-kuromoji": "github:sglkc/kuroshiro-analyzer-kuromoji-ts",
     "preact": "^10.16.0"
   },
   "devDependencies": {
@@ -22,6 +24,7 @@
     "@types/node": "^20.4.5",
     "typescript": "^5.1.6",
     "unocss": "^0.54.0",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-cp": "^1.0.0"
   }
 }

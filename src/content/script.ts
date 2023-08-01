@@ -13,6 +13,7 @@ initElement.src = chrome.runtime.getURL(initUrl)
 initElement.type = 'module'
 initElement.defer = true
 initElement.async = true
+initElement.dataset.dictPath = chrome.runtime.getURL('dict/')
 initElement.dataset.moegiOptions = JSON.stringify(moegiOptions)
 document.head.appendChild(initElement);
 
@@ -20,12 +21,14 @@ chrome.runtime.onConnect.addListener((port) => {
   if (port.name !== 'popup') return;
 
   let effectTimeout: ReturnType<typeof setTimeout> | undefined
-  let lastOptions: MoegiOptions
+  let lastOptions: MoegiOptions = moegiOptions.value
 
   // On message, save options using debounce function to prevent write errors
   port.onMessage.addListener(({ options }: { options: MoegiOptions }) => {
     effect(() => {
-      // options must be referenced in first level to trigger effect
+      if (JSON.stringify(options) === JSON.stringify(lastOptions)) return;
+
+      // Store changed options in case user exited the popup before debouncing
       lastOptions = options
       clearTimeout(effectTimeout)
 
