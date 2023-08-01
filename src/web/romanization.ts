@@ -61,12 +61,13 @@ const lyricElements: Set<HTMLDivElement> = new Set(
 // Move lyrics from text node to paragraph element in the container
 function initLyrics() {
   lyricElements.forEach((originalElement) => {
-    if (!originalElement.firstChild) {
-      lyricElements.delete(originalElement);
-      originalElement.remove();
-      return;
-    }
 
+    // There are empty lyric elements from Spotify, if any are removed Spotify
+    // will happen to error on the next song load
+    if (!originalElement.firstChild)
+      return lyricElements.delete(originalElement);
+
+    // If element lyric is already moved to paragraph element
     if (originalElement.firstChild.nodeType !== Node.TEXT_NODE) return;
 
     const lyricsElement = document.createElement('p');
