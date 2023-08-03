@@ -22,12 +22,12 @@ export default defineConfig(() => {
       shouldCopyDict && copy({
         targets: [
           {
-            src: 'node_modules/**/kuromoji/dict/*.dat',
+            src: 'node_modules/**/kuromoji/dict/*.dat.gz',
             dest: 'dist/dict',
             rename: ''
           },
           {
-            src: 'node_modules/**/kuromoji/dict/*.dat',
+            src: 'node_modules/**/kuromoji/dict/*.dat.gz',
             dest: 'public/dict',
             rename: ''
           }

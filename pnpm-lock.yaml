@@ -13,10 +13,10 @@ dependencies:
     version: 0.54.0
   kuroshiro:
     specifier: github:sglkc/kuroshiro-ts
-    version: github.com/sglkc/kuroshiro-ts/75851b25c898fcd2fc0260589c43897756c0e1ff
+    version: github.com/sglkc/kuroshiro-ts/54d71aa8daa497c9671820689fd9a58ccce1c6db
   kuroshiro-analyzer-kuromoji:
     specifier: github:sglkc/kuroshiro-analyzer-kuromoji-ts
-    version: github.com/sglkc/kuroshiro-analyzer-kuromoji-ts/e3d6e818d0ec968a830ac19a53e44e9c63548731
+    version: github.com/sglkc/kuroshiro-analyzer-kuromoji-ts/dbc238eb668d83c8c4615736cd752944a665dc2e
   preact:
     specifier: ^10.16.0
     version: 10.16.0
@@ -1273,6 +1273,10 @@ packages:
       reusify: 1.0.4
     dev: true
 
+  /fflate@0.8.0:
+    resolution: {integrity: sha512-FAdS4qMuFjsJj6XHbBaZeXOgaypXp8iw/Tpyuq/w3XA41jjLHT8NPA+n7czH/DDhdncq0nAyDZmPeWXh2qmdIg==}
+    dev: false
+
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
     engines: {node: '>=8'}
@@ -1949,25 +1953,26 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/hata6502/kuromoji.js/f923005d219a5529fbd92ea8c225700fb40e9366:
-    resolution: {tarball: https://codeload.github.com/hata6502/kuromoji.js/tar.gz/f923005d219a5529fbd92ea8c225700fb40e9366}
+  github.com/sglkc/kuromoji.js/62dc1352cd2c63731f0f8626994a2d84cd94b7db:
+    resolution: {tarball: https://codeload.github.com/sglkc/kuromoji.js/tar.gz/62dc1352cd2c63731f0f8626994a2d84cd94b7db}
     name: kuromoji
-    version: 0.1.8
+    version: 0.1.2
     dependencies:
       async: 2.6.4
       doublearray: 0.0.2
+      fflate: 0.8.0
     dev: false
 
-  github.com/sglkc/kuroshiro-analyzer-kuromoji-ts/e3d6e818d0ec968a830ac19a53e44e9c63548731:
-    resolution: {tarball: https://codeload.github.com/sglkc/kuroshiro-analyzer-kuromoji-ts/tar.gz/e3d6e818d0ec968a830ac19a53e44e9c63548731}
+  github.com/sglkc/kuroshiro-analyzer-kuromoji-ts/dbc238eb668d83c8c4615736cd752944a665dc2e:
+    resolution: {tarball: https://codeload.github.com/sglkc/kuroshiro-analyzer-kuromoji-ts/tar.gz/dbc238eb668d83c8c4615736cd752944a665dc2e}
     name: kuroshiro-analyzer-kuromoji
     version: 1.1.0
     dependencies:
-      kuromoji: github.com/hata6502/kuromoji.js/f923005d219a5529fbd92ea8c225700fb40e9366
+      kuromoji: github.com/sglkc/kuromoji.js/62dc1352cd2c63731f0f8626994a2d84cd94b7db
     dev: false
 
-  github.com/sglkc/kuroshiro-ts/75851b25c898fcd2fc0260589c43897756c0e1ff:
-    resolution: {tarball: https://codeload.github.com/sglkc/kuroshiro-ts/tar.gz/75851b25c898fcd2fc0260589c43897756c0e1ff}
+  github.com/sglkc/kuroshiro-ts/54d71aa8daa497c9671820689fd9a58ccce1c6db:
+    resolution: {tarball: https://codeload.github.com/sglkc/kuroshiro-ts/tar.gz/54d71aa8daa497c9671820689fd9a58ccce1c6db}
     name: kuroshiro
     version: 1.2.0
     engines: {node: '>=6.5.0'}
