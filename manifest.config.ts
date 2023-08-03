@@ -35,9 +35,13 @@ export default defineManifest((env) => {
       default_popup: 'index.html'
     },
     permissions: [
-      'storage',
-      'tabs'
+      'declarativeContent',
+      'storage'
     ],
+    background: {
+      service_worker: 'src/background/worker.ts',
+      type: 'module'
+    },
     content_scripts: [
       {
         js: ['src/content/script.ts'],

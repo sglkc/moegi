@@ -39,12 +39,9 @@ export default defineConfig(() => {
       })
     ],
     resolve: {
-      alias: [
-        {
-          find: '@',
-          replacement: resolve(__dirname, 'src')
-          }
-      ]
+      alias: {
+        '@': resolve(__dirname, 'src')
+      },
     },
     server: {
       port: 5172,
