@@ -1,3 +1,5 @@
+import './translate'
+
 // Enable extension action only on Spotify tabs
 chrome.runtime.onInstalled.addListener(() => {
   chrome.action.disable();

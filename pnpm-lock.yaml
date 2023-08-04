@@ -11,6 +11,9 @@ dependencies:
   '@unocss/reset':
     specifier: ^0.54.0
     version: 0.54.0
+  google-translate-api-x:
+    specifier: ^10.6.7
+    version: 10.6.7
   kuroshiro:
     specifier: github:sglkc/kuroshiro-ts
     version: github.com/sglkc/kuroshiro-ts/54d71aa8daa497c9671820689fd9a58ccce1c6db
@@ -1346,6 +1349,11 @@ packages:
       merge2: 1.4.1
       slash: 3.0.0
     dev: true
+
+  /google-translate-api-x@10.6.7:
+    resolution: {integrity: sha512-xw20Kjv5u84Q3FwKTk4CU1PZrYoOsRcKq0z7J3a98aIcscOCZnW3T43Rb/SOl/JPUj/QYyjJiRW9G+MQhxUnAw==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}

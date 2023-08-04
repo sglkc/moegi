@@ -1,6 +1,7 @@
+import { HTMLAttributes } from 'preact/compat'
 import { MoegiOptions, MoegiOptionsKey, moegiOptions } from '@/services/options'
 
-export type SelectProps = {
+export type SelectProps = Omit<HTMLAttributes<HTMLSelectElement>, 'name'> & {
   label: string
   name: MoegiOptionsKey
   options: Array<{
@@ -9,14 +10,16 @@ export type SelectProps = {
   }>
 }
 
-export default function Select({ label, name, options }: SelectProps) {
+export default function Select(props: SelectProps) {
+  const { label, name, options } = props
+
   return (
     <>
       <label class="py-1 text-right" for={name}>{ label }:</label>
       <select
         id={name}
-        class="bg-gray-50 disabled:bg-gray-200 p-1 b-1"
-        name={name}
+        class="bg-gray-50 disabled:bg-gray-100 p-1 b-1 disabled:c-gray"
+        {...props}
       >
         { options.map(({ text, value }) => (
           <option

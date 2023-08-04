@@ -48,6 +48,9 @@ export default defineManifest((env) => {
         matches: ['*://open.spotify.com/*']
       }
     ],
+    host_permissions: [
+      'https://translate.google.com/'
+    ],
     web_accessible_resources: [
       {
         matches: ['*://open.spotify.com/*'],

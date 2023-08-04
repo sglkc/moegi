@@ -13,6 +13,7 @@
   "dependencies": {
     "@preact/signals": "^1.1.5",
     "@unocss/reset": "^0.54.0",
+    "google-translate-api-x": "^10.6.7",
     "kuroshiro": "github:sglkc/kuroshiro-ts",
     "kuroshiro-analyzer-kuromoji": "github:sglkc/kuroshiro-analyzer-kuromoji-ts",
     "preact": "^10.16.0"

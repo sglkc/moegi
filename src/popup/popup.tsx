@@ -29,13 +29,14 @@ export default function Popup() {
       ]
     },
     {
-      label: 'Romaji System:',
+      label: 'Romaji System',
       name: 'romajiSystem',
       options: [
         { text: 'Hepburn', value: 'hepburn' },
         { text: 'Nippon', value: 'nippon' },
         { text: 'Passport', value: 'passport' },
-      ]
+      ],
+      disabled: (moegiOptions.value.to !== 'romaji')
     }
   ]
 
@@ -61,8 +62,18 @@ export default function Popup() {
 
           <div class="col-span-2 grid grid-cols-4 gap-2">
             <p class="col-span-4 text-center">Okurigana Delimiter</p>
-            <Input label="Start" name="delimiter_start" placeholder="(" />
-            <Input label="End" name="delimiter_end" placeholder=")" />
+            <Input
+              label="Start"
+              name="delimiter_start"
+              placeholder="("
+              disabled={moegiOptions.value.mode !== 'okurigana'}
+            />
+            <Input
+              label="End"
+              name="delimiter_end"
+              placeholder=")"
+              disabled={moegiOptions.value.mode !== 'okurigana'}
+            />
           </div>
 
           <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
