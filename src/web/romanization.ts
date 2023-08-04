@@ -1,9 +1,6 @@
 import Kuroshiro from 'kuroshiro';
 import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
-import { lyricElements, options } from './init';
-
-const scriptElement = document
-  .querySelector<HTMLScriptElement>('[data-moegi-script]')!;
+import { lyricElements, options, scriptElement } from './init';
 
 const kuroshiro = new Kuroshiro();
 const kuromojiAnalyzer = new KuromojiAnalyzer({

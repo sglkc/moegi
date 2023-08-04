@@ -48,6 +48,11 @@ export default defineManifest((env) => {
         matches: ['*://open.spotify.com/*']
       }
     ],
+    externally_connectable: {
+      ids: ['*'],
+      matches: ['*://open.spotify.com/*'],
+      accepts_tls_channel_id: false
+    },
     host_permissions: [
       'https://translate.google.com/'
     ],

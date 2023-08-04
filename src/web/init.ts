@@ -1,6 +1,7 @@
 import { HistoryChangeEvent } from '@/types';
 import { addHistoryListener } from './listeners';
-import './romanization';
+
+// Module imports are below to avoid export not defined errors
 
 // Get saved options from extension script dataset and apply to window object
 const scriptElement = document
@@ -36,7 +37,7 @@ function initLyrics() {
 }
 
 const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
-const lyricElements: Set<HTMLDivElement> = new Set(
+const lyricElements = new Set<HTMLDivElement>(
   Array.from(document.querySelectorAll(lyricElementSelector))
 );
 
@@ -86,4 +87,8 @@ addHistoryListener((event) => {
 // initialize lyrics immediately
 if (location.pathname.includes('lyrics') || lyricElements.size) initLyrics();
 
-export { lyricElements, options };
+// Use dynamic import so it doesn't bundle to the top
+import('./romanization');
+import('./translation');
+
+export { lyricElements, options, scriptElement };
