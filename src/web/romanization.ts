@@ -34,31 +34,24 @@ async function applyRomanization() {
 
   convertedElements.forEach((el) => el.remove());
 
-  if (options.active) await convertLyrics();
+  if (convertedElements.length && !options.romanization) {
+    convertedElements.forEach((el) => el.remove());
+    return;
+  }
 
-  // Hide original element logic and scroll to active line if exists
-  let activeElement: HTMLElement | undefined;
+  await convertLyrics();
 
+  // Logic for original lyrics display
   lyricElements.forEach((lyricElement) => {
     const [original, converted] =
       lyricElement.children as HTMLCollectionOf<HTMLElement>;
 
-    if (options.active && options.hideOriginal && converted) {
+    if (options.romanization && options.hideOriginal && converted) {
       original.style.display = 'none';
     } else {
       original.style.display = '';
     }
-
-    // There are 2 default classes for lyrics as of writing
-    if (lyricElement.classList.length > 2) activeElement = lyricElement;
   });
-
-  if (activeElement) {
-    setTimeout(() => activeElement!.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    }), 100);
-  }
 }
 
 // Apply new options on event and on lyrics ready

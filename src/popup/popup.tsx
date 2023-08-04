@@ -50,34 +50,43 @@ export default function Popup() {
 
         <h1 class="font-bold text-2xl">Moegi</h1>
 
-        <Checkbox name="active">
-          Extension is currently
-          <strong id="status"> { moegiOptions.value.active ? 'ON' : 'OFF' }</strong>
+        <Checkbox name="translation">
+          Translation
+          <strong> { moegiOptions.value.translation ? 'ON' : 'OFF' }</strong>
         </Checkbox>
 
-        <p><strong>Options:</strong></p>
-        <div class="grid grid-cols-2 gap-2">
+        <Checkbox name="romanization">
+          Japanese Romanization
+          <strong> { moegiOptions.value.romanization ? 'ON' : 'OFF' }</strong>
+        </Checkbox>
 
-          { selects.map((select) => (<Select {...select} />)) }
+        { moegiOptions.value.romanization &&
+          <>
+            <p><strong>Romanization Options:</strong></p>
+            <div class="grid grid-cols-2 gap-2">
 
-          <div class="col-span-2 grid grid-cols-4 gap-2">
-            <p class="col-span-4 text-center">Okurigana Delimiter</p>
-            <Input
-              label="Start"
-              name="delimiter_start"
-              placeholder="("
-              disabled={moegiOptions.value.mode !== 'okurigana'}
-            />
-            <Input
-              label="End"
-              name="delimiter_end"
-              placeholder=")"
-              disabled={moegiOptions.value.mode !== 'okurigana'}
-            />
-          </div>
+              { selects.map((select) => (<Select {...select} />)) }
 
-          <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
-        </div>
+              <div class="col-span-2 grid grid-cols-4 gap-2">
+                <p class="col-span-4 text-center">Okurigana Delimiter</p>
+                <Input
+                  label="Start"
+                  name="delimiter_start"
+                  placeholder="("
+                  disabled={moegiOptions.value.mode !== 'okurigana'}
+                />
+                <Input
+                  label="End"
+                  name="delimiter_end"
+                  placeholder=")"
+                  disabled={moegiOptions.value.mode !== 'okurigana'}
+                />
+              </div>
+
+              <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
+            </div>
+          </>
+        }
 
         <button
           id="reset"

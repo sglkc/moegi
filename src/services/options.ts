@@ -3,7 +3,8 @@ import { signal } from '@preact/signals'
 
 // Define moegiOptions and its type and create a signal to manage state
 export type MoegiOptions = {
-  active: boolean
+  translation: boolean
+  romanization: boolean
   to: 'romaji' | 'hiragana' | 'katakana'
   mode: 'normal' | 'spaced' | 'okurigana' | 'furigana'
   romajiSystem: 'hepburn' | 'nippon' | 'passport'
@@ -15,7 +16,8 @@ export type MoegiOptions = {
 export type MoegiOptionsKey = keyof MoegiOptions
 
 export const moegiDefaultOptions: MoegiOptions = {
-  active: false,
+  translation: false,
+  romanization: false,
   to: 'romaji',
   mode: 'spaced',
   romajiSystem: 'hepburn',

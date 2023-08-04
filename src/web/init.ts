@@ -1,3 +1,4 @@
+import { MoegiOptions } from '@/services/options';
 import { HistoryChangeEvent } from '@/types';
 import { addHistoryListener } from './listeners';
 
@@ -12,7 +13,7 @@ const optionsData = JSON.parse(scriptElement.dataset.moegiOptions!);
 window.__moegiOptions = Object.assign({}, optionsData);
 scriptElement.removeAttribute('data-moegi-options');
 
-const options = window.__moegiOptions;
+const options: MoegiOptions = window.__moegiOptions;
 
 // Move lyrics from text node to paragraph element in the container
 function initLyrics() {
@@ -74,7 +75,22 @@ const lyricsObserver = new MutationObserver((mutations) => {
 
 lyricsObserver.observe(document.body, { subtree: true, childList: true });
 
-// Apply romanization if current url is /lyrics
+// Scroll to current line on new options
+addEventListener('moegioptions', () => {
+  let activeElement: HTMLElement | undefined;
+
+  lyricElements.forEach((lyricElement) => {
+    // There are 2 default classes for lyrics as of now
+    if (lyricElement.classList.length > 2) activeElement = lyricElement;
+  })
+
+  if (activeElement) setTimeout(() => activeElement!.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  }), 100);
+});
+
+// Initialize lyrics if current url is /lyrics
 addHistoryListener((event) => {
   const isLyricsPage = (event.type === 'pushstate')
     ? (event as HistoryChangeEvent).detail[2]?.toString().includes('lyrics')
@@ -85,7 +101,7 @@ addHistoryListener((event) => {
 
 // If user's already in lyrics page and lyric elements exist in first try,
 // initialize lyrics immediately
-if (location.pathname.includes('lyrics') || lyricElements.size) initLyrics();
+if (location.pathname.includes('lyrics') && lyricElements.size) initLyrics();
 
 // Use dynamic import so it doesn't bundle to the top
 import('./romanization');

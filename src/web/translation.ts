@@ -1,5 +1,5 @@
 import { googleTranslateApi } from 'google-translate-api-x';
-import { lyricElements, scriptElement } from './init';
+import { lyricElements, options, scriptElement } from './init';
 
 type TranslateResult = googleTranslateApi.TranslationResponse;
 
@@ -8,7 +8,7 @@ const translate = (text: string)  => new Promise<TranslateResult>((resolve) => {
   chrome.runtime.sendMessage(extensionId, { type: 'translate', text }, resolve);
 });
 
-async function applyTranslation() {
+async function translateLyrics() {
 
   // Get lyric elements and join them into a string of lines
   const lyricsArray = Array.from(lyricElements);
@@ -32,6 +32,19 @@ async function applyTranslation() {
     translatedElement.classList.add('translated-lyrics');
     lyricElement.insertAdjacentElement('beforeend', translatedElement);
   });
+}
+
+async function applyTranslation() {
+
+  // Clear past translations to avoid duplicate elements
+  const translatedElements = document.querySelectorAll('.translated-lyrics');
+
+  if (translatedElements.length && !options.translation) {
+    translatedElements.forEach((el) => el.remove());
+    return;
+  }
+
+  await translateLyrics();
 }
 
 // Apply new options on event and on lyrics ready
