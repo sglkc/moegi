@@ -1,7 +1,17 @@
-import { HistoryChangeEvent } from '@/types';
-import { addHistoryListener, kuroshiro } from './init';
+import Kuroshiro from 'kuroshiro';
+import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
+import { lyricElements, options } from './init';
 
-const options = window.__moegiOptions;
+const scriptElement = document
+  .querySelector<HTMLScriptElement>('[data-moegi-script]')!;
+
+const kuroshiro = new Kuroshiro();
+const kuromojiAnalyzer = new KuromojiAnalyzer({
+  dictPath: scriptElement.dataset.dictPath!
+});
+
+kuroshiro.init(kuromojiAnalyzer);
+scriptElement.removeAttribute('data-dict-path');
 
 // Convert lyric lines using Kuroshiro if they have any Japanese characters
 async function convertLyrics() {
@@ -20,7 +30,7 @@ async function convertLyrics() {
   }
 }
 
-async function applyOptions() {
+async function applyRomanization() {
 
   // Clear past conversions to avoid duplicate elements
   const convertedElements = document.querySelectorAll('.converted-lyrics');
@@ -53,85 +63,7 @@ async function applyOptions() {
     }), 100);
   }
 }
-const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
-const lyricElements: Set<HTMLDivElement> = new Set(
-  Array.from(document.querySelectorAll(lyricElementSelector))
-);
 
-// Move lyrics from text node to paragraph element in the container
-function initLyrics() {
-  lyricElements.forEach((originalElement) => {
-
-    // There are empty lyric elements from Spotify, if any are removed Spotify
-    // will happen to error on the next song load
-    if (!originalElement.firstChild)
-      return lyricElements.delete(originalElement);
-
-    // If element lyric is already moved to paragraph element
-    if (originalElement.firstChild.nodeType !== Node.TEXT_NODE) return;
-
-    const lyricsElement = document.createElement('p');
-
-    lyricsElement.innerText = originalElement.innerText;
-    originalElement.replaceChildren(lyricsElement);
-  });
-
-  applyOptions();
-}
-
-// If user's already in lyrics page and lyric elements exist in first try,
-// initialize lyrics immediately
-if (location.pathname.includes('lyrics') || lyricElements.size) initLyrics();
-
-// Setup observer to detect lyrics elements on slow network or UI changes
-// use debounce to prevent performance leak
-let checkLyricsMutationTimeout: ReturnType<Window['setTimeout']> | undefined;
-
-function checkLyricsMutation(node: Node) {
-  if (node.nodeName !== 'DIV') return;
-
-  const newLyrics: HTMLDivElement[] = Array.from(
-    (node as Element).querySelectorAll(lyricElementSelector)
-  );
-
-  if (!newLyrics.length) return;
-
-  clearTimeout(checkLyricsMutationTimeout);
-
-  checkLyricsMutationTimeout = (setTimeout as Window['setTimeout'])(() => {
-    checkLyricsMutationTimeout = undefined;
-
-    lyricElements.clear();
-    newLyrics.forEach((el) => lyricElements.add(el));
-    initLyrics();
-  }, 500);
-}
-
-const lyricsObserver = new MutationObserver((mutations) => {
-  for (const mutation of mutations) {
-    mutation.addedNodes.forEach(checkLyricsMutation);
-    checkLyricsMutation(mutation.target);
-  }
-});
-
-lyricsObserver.observe(document.body, { subtree: true, childList: true });
-
-// Apply romanization if current url is /lyrics
-addHistoryListener((event) => {
-  const isLyricsPage = (event.type === 'pushstate')
-    ? (event as HistoryChangeEvent).detail[2]?.toString().includes('lyrics')
-    : location.pathname.includes('lyrics');
-
-  if (isLyricsPage) initLyrics();
-});
-
-// Apply new options on popup message
-addEventListener('message', (message) => {
-  if (
-    typeof message.data !== 'object'
-      || !message.data.type
-      || message.data.type !== 'moegiOptions'
-  ) return;
-
-  applyOptions();
-});
+// Apply new options on event and on lyrics ready
+addEventListener('moegioptions', applyRomanization);
+addEventListener('lyricsready', applyRomanization);

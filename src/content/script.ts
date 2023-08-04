@@ -13,5 +13,7 @@ initElement.type = 'module'
 initElement.defer = true
 initElement.async = true
 initElement.dataset.dictPath = chrome.runtime.getURL('dict/')
+initElement.dataset.extensionId = chrome.runtime.id
+initElement.dataset.moegiScript = ''
 initElement.dataset.moegiOptions = JSON.stringify(moegiOptions)
 document.head.appendChild(initElement);
