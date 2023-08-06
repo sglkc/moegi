@@ -4,9 +4,14 @@ import { lyricElements, options, scriptElement } from './init';
 type TranslateResult = googleTranslateApi.TranslationResponse;
 
 const extensionId = scriptElement.dataset.extensionId!;
-const translate = (text: string)  => new Promise<TranslateResult>((resolve) => {
-  chrome.runtime.sendMessage(extensionId, { type: 'translate', text }, resolve);
-});
+const translate = (title: string, text: string) =>
+  new Promise<TranslateResult>((resolve) => {
+    chrome.runtime.sendMessage(
+      extensionId,
+      { type: 'translate', title, text },
+      resolve
+    );
+  });
 
 async function translateLyrics() {
 
@@ -17,9 +22,17 @@ async function translateLyrics() {
 
   const lyricsString = lyrics.join('\n');
 
+  // Compare song title before and after translation to avoid doubles
+  const titleElement =
+    document.querySelector('[data-testid="context-item-link"]')!;
+  const lastTitle = titleElement.textContent!;
+
   // Translate the string, split into array, and append to lyric container
-  const translateResult = await translate(lyricsString);
-  const translations = translateResult?.text.split('\n') ?? [];
+  const translateResult = await translate(lastTitle, lyricsString);
+  const translations = translateResult?.text?.split('\n') ?? [];
+  const newTitle = titleElement.textContent!;
+
+  if (newTitle !== lastTitle) return;
 
   lyricsArray.forEach((lyricElement, index) => {
     const originalElement = lyricElement.firstElementChild!;
