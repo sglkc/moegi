@@ -1,9 +1,11 @@
+import { TranslationLanguage } from '@/types'
 import ChromeStorage from '@/utils/chrome-storage'
 import { signal } from '@preact/signals'
 
 // Define moegiOptions and its type and create a signal to manage state
 export type MoegiOptions = {
   translation: boolean
+  languageTarget: TranslationLanguage
   romanization: boolean
   to: 'romaji' | 'hiragana' | 'katakana'
   mode: 'normal' | 'spaced' | 'okurigana' | 'furigana'
@@ -17,6 +19,7 @@ export type MoegiOptionsKey = keyof MoegiOptions
 
 export const moegiDefaultOptions: MoegiOptions = {
   translation: false,
+  languageTarget: 'auto',
   romanization: false,
   to: 'romaji',
   mode: 'spaced',

@@ -4,10 +4,14 @@ import Checkbox from './components/Checkbox'
 import Input from './components/Input'
 import Select, { SelectProps } from './components/Select'
 import { formInputHandler, resetStorageHandler } from './handler'
+import { languages } from 'google-translate-api-x';
 
 type FormEventHandler = JSX.EventHandler<TargetedEvent<HTMLFormElement, Event>>
 
 export default function Popup() {
+  const translationLanguages = Object.entries(languages)
+    .map(([value, text]) => ({ text, value }))
+
   const selects: SelectProps[] = [
     {
       label: 'To',
@@ -41,27 +45,44 @@ export default function Popup() {
   ]
 
   return (
-    <main class="p-4 pb-6 min-w-64 text-sm">
+    <main class="p-4 min-w-64 text-sm">
       <form
         id="form"
-        class="flex flex-col items-center gap-2"
+        class="flex flex-col gap-2"
         onInput={formInputHandler as FormEventHandler}
       >
 
-        <h1 class="font-bold text-2xl">Moegi</h1>
+        <h1 class="mb-4 font-bold text-2xl text-center">Moegi</h1>
 
-        <Checkbox name="translation">
-          <strong>Translation</strong>
-        </Checkbox>
+        <div class="flex flex-col gap-2">
+          <Checkbox name="translation">
+            <strong>Translation</strong>
+          </Checkbox>
 
-        <Checkbox name="romanization">
-          <strong>Japanese Romanization</strong>
-        </Checkbox>
 
-        <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
+          <Checkbox name="romanization">
+            <strong>Japanese Romanization</strong>
+          </Checkbox>
 
+          <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
+        </div>
+
+        { moegiOptions.value.translation &&
+          <>
+            <hr class="my-2" />
+            <p><strong>Translation Options:</strong></p>
+            <div class="grid gap-2">
+              <Select
+                label="Language Target"
+                name="languageTarget"
+                options={translationLanguages}
+              />
+            </div>
+          </>
+        }
         { moegiOptions.value.romanization &&
           <>
+            <hr class="my-2" />
             <p><strong>Romanization Options:</strong></p>
             <div class="grid grid-cols-2 gap-2">
 
@@ -82,14 +103,13 @@ export default function Popup() {
                   disabled={moegiOptions.value.mode !== 'okurigana'}
                 />
               </div>
-
             </div>
           </>
         }
 
         <button
           id="reset"
-          class="p-2"
+          class="mt-2 p-2"
           type="button"
           onClick={resetStorageHandler}
         >

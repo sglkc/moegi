@@ -1,3 +1,4 @@
+import { googleTranslateApi } from 'google-translate-api-x'
 import { MoegiOptions } from '../services/options'
 
 export type HistoryChangeEvent = CustomEvent<Parameters<History['pushState']>>
@@ -10,5 +11,13 @@ declare global {
   }
   interface Window {
     __moegiOptions: MoegiOptions
+  }
+}
+
+export type TranslationLanguage = keyof typeof googleTranslateApi.languages
+
+declare module 'google-translate-api-x' {
+  export const languages: {
+    readonly [lang in TranslationLanguage]: `${(TranslationLanguage[lang])}`
   }
 }

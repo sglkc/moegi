@@ -1,6 +1,13 @@
 import ChromeStorage from '@/utils/chrome-storage';
 import { googleTranslateApi, translate } from 'google-translate-api-x';
 
+type TranslateMessage = {
+  type: 'translate'
+  title: string
+  text: string
+  options: googleTranslateApi.RequestOptions
+}
+
 type TranslationCache = {
   [key: string]: string[]
 }
@@ -11,24 +18,32 @@ const sessionStorage = new ChromeStorage('session')
 // @ts-ignore
 self.sessionStorage = sessionStorage
 
-chrome.runtime.onMessageExternal.addListener(async (message, _, response) => {
-  if (message.type !== 'translate') return
+chrome.runtime.onMessageExternal.addListener(
+  async (message: TranslateMessage, _, response) => {
+    if (message.type !== 'translate') return
 
-  const title = message.title
-  const cache =
-    (await sessionStorage.get<TranslationCache>('translations')) ?? {}
+    const target = message.options.to ?? 'auto'
+    const title = message.title + '.' + target
+    const options: googleTranslateApi.RequestOptions = {
+      to: target,
+      rejectOnPartialFail: false
+    }
 
-  if (title in cache) return response(cache[title])
+    const cache =
+      (await sessionStorage.get<TranslationCache>('translations')) ?? {}
 
-  translate(message.text, { rejectOnPartialFail: false })
-    .then((result) => {
-      const { text } = result as googleTranslateApi.TranslationResponse
-      const textArray = text.split('\n').map(t => t.trim())
+    if (title in cache) return response(cache[title])
 
-      cache[title] = textArray
+    translate(message.text, options)
+      .then((result) => {
+        const { text } = result as googleTranslateApi.TranslationResponse
+        const textArray = text.split('\n').map(t => t.trim())
 
-      sessionStorage.set({ translations: cache })
-      return response(textArray)
-    })
-    .catch(console.error)
-})
+        cache[title] = textArray
+
+        sessionStorage.set({ translations: cache })
+        return response(textArray)
+      })
+      .catch(console.error)
+  }
+)

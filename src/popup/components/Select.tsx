@@ -15,7 +15,7 @@ export default function Select(props: SelectProps) {
 
   return (
     <>
-      <label class="py-1 text-right" for={name}>{ label }:</label>
+      <label class="py-1" for={name}>{ label }:</label>
       <select
         id={name}
         class="bg-gray-50 disabled:bg-gray-100 p-1 b-1 disabled:c-gray"

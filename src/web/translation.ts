@@ -1,11 +1,16 @@
+import { googleTranslateApi } from 'google-translate-api-x';
 import { lyricElements, options, scriptElement } from './init';
 
 const extensionId = scriptElement.dataset.extensionId!;
-const translate = (title: string, text: string) =>
+const translate = (
+  title: string,
+  text: string,
+  options: googleTranslateApi.RequestOptions
+) =>
   new Promise<string[]>((resolve) => {
     chrome.runtime.sendMessage(
       extensionId,
-      { type: 'translate', title, text },
+      { type: 'translate', title, text, options },
       resolve
     );
   });
@@ -25,7 +30,9 @@ async function translateLyrics() {
   const lastTitle = titleElement.textContent!;
 
   // Translate the string, split into array, and append to lyric container
-  const translations = await translate(lastTitle, lyricsString);
+  const translations = await translate(lastTitle, lyricsString, {
+    to: options.languageTarget
+  });
   const newTitle = titleElement.textContent!;
 
   if (newTitle !== lastTitle) return;
@@ -50,10 +57,8 @@ async function translateLyrics() {
 async function applyTranslation() {
 
   // Clear past translations to avoid duplicate elements
-  const translatedElements = document.querySelectorAll('.translated-lyrics');
-
-  if (!options.translation) translatedElements.forEach((el) => el.remove());
-  if (options.translation && !translatedElements.length) await translateLyrics();
+  document.querySelectorAll('.translated-lyrics').forEach((el) => el.remove());
+  if (options.translation) await translateLyrics();
 }
 
 // Apply new options on event and on lyrics ready
