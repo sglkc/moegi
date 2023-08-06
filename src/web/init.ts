@@ -75,20 +75,29 @@ const lyricsObserver = new MutationObserver((mutations) => {
 
 lyricsObserver.observe(document.body, { subtree: true, childList: true });
 
-// Scroll to current line on new options
-addEventListener('moegioptions', () => {
+// Apply hide original lyrics option and scroll to current line
+function hideOriginalLyrics() {
   let activeElement: HTMLElement | undefined;
 
+  // Logic for original lyrics display
   lyricElements.forEach((lyricElement) => {
+    const [original] =
+      lyricElement.children as HTMLCollectionOf<HTMLElement>;
+
+    original.style.display = (options.hideOriginal ? 'none' : '');
+
     // There are 2 default classes for lyrics as of now
     if (lyricElement.classList.length > 2) activeElement = lyricElement;
-  })
+  });
 
   if (activeElement) setTimeout(() => activeElement!.scrollIntoView({
     behavior: 'smooth',
     block: 'center'
   }), 100);
-});
+}
+
+addEventListener('moegioptions', hideOriginalLyrics);
+addEventListener('lyricsready', hideOriginalLyrics);
 
 // Initialize lyrics if current url is /lyrics
 addHistoryListener((event) => {

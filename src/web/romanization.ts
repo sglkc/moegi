@@ -13,8 +13,8 @@ scriptElement.removeAttribute('data-dict-path');
 // Convert lyric lines using Kuroshiro if they have any Japanese characters
 async function convertLyrics() {
   for (const lyricElement of lyricElements) {
-    const originalElement = lyricElement.firstElementChild! as HTMLElement;
-    const originalText = originalElement.innerText.trim();
+    const originalElement = lyricElement.firstElementChild!;
+    const originalText = originalElement.textContent!.trim();
 
     if (!kuroshiro.Util.hasJapanese(originalText)) continue;
 
@@ -32,26 +32,8 @@ async function applyRomanization() {
   // Clear past conversions to avoid duplicate elements
   const convertedElements = document.querySelectorAll('.converted-lyrics');
 
-  convertedElements.forEach((el) => el.remove());
-
-  if (convertedElements.length && !options.romanization) {
-    convertedElements.forEach((el) => el.remove());
-    return;
-  }
-
-  await convertLyrics();
-
-  // Logic for original lyrics display
-  lyricElements.forEach((lyricElement) => {
-    const [original, converted] =
-      lyricElement.children as HTMLCollectionOf<HTMLElement>;
-
-    if (options.romanization && options.hideOriginal && converted) {
-      original.style.display = 'none';
-    } else {
-      original.style.display = '';
-    }
-  });
+  if (!options.romanization) convertedElements.forEach((el) => el.remove());
+  if (options.romanization && !convertedElements.length) await convertLyrics();
 }
 
 // Apply new options on event and on lyrics ready

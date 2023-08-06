@@ -51,14 +51,14 @@ export default function Popup() {
         <h1 class="font-bold text-2xl">Moegi</h1>
 
         <Checkbox name="translation">
-          Translation
-          <strong> { moegiOptions.value.translation ? 'ON' : 'OFF' }</strong>
+          <strong>Translation</strong>
         </Checkbox>
 
         <Checkbox name="romanization">
-          Japanese Romanization
-          <strong> { moegiOptions.value.romanization ? 'ON' : 'OFF' }</strong>
+          <strong>Japanese Romanization</strong>
         </Checkbox>
+
+        <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
 
         { moegiOptions.value.romanization &&
           <>
@@ -83,7 +83,6 @@ export default function Popup() {
                 />
               </div>
 
-              <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
             </div>
           </>
         }

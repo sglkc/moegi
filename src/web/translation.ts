@@ -12,21 +12,25 @@ async function translateLyrics() {
 
   // Get lyric elements and join them into a string of lines
   const lyricsArray = Array.from(lyricElements);
-  const lyrics = lyricsArray.map((element) => element.innerText);
+  const lyrics = lyricsArray
+    .map((element) => element.firstElementChild!.textContent);
+
   const lyricsString = lyrics.join('\n');
 
   // Translate the string, split into array, and append to lyric container
   const translateResult = await translate(lyricsString);
-  const translations = translateResult.text.split('\n');
+  const translations = translateResult?.text.split('\n') ?? [];
 
   lyricsArray.forEach((lyricElement, index) => {
-    const originalElement = lyricElement.firstElementChild! as HTMLElement;
-    const originalText = originalElement.innerText.trim();
+    const originalElement = lyricElement.firstElementChild!;
+    const originalText = originalElement.textContent!.trim();
 
     if (originalText.length < 2) return;
 
     const translatedElement = document.createElement('p');
-    const translatedText = translations[index];
+    const translatedText = translations.at(index);
+
+    if (!translatedText) return;
 
     translatedElement.innerHTML = translatedText;
     translatedElement.classList.add('translated-lyrics');
@@ -39,12 +43,8 @@ async function applyTranslation() {
   // Clear past translations to avoid duplicate elements
   const translatedElements = document.querySelectorAll('.translated-lyrics');
 
-  if (translatedElements.length && !options.translation) {
-    translatedElements.forEach((el) => el.remove());
-    return;
-  }
-
-  await translateLyrics();
+  if (!options.translation) translatedElements.forEach((el) => el.remove());
+  if (options.translation && !translatedElements.length) await translateLyrics();
 }
 
 // Apply new options on event and on lyrics ready
