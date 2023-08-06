@@ -1,6 +1,8 @@
 import { effect } from '@preact/signals'
 import { moegiOptions, MoegiOptions } from '@/services/options'
-import syncStorage from '@/utils/sync-storage'
+import ChromeStorage from '@/utils/chrome-storage'
+
+const syncStorage = new ChromeStorage('sync')
 
 // On popup opened
 chrome.runtime.onConnect.addListener((port) => {

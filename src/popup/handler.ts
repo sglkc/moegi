@@ -5,7 +5,9 @@ import {
   moegiDefaultOptions
 } from '@/services/options'
 import { effect } from '@preact/signals'
-import syncStorage from '@/utils/sync-storage'
+import ChromeStorage from '@/utils/chrome-storage'
+
+const syncStorage = new ChromeStorage('sync')
 
 // Get current active tab to connect to content script, and send message for
 // every time options changed

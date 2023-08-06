@@ -1,11 +1,8 @@
-import { googleTranslateApi } from 'google-translate-api-x';
 import { lyricElements, options, scriptElement } from './init';
-
-type TranslateResult = googleTranslateApi.TranslationResponse;
 
 const extensionId = scriptElement.dataset.extensionId!;
 const translate = (title: string, text: string) =>
-  new Promise<TranslateResult>((resolve) => {
+  new Promise<string[]>((resolve) => {
     chrome.runtime.sendMessage(
       extensionId,
       { type: 'translate', title, text },
@@ -28,8 +25,7 @@ async function translateLyrics() {
   const lastTitle = titleElement.textContent!;
 
   // Translate the string, split into array, and append to lyric container
-  const translateResult = await translate(lastTitle, lyricsString);
-  const translations = translateResult?.text?.split('\n') ?? [];
+  const translations = await translate(lastTitle, lyricsString);
   const newTitle = titleElement.textContent!;
 
   if (newTitle !== lastTitle) return;

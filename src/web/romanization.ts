@@ -30,10 +30,9 @@ async function convertLyrics() {
 async function applyRomanization() {
 
   // Clear past conversions to avoid duplicate elements
-  const convertedElements = document.querySelectorAll('.converted-lyrics');
+  document.querySelectorAll('.converted-lyrics').forEach((el) => el.remove());
 
-  if (!options.romanization) convertedElements.forEach((el) => el.remove());
-  if (options.romanization && !convertedElements.length) await convertLyrics();
+  if (options.romanization) await convertLyrics();
 }
 
 // Apply new options on event and on lyrics ready

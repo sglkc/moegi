@@ -1,4 +1,4 @@
-import syncStorage from '@/utils/sync-storage'
+import ChromeStorage from '@/utils/chrome-storage'
 import { signal } from '@preact/signals'
 
 // Define moegiOptions and its type and create a signal to manage state
@@ -26,7 +26,8 @@ export const moegiDefaultOptions: MoegiOptions = {
   hideOriginal: false,
 }
 
-const savedOptions: MoegiOptions = await syncStorage.get('options')
+const syncStorage = new ChromeStorage('sync')
+const savedOptions = await syncStorage.get<MoegiOptions>('options')
 const currentOptions = Object.assign({}, moegiDefaultOptions, savedOptions)
 
 export const moegiOptions = signal<MoegiOptions>(currentOptions)
