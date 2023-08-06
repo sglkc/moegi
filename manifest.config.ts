@@ -18,18 +18,18 @@ export default defineManifest((env) => {
     description: description,
     homepage_url: homepage,
     icons: {
-      16: 'icons/icon16.png',
-      19: 'icons/icon19.png',
-      48: 'icons/icon48.png',
-      128: 'icons/icon128.png'
+      '16': 'icons/icon16.png',
+      '19': 'icons/icon19.png',
+      '48': 'icons/icon48.png',
+      '96': 'icons/icon48.png'
     },
     default_locale: 'en',
     action: {
       default_icon: {
-        16: 'icons/icon16.png',
-        19: 'icons/icon19.png',
-        48: 'icons/icon48.png',
-        128: 'icons/icon128.png'
+        '16': 'icons/icon16.png',
+        '19': 'icons/icon19.png',
+        '48': 'icons/icon48.png',
+        '96': 'icons/icon48.png'
       },
       default_title: nameExt,
       default_popup: 'index.html'
