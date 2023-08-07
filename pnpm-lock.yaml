@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fontsource/quicksand':
+    specifier: ^5.0.8
+    version: 5.0.8
+  '@fontsource/rocknroll-one':
+    specifier: ^5.0.7
+    version: 5.0.7
   '@preact/signals':
     specifier: ^1.1.5
     version: 1.1.5(preact@10.16.0)
@@ -537,6 +543,14 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@fontsource/quicksand@5.0.8:
+    resolution: {integrity: sha512-yckyBMWMerElcJq23yBZ8MOYLN3cJQFbb+bVQOhRrt68qRMDpselnF+/IYR078eHHmYOzNAfQaopFEeHaXrGyw==}
+    dev: false
+
+  /@fontsource/rocknroll-one@5.0.7:
+    resolution: {integrity: sha512-gI81bYGft4nfDRw7qJU+NCgP3Ed77FpIBZJvfQLT5y05GDKRaJmAJ+d0Gjb253VEW86wCwSNn9i4rBLm+Xtiug==}
+    dev: false
 
   /@iconify/types@2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}

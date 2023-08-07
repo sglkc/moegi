@@ -37,6 +37,7 @@ syncStorage.onChanged.addListener((changes) => {
 
   const { newValue, oldValue } = changes.options;
 
+  if (!newValue) return;
   if (JSON.stringify(newValue) === JSON.stringify(oldValue)) return;
 
   window.postMessage({ type: 'moegiOptions', options: newValue })

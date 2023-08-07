@@ -46,4 +46,5 @@ export function formInputHandler({ target }: FormEvent) {
 export async function resetStorageHandler() {
   await syncStorage.remove('options')
   await syncStorage.set({ options: moegiDefaultOptions })
+  moegiOptions.value = Object.assign({}, moegiDefaultOptions)
 }

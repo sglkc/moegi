@@ -17,7 +17,7 @@ export default function Checkbox({ children, name }: CheckboxProps) {
         class="peer sr-only"
         type="checkbox"
         name={name}
-        defaultChecked={moegiOptions.value[name] as boolean}
+        checked={moegiOptions.value[name] as boolean}
       />
       <span
         class="absolute inset-0 w-10 rounded-full bg-accent/10 transition peer-checked:bg-accent/25"

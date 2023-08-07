@@ -19,6 +19,10 @@ export default defineConfig(() => {
       preact(),
       UnoCSS({
         theme: {
+          fontFamily: {
+            title: '"RocknRoll One", sans-serif',
+            text: '"Quicksand", sans-serif'
+          },
           colors: {
             text: '#1d230b',
             background: '#f6f9ec',

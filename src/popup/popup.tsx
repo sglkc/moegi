@@ -11,7 +11,10 @@ type FormEventHandler = JSX.EventHandler<TargetedEvent<HTMLFormElement, Event>>
 
 export default function Popup() {
   const translationLanguages = Object.entries(languages)
-    .map(([value, text]) => ({ text, value }))
+    .map(([code, name]) => ({
+      text: `${name} (${code})`,
+      value: code
+    }))
 
   const selects: SelectProps[] = [
     {
@@ -46,19 +49,24 @@ export default function Popup() {
   ]
 
   return (
-    <main class="p-4 min-w-64 bg-background color-text text-xs">
+    <main class="p-4 min-w-72 bg-background color-text text-sm font-text fw-500">
       <form
         id="form"
         class="flex flex-col gap-2"
         onInput={formInputHandler as FormEventHandler}
       >
 
-        <div class="mb-4 flex gap-2 justify-center items-center">
-          <img class="w-12 square" src={moegiLogo} alt="Moegi Logo" />
-          <h1 class="font-bold text-2xl text-center">もえぎ</h1>
+        <div class="fixed top-4 left-4 right-4 flex justify-between items-center">
+          <div class="flex gap-2 items-center">
+            <img class="max-w-8" src={moegiLogo} alt="Moegi" />
+            <h1 class="color-gray-800 font-bold font-title text-xl">もえぎ</h1>
+          </div>
+          <p class="max-w-32 line-height-4 text-end">
+            <small>Spotify lyrics utility extension</small>
+          </p>
         </div>
 
-        <div class="flex flex-col gap-2">
+        <div class="mt-14 flex flex-col gap-2">
           <Checkbox name="translation">
             <strong>Translation</strong>
           </Checkbox>
@@ -115,7 +123,7 @@ export default function Popup() {
 
         <button
           id="reset"
-          class="mt-2 p-2 bg-accent color-light text-bold"
+          class="mt-2 p-2 bg-accent color-light text-bold rounded"
           type="button"
           onClick={resetStorageHandler}
         >
