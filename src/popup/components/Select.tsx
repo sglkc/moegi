@@ -18,7 +18,7 @@ export default function Select(props: SelectProps) {
       <label class="py-1" for={name}>{ label }:</label>
       <select
         id={name}
-        class="bg-gray-50 disabled:bg-gray-100 p-1 b-1 disabled:c-gray"
+        class="bg-secondary disabled:bg-secondary/50 p-1 b-1"
         {...props}
       >
         { options.map(({ text, value }) => (

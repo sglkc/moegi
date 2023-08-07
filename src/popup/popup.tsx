@@ -1,10 +1,11 @@
 import { JSX, TargetedEvent } from 'preact/compat'
+import { languages } from 'google-translate-api-x'
+import moegiLogo from '@/assets/moegi.svg'
 import { moegiOptions } from '@/services/options'
 import Checkbox from './components/Checkbox'
 import Input from './components/Input'
 import Select, { SelectProps } from './components/Select'
 import { formInputHandler, resetStorageHandler } from './handler'
-import { languages } from 'google-translate-api-x';
 
 type FormEventHandler = JSX.EventHandler<TargetedEvent<HTMLFormElement, Event>>
 
@@ -45,14 +46,17 @@ export default function Popup() {
   ]
 
   return (
-    <main class="p-4 min-w-64 text-sm">
+    <main class="p-4 min-w-64 bg-background color-text text-xs">
       <form
         id="form"
         class="flex flex-col gap-2"
         onInput={formInputHandler as FormEventHandler}
       >
 
-        <h1 class="mb-4 font-bold text-2xl text-center">Moegi</h1>
+        <div class="mb-4 flex gap-2 justify-center items-center">
+          <img class="w-12 square" src={moegiLogo} alt="Moegi Logo" />
+          <h1 class="font-bold text-2xl text-center">もえぎ</h1>
+        </div>
 
         <div class="flex flex-col gap-2">
           <Checkbox name="translation">
@@ -64,7 +68,9 @@ export default function Popup() {
             <strong>Japanese Romanization</strong>
           </Checkbox>
 
-          <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
+          {(moegiOptions.value.translation || moegiOptions.value.romanization) &&
+            <Checkbox name="hideOriginal">Hide Original Lyrics</Checkbox>
+          }
         </div>
 
         { moegiOptions.value.translation &&
@@ -109,7 +115,7 @@ export default function Popup() {
 
         <button
           id="reset"
-          class="mt-2 p-2"
+          class="mt-2 p-2 bg-accent color-light text-bold"
           type="button"
           onClick={resetStorageHandler}
         >
