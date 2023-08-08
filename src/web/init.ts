@@ -113,6 +113,7 @@ addHistoryListener((event) => {
 if (location.pathname.includes('lyrics') && lyricElements.size) initLyrics();
 
 // Use dynamic import so it doesn't bundle to the top
+import('./styling');
 import('./romanization');
 import('./translation');
 

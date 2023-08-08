@@ -1,8 +1,8 @@
 import { JSX, TargetedEvent } from 'preact/compat'
 import { languages } from 'google-translate-api-x'
-import moegiLogo from '@/assets/moegi.svg'
 import { moegiOptions } from '@/services/options'
 import Checkbox from './components/Checkbox'
+import Color from './components/Color'
 import Input from './components/Input'
 import Select, { SelectProps } from './components/Select'
 import { formInputHandler, resetStorageHandler } from './handler'
@@ -58,8 +58,7 @@ export default function Popup() {
 
         <div class="fixed top-4 left-4 right-4 flex justify-between items-center">
           <div class="flex gap-2 items-center">
-            <img class="max-w-8" src={moegiLogo} alt="Moegi" />
-            <h1 class="color-gray-800 font-bold font-title text-xl">もえぎ</h1>
+            <h1 class="color-gray-800 font-bold font-title text-3xl">もえぎ</h1>
           </div>
           <p class="max-w-32 line-height-4 text-end">
             <small>Spotify lyrics utility extension</small>
@@ -67,10 +66,13 @@ export default function Popup() {
         </div>
 
         <div class="mt-14 flex flex-col gap-2">
+          <Checkbox name="styling">
+            <strong>Lyrics Style</strong>
+          </Checkbox>
+
           <Checkbox name="translation">
             <strong>Translation</strong>
           </Checkbox>
-
 
           <Checkbox name="romanization">
             <strong>Japanese Romanization</strong>
@@ -81,6 +83,13 @@ export default function Popup() {
           }
         </div>
 
+        { moegiOptions.value.styling &&
+          <>
+            <hr class="my-2" />
+            <p><strong>Lyrics Style:</strong></p>
+            <Color />
+          </>
+        }
         { moegiOptions.value.translation &&
           <>
             <hr class="my-2" />

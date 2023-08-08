@@ -18,7 +18,8 @@
     "google-translate-api-x": "^10.6.7",
     "kuroshiro": "github:sglkc/kuroshiro-ts",
     "kuroshiro-analyzer-kuromoji": "github:sglkc/kuroshiro-analyzer-kuromoji-ts",
-    "preact": "^10.16.0"
+    "preact": "^10.16.0",
+    "react-colorful": "^5.6.1"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.18",
