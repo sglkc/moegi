@@ -57,10 +57,8 @@ export default function Popup() {
         onInput={formInputHandler as FormEventHandler}
       >
 
-        <div class="mb-2 flex justify-between items-center">
-          <div class="flex gap-2 items-center">
-            <h1 class="color-gray-800 font-bold font-title text-3xl">もえぎ</h1>
-          </div>
+        <div class="mt-2 mb-4 flex justify-between items-center">
+          <h1 class="color-gray-800 font-bold font-title text-3xl">もえぎ</h1>
           <p class="max-w-32 line-height-4 text-end">
             <small class="text-xs">Spotify lyrics utility extension</small>
           </p>
@@ -68,7 +66,7 @@ export default function Popup() {
 
         <div class="flex flex-col gap-2">
           <Checkbox name="styling">
-            <strong>Lyrics Style</strong>
+            <strong>Lyrics Styling</strong>
           </Checkbox>
 
           <Checkbox name="translation">
@@ -89,13 +87,22 @@ export default function Popup() {
             <hr class="my-2" />
             <p><strong>Lyrics Style:</strong></p>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+              <Select
+                label="Text Align"
+                name="lyrics_align"
+                options={[
+                  { text: 'Left', value: 'left' },
+                  { text: 'Center', value: 'center' },
+                  { text: 'Right', value: 'Right' }
+                ]}
+                />
               <div class="col-span-2">
                 <Range
                   label="Font Size"
                   name="lyrics_size"
                   prefix="em"
                   min="0.5"
-                  step="0.1"
+                  step="0.05"
                   max="2.5"
                 />
               </div>
@@ -121,8 +128,8 @@ export default function Popup() {
                 name="translation_size"
                 prefix="em"
                 min="0.5"
-                step="0.1"
-                max="2.5"
+                step="0.05"
+                max="1.5"
               />
               <Select
                 label="Language Target"
@@ -143,8 +150,8 @@ export default function Popup() {
                   name="romanization_size"
                   prefix="em"
                   min="0.5"
-                  step="0.1"
-                  max="2.5"
+                  step="0.05"
+                  max="1.5"
                 />
               </div>
 

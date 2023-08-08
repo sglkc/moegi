@@ -3,6 +3,7 @@ import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
 import { lyricElements, options, scriptElement } from './init';
 import createToast from './toast';
 
+let isActive: undefined | boolean;
 const kuroshiro = new Kuroshiro();
 const kuromojiAnalyzer = new KuromojiAnalyzer({
   dictPath: scriptElement.dataset.dictPath!
@@ -31,11 +32,13 @@ async function convertLyrics() {
 }
 
 async function applyRomanization() {
+  // Only continue if translation was changed
+  if (options.romanization === isActive) return;
+  isActive = options.romanization;
 
   // Clear past conversions to avoid duplicate elements
   document.querySelectorAll('.converted-lyrics').forEach((el) => el.remove());
-
-  if (options.romanization) await convertLyrics();
+  if (isActive) await convertLyrics();
 }
 
 // Apply new options on event and on lyrics ready

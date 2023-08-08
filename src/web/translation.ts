@@ -2,6 +2,7 @@ import { googleTranslateApi } from 'google-translate-api-x';
 import { lyricElements, options, scriptElement } from './init';
 import createToast from './toast';
 
+let isActive: undefined | boolean;
 const extensionId = scriptElement.dataset.extensionId!;
 const translate = (
   title: string,
@@ -31,18 +32,18 @@ async function translateLyrics() {
   const lastTitle = titleElement.textContent!;
 
   // Translate the string, split into array, and append to lyric container
-  const toast = createToast('Loading translation', 5000);
+  const toast = createToast('Loading translation', -1);
   toast.showToast();
   const translations = await translate(lastTitle, lyricsString, {
     to: options.languageTarget
   });
   const newTitle = titleElement.textContent!;
 
+  toast.hideToast();
+
   if (newTitle !== lastTitle) return;
 
-  toast.hideToast();
   createToast('Translation loaded').showToast();
-
   lyricsArray.forEach((lyricElement, index) => {
     const originalElement = lyricElement.firstElementChild!;
     const originalText = originalElement.textContent!.trim();
@@ -61,10 +62,13 @@ async function translateLyrics() {
 }
 
 async function applyTranslation() {
+  // Only continue if translation was changed
+  if (options.translation === isActive) return;
+  isActive = options.translation;
 
   // Clear past translations to avoid duplicate elements
   document.querySelectorAll('.translated-lyrics').forEach((el) => el.remove());
-  if (options.translation) await translateLyrics();
+  if (isActive) await translateLyrics();
 }
 
 // Apply new options on event and on lyrics ready

@@ -42,6 +42,7 @@ export default function Color() {
 
   return (
     <>
+      <p class="mt-2 col-span-2 text-center">Colors</p>
       { styleProps.map((props) => (
         <ColorLabel current={input} set={setInput} {...props} />
       ))}
@@ -54,8 +55,10 @@ export default function Color() {
             [CLOSE]
           </button>
           <p>
-            Picking color for {' '}
-            { styleProps.find(({ name }) => name === input)?.label }. {' '}
+            Picking color for
+            <strong>
+              { styleProps.find(({ name }) => name === input)?.label }
+            </strong>.
           </p>
           <HexAlphaColorPicker
             color={moegiOptions.value[input]}
