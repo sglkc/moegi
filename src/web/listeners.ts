@@ -20,7 +20,8 @@ function addHistoryListener(func: (event: HistoryEvents) => void) {
   historyEvents.forEach((event) => addEventListener(event, func));
 }
 
-// Listen for incoming messages from content script and apply to options
+// Listen for incoming messages from content script, apply to options,
+// and send filtered object that has changed values
 addEventListener('message', (message) => {
   if (
     typeof message.data !== 'object'
@@ -28,11 +29,16 @@ addEventListener('message', (message) => {
       || message.data.type !== 'moegiOptions'
   ) return
 
-  Object.assign(window.__moegiOptions, message.data.options);
+  const options = message.data.options;
+  const diff = Object.fromEntries(
+    Object.entries(window.__moegiOptions).filter(
+      ([key, val]) => key in options && options[key] !== val
+    )
+  );
+
+  Object.assign(window.__moegiOptions, options);
   dispatchEvent(
-    new CustomEvent<MoegiOptions>('moegioptions', {
-      detail: message.data.options
-    })
+    new CustomEvent<Partial<MoegiOptions>>('moegioptions', { detail: diff })
   );
 });
 

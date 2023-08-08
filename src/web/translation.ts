@@ -1,8 +1,11 @@
 import { googleTranslateApi } from 'google-translate-api-x';
+import { MoegiOptionsKey } from '@/services/options';
 import { lyricElements, options, scriptElement } from './init';
 import createToast from './toast';
 
-let isActive: undefined | boolean;
+const translationKeys: Array<MoegiOptionsKey> = [
+  'translation', 'languageTarget'
+];
 const extensionId = scriptElement.dataset.extensionId!;
 const translate = (
   title: string,
@@ -61,14 +64,16 @@ async function translateLyrics() {
   });
 }
 
-async function applyTranslation() {
-  // Only continue if translation was changed
-  if (options.translation === isActive) return;
-  isActive = options.translation;
+async function applyTranslation(e: WindowEventMap['moegioptions']) {
+  const shouldUpdate = (Object.keys(e.detail ?? {}) as Array<MoegiOptionsKey>)
+    .find((k) => translationKeys.includes(k));
+
+  // Only continue if any of translation keys was changed
+  if (!shouldUpdate && (e.type === 'moegioptions')) return;
 
   // Clear past translations to avoid duplicate elements
   document.querySelectorAll('.translated-lyrics').forEach((el) => el.remove());
-  if (isActive) await translateLyrics();
+  if (options.translation) await translateLyrics();
 }
 
 // Apply new options on event and on lyrics ready

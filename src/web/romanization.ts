@@ -1,9 +1,13 @@
 import Kuroshiro from 'kuroshiro';
 import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
+import { MoegiOptionsKey } from '@/services/options';
 import { lyricElements, options, scriptElement } from './init';
 import createToast from './toast';
 
-let isActive: undefined | boolean;
+const romanizationKeys: Array<MoegiOptionsKey> = [
+  'romanization', 'to', 'mode', 'romajiSystem', 'delimiter_end',
+  'delimiter_start'
+];
 const kuroshiro = new Kuroshiro();
 const kuromojiAnalyzer = new KuromojiAnalyzer({
   dictPath: scriptElement.dataset.dictPath!
@@ -31,14 +35,16 @@ async function convertLyrics() {
   createToast('Japanese romanization generated').showToast();
 }
 
-async function applyRomanization() {
-  // Only continue if translation was changed
-  if (options.romanization === isActive) return;
-  isActive = options.romanization;
+async function applyRomanization(e: WindowEventMap['moegioptions']) {
+  const shouldUpdate = (Object.keys(e.detail ?? {}) as Array<MoegiOptionsKey>)
+    .find((k) => romanizationKeys.includes(k));
+
+  // Only continue if any of romanization keys was changed
+  if (!shouldUpdate && (e.type === 'moegioptions')) return;
 
   // Clear past conversions to avoid duplicate elements
   document.querySelectorAll('.converted-lyrics').forEach((el) => el.remove());
-  if (isActive) await convertLyrics();
+  if (options.romanization) await convertLyrics();
 }
 
 // Apply new options on event and on lyrics ready

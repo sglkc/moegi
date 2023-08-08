@@ -2,23 +2,20 @@ import { MoegiOptionsKey } from '@/services/options';
 import { options } from './init';
 
 // Style element for elements styling and append immediately if styling is on
-const generateStyles = () => `
+const generateStyles = () => `${options.styling ? '' : '/*'}
   [data-testid="fullscreen-lyric"] {
     margin-top: ${options.lyrics_spacing}px;
     font-size: ${options.lyrics_size}em;
     text-align: ${options.lyrics_align};
     line-height: 1.5;
-  }
+  } ${options.styling ? '' : '*/'}
   .converted-lyrics { font-size: ${options.romanization_size}em; }
   .translated-lyrics { font-size: ${options.translation_size}em; }
 `.trim();
 
 const styleElement = document.createElement('style');
-
-if (options.styling) {
-  document.head.append(styleElement);
-  styleElement.innerHTML = generateStyles();
-}
+styleElement.innerHTML = generateStyles();
+document.head.append(styleElement);
 
 // Lyrics colors styling
 const defaultColors = new Map();
@@ -49,13 +46,8 @@ function applyStyle(e: Event) {
   styleElement.innerHTML = generateStyles();
 
   // If styling is active, continue to style element, else set to defaults
-  if (options.styling) {
-    document.head.append(styleElement);
-    styleLyrics();
-    return;
-  }
+  if (options.styling) return styleLyrics();
 
-  styleElement.remove();
   colorProperties.forEach((prop) => {
     const property = `--lyrics-color-${prop}`;
     lyricsStyles.setProperty(property, defaultColors.get(prop))

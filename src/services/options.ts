@@ -47,7 +47,7 @@ export const moegiDefaultOptions: MoegiOptions = {
   delimiter_start: '(',
   delimiter_end: ')',
   hideOriginal: false,
-}
+} as const
 
 const syncStorage = new ChromeStorage('sync')
 const savedOptions = await syncStorage.get<MoegiOptions>('options')

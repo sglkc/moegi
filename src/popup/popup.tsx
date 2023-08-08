@@ -111,7 +111,7 @@ export default function Popup() {
                   label="Spacing"
                   name="lyrics_spacing"
                   prefix="px"
-                  max="32"
+                  max="64"
                 />
               </div>
               <Color />

@@ -35,7 +35,7 @@ function initLyrics() {
     originalElement.replaceChildren(lyricsElement);
   });
 
-  createToast('Lyrics loaded', 5000).showToast();
+  createToast('Lyrics loaded', 3000).showToast();
   dispatchEvent(new CustomEvent('lyricsready'));
 }
 

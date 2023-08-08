@@ -8,6 +8,8 @@ declare global {
   interface WindowEventMap {
     'changestate': CustomEvent<Parameters<History['pushState']>>
     'popstate': CustomEvent<PopStateEvent>
+    'moegioptions': CustomEvent<Partial<MoegiOptions>>
+    'lyricsready': CustomEvent
   }
   interface Window {
     __moegiOptions: MoegiOptions
