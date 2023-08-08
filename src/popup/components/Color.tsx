@@ -55,10 +55,10 @@ export default function Color() {
             [CLOSE]
           </button>
           <p>
-            Picking color for
+            Picking color for {' '}
             <strong>
               { styleProps.find(({ name }) => name === input)?.label }
-            </strong>.
+            </strong>:
           </p>
           <HexAlphaColorPicker
             color={moegiOptions.value[input]}

@@ -1,7 +1,12 @@
 import Kuroshiro from 'kuroshiro';
 import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
 import { MoegiOptionsKey } from '@/services/options';
-import { lyricElements, options, scriptElement } from './init';
+import {
+  lyricElements,
+  options,
+  scriptElement,
+  scrollToActiveLyric
+} from './init';
 import createToast from './toast';
 
 const romanizationKeys: Array<MoegiOptionsKey> = [
@@ -24,12 +29,10 @@ async function convertLyrics() {
 
     if (!kuroshiro.Util.hasJapanese(originalText)) continue;
 
-    const convertedElement = document.createElement('p');
+    const convertedElement = lyricElement.querySelector('.converted-lyrics')!;
     const convertedText = await kuroshiro.convert(originalText, options);
 
     convertedElement.innerHTML = convertedText;
-    convertedElement.classList.add('converted-lyrics');
-    lyricElement.insertAdjacentElement('beforeend', convertedElement);
   }
 
   createToast('Japanese romanization generated').showToast();
@@ -43,8 +46,12 @@ async function applyRomanization(e: WindowEventMap['moegioptions']) {
   if (!shouldUpdate && (e.type === 'moegioptions')) return;
 
   // Clear past conversions to avoid duplicate elements
-  document.querySelectorAll('.converted-lyrics').forEach((el) => el.remove());
+  document.querySelectorAll('.converted-lyrics')
+    .forEach((el) => el.innerHTML = '');
+
   if (options.romanization) await convertLyrics();
+
+  scrollToActiveLyric();
 }
 
 // Apply new options on event and on lyrics ready

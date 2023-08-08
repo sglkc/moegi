@@ -28,11 +28,22 @@ function initLyrics() {
     // If element lyric is already moved to paragraph element
     if (originalElement.firstChild.nodeType !== Node.TEXT_NODE) return;
 
+    // Initialize paragraph elements for romanization and translation
     const lyricsElement = document.createElement('p');
-
     lyricsElement.innerText = originalElement.innerText;
     lyricsElement.classList.add('original-lyrics');
-    originalElement.replaceChildren(lyricsElement);
+
+    const convertedElement = document.createElement('p');
+    convertedElement.classList.add('converted-lyrics');
+
+    const translatedElement = document.createElement('p');
+    translatedElement.classList.add('translated-lyrics');
+
+    originalElement.replaceChildren(
+      lyricsElement,
+      convertedElement,
+      translatedElement
+    );
   });
 
   createToast('Lyrics loaded', 3000).showToast();
@@ -77,29 +88,18 @@ const lyricsObserver = new MutationObserver((mutations) => {
 
 lyricsObserver.observe(document.body, { subtree: true, childList: true });
 
-// Apply hide original lyrics option and scroll to current line
-function hideOriginalLyrics() {
-  let activeElement: HTMLElement | undefined;
+// Scroll to active lyric line after DOM modifications
+// There are 2 default classes for default lyrics so if more then its active
+function scrollToActiveLyric() {
+  const activeElement = Array.from(lyricElements)
+    .reverse()
+    .find((lyricElement) => lyricElement.classList.length > 2);
 
-  // Logic for original lyrics display
-  lyricElements.forEach((lyricElement) => {
-    const [original] =
-      lyricElement.children as HTMLCollectionOf<HTMLElement>;
-
-    original.style.display = (options.hideOriginal ? 'none' : '');
-
-    // There are 2 default classes for lyrics as of now
-    if (lyricElement.classList.length > 2) activeElement = lyricElement;
-  });
-
-  if (activeElement) setTimeout(() => activeElement!.scrollIntoView({
+  if (activeElement) setTimeout(() => activeElement.scrollIntoView({
     behavior: 'smooth',
     block: 'center'
   }), 100);
 }
-
-addEventListener('moegioptions', hideOriginalLyrics);
-addEventListener('lyricsready', hideOriginalLyrics);
 
 // Initialize lyrics if current url is /lyrics
 addHistoryListener((event) => {
@@ -119,4 +119,4 @@ import('./styling');
 import('./romanization');
 import('./translation');
 
-export { lyricElements, options, scriptElement };
+export { lyricElements, options, scriptElement, scrollToActiveLyric };

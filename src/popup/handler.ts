@@ -34,11 +34,6 @@ export function formInputHandler({ target }: FormEvent) {
 
   const newOptions = { [name]: castValue }
 
-  // If translation and romanization is disabled, force show original lyrics
-  if (!moegiOptions.value.translation && !moegiOptions.value.romanization) {
-    newOptions.hideOriginal = false
-  }
-
   moegiOptions.value = Object.assign(
     {},
     moegiOptions.value,

@@ -1,6 +1,11 @@
 import { googleTranslateApi } from 'google-translate-api-x';
 import { MoegiOptionsKey } from '@/services/options';
-import { lyricElements, options, scriptElement } from './init';
+import {
+  lyricElements,
+  options,
+  scriptElement,
+  scrollToActiveLyric
+} from './init';
 import createToast from './toast';
 
 const translationKeys: Array<MoegiOptionsKey> = [
@@ -46,22 +51,21 @@ async function translateLyrics() {
 
   if (newTitle !== lastTitle) return;
 
-  createToast('Translation loaded').showToast();
   lyricsArray.forEach((lyricElement, index) => {
     const originalElement = lyricElement.firstElementChild!;
     const originalText = originalElement.textContent!.trim();
 
     if (originalText.length < 2) return;
 
-    const translatedElement = document.createElement('p');
+    const translatedElement = lyricElement.querySelector('.translated-lyrics')!;
     const translatedText = translations.at(index);
 
     if (!translatedText) return;
 
     translatedElement.innerHTML = translatedText;
-    translatedElement.classList.add('translated-lyrics');
-    lyricElement.insertAdjacentElement('beforeend', translatedElement);
   });
+
+  createToast('Translation loaded').showToast();
 }
 
 async function applyTranslation(e: WindowEventMap['moegioptions']) {
@@ -72,8 +76,12 @@ async function applyTranslation(e: WindowEventMap['moegioptions']) {
   if (!shouldUpdate && (e.type === 'moegioptions')) return;
 
   // Clear past translations to avoid duplicate elements
-  document.querySelectorAll('.translated-lyrics').forEach((el) => el.remove());
+  document.querySelectorAll('.translated-lyrics')
+    .forEach((el) => el.innerHTML = '');
+
   if (options.translation) await translateLyrics();
+
+  scrollToActiveLyric();
 }
 
 // Apply new options on event and on lyrics ready
