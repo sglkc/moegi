@@ -41,7 +41,7 @@ export default function Color() {
   const [input, setInput] = useState<InputType>()
 
   return (
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+    <>
       { styleProps.map((props) => (
         <ColorLabel current={input} set={setInput} {...props} />
       ))}
@@ -68,6 +68,6 @@ export default function Color() {
           />
         </div>
       }
-    </div>
+    </>
   )
 }

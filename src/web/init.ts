@@ -9,7 +9,6 @@ import createToast from './toast';
 // Get saved options from extension script dataset and apply to window object
 const scriptElement = document
   .querySelector<HTMLScriptElement>('[data-moegi-script]')!;
-
 const optionsData = JSON.parse(scriptElement.dataset.moegiOptions!);
 
 window.__moegiOptions = Object.assign({}, optionsData);

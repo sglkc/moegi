@@ -6,6 +6,7 @@ import Color from './components/Color'
 import Input from './components/Input'
 import Select, { SelectProps } from './components/Select'
 import { formInputHandler, resetStorageHandler } from './handler'
+import Range from './components/Range'
 
 type FormEventHandler = JSX.EventHandler<TargetedEvent<HTMLFormElement, Event>>
 
@@ -56,16 +57,16 @@ export default function Popup() {
         onInput={formInputHandler as FormEventHandler}
       >
 
-        <div class="fixed top-4 left-4 right-4 flex justify-between items-center">
+        <div class="mb-2 flex justify-between items-center">
           <div class="flex gap-2 items-center">
             <h1 class="color-gray-800 font-bold font-title text-3xl">もえぎ</h1>
           </div>
           <p class="max-w-32 line-height-4 text-end">
-            <small>Spotify lyrics utility extension</small>
+            <small class="text-xs">Spotify lyrics utility extension</small>
           </p>
         </div>
 
-        <div class="mt-14 flex flex-col gap-2">
+        <div class="flex flex-col gap-2">
           <Checkbox name="styling">
             <strong>Lyrics Style</strong>
           </Checkbox>
@@ -87,7 +88,27 @@ export default function Popup() {
           <>
             <hr class="my-2" />
             <p><strong>Lyrics Style:</strong></p>
-            <Color />
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+              <div class="col-span-2">
+                <Range
+                  label="Font Size"
+                  name="lyrics_size"
+                  prefix="em"
+                  min="0.5"
+                  step="0.1"
+                  max="2.5"
+                />
+              </div>
+              <div class="col-span-2">
+                <Range
+                  label="Spacing"
+                  name="lyrics_spacing"
+                  prefix="px"
+                  max="32"
+                />
+              </div>
+              <Color />
+            </div>
           </>
         }
         { moegiOptions.value.translation &&
@@ -95,6 +116,14 @@ export default function Popup() {
             <hr class="my-2" />
             <p><strong>Translation Options:</strong></p>
             <div class="grid gap-2">
+              <Range
+                label="Font Size"
+                name="translation_size"
+                prefix="em"
+                min="0.5"
+                step="0.1"
+                max="2.5"
+              />
               <Select
                 label="Language Target"
                 name="languageTarget"
@@ -108,6 +137,16 @@ export default function Popup() {
             <hr class="my-2" />
             <p><strong>Romanization Options:</strong></p>
             <div class="grid grid-cols-2 gap-2">
+              <div class="col-span-2">
+                <Range
+                  label="Font Size"
+                  name="romanization_size"
+                  prefix="em"
+                  min="0.5"
+                  step="0.1"
+                  max="2.5"
+                />
+              </div>
 
               { selects.map((select) => (<Select {...select} />)) }
 

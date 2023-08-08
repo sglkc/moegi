@@ -1,37 +1,56 @@
 import { MoegiOptionsKey } from '@/services/options';
 import { options } from './init';
 
-const defaultStyle = new Map();
-const styleProperties = ['active', 'inactive', 'passed', 'background'] as const;
-let styles: CSSStyleDeclaration;
+// Style element for elements styling
+const generateStyles = () => `
+  [data-testid="fullscreen-lyric"] {
+    margin-top: ${options.lyrics_spacing}px;
+    font-size: ${options.lyrics_size}em;
+    text-align: '${options.lyrics_align}';
+  }
+  .converted-lyrics { font-size: ${options.romanization_size}em; }
+  .translated-lyrics { font-size: ${options.translation_size}em; }
+`.trim();
+
+const styleElement = document.createElement('style');
+
+styleElement.innerHTML = generateStyles();
+document.head.append(styleElement);
+
+// Lyrics colors styling
+const defaultColors = new Map();
+const colorProperties = ['active', 'inactive', 'passed', 'background'] as const;
+let lyricsStyles: CSSStyleDeclaration;
 
 function styleLyrics() {
-  styleProperties.forEach((prop) => {
+  colorProperties.forEach((prop) => {
     const property = `--lyrics-color-${prop}`;
     const option: MoegiOptionsKey = `lyrics_${prop}`;
-    const newValue = options[option] || defaultStyle.get(prop);
+    const newValue = options[option] || defaultColors.get(prop);
 
-    styles.setProperty(property, newValue);
+    lyricsStyles.setProperty(property, newValue);
   });
 }
 
 function applyStyle(e: Event) {
-  styles = document.querySelector<HTMLDivElement>('[style*="lyrics"]')!.style;
+  lyricsStyles = document.querySelector<HTMLDivElement>('[style*="lyrics"]')!.style;
 
   // If lyrics ready, set current style to default style
   if (e.type === 'lyricsready') {
-    styleProperties.forEach((prop) => {
+    colorProperties.forEach((prop) => {
       const property = `--lyrics-color-${prop}`;
-      defaultStyle.set(prop, styles.getPropertyValue(property));
+      defaultColors.set(prop, lyricsStyles.getPropertyValue(property));
     });
   }
+
+  styleElement.innerHTML = generateStyles();
 
   // If styling is active, continue to style element, else set to defaults
   if (options.styling) return styleLyrics();
 
-  styleProperties.forEach((prop) => {
+  colorProperties.forEach((prop) => {
     const property = `--lyrics-color-${prop}`;
-    styles.setProperty(property, defaultStyle.get(prop))
+    lyricsStyles.setProperty(property, defaultColors.get(prop))
   });
 }
 

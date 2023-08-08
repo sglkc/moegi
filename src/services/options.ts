@@ -5,13 +5,18 @@ import { signal } from '@preact/signals'
 // Define moegiOptions and its type and create a signal to manage state
 export type MoegiOptions = {
   styling: boolean
+  lyrics_size: number
+  lyrics_spacing: number
+  lyrics_align: 'left' | 'center' | 'right'
   lyrics_active: string
   lyrics_inactive: string
   lyrics_passed: string
   lyrics_background: string
   translation: boolean
+  translation_size: number
   languageTarget: TranslationLanguage
   romanization: boolean
+  romanization_size: number
   to: 'romaji' | 'hiragana' | 'katakana'
   mode: 'normal' | 'spaced' | 'okurigana' | 'furigana'
   romajiSystem: 'hepburn' | 'nippon' | 'passport'
@@ -24,13 +29,18 @@ export type MoegiOptionsKey = keyof MoegiOptions
 
 export const moegiDefaultOptions: MoegiOptions = {
   styling: false,
+  lyrics_size: 1,
+  lyrics_spacing: 5,
+  lyrics_align: 'left',
   lyrics_active: '#ffffffff',
   lyrics_inactive: '#000000ff',
   lyrics_passed: '#ffffffb3',
   lyrics_background: '#6495edff',
   translation: false,
+  translation_size: 1,
   languageTarget: 'auto',
   romanization: false,
+  romanization_size: 1,
   to: 'romaji',
   mode: 'spaced',
   romajiSystem: 'hepburn',

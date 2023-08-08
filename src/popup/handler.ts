@@ -27,8 +27,11 @@ type FormEvent = TargetedEvent<HTMLFormElement, Event> & Readonly<{
 }>
 
 export function formInputHandler({ target }: FormEvent) {
-  const { checked, name, value } = target
-  const castValue = (target.type === 'checkbox') ? Boolean(checked) : value
+  const { checked, name, type, value } = target
+  const castValue = (type === 'checkbox') ? Boolean(checked)
+    : (type === 'range') ? parseFloat(value)
+    : value
+
   const newOptions = { [name]: castValue }
 
   // If translation and romanization is disabled, force show original lyrics
