@@ -32,6 +32,9 @@ dependencies:
   react-colorful:
     specifier: ^5.6.1
     version: 5.6.1(react-dom@18.2.0)(react@18.2.0)
+  toastify-js:
+    specifier: ^1.12.0
+    version: 1.12.0
 
 devDependencies:
   '@crxjs/vite-plugin':
@@ -46,6 +49,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.4.5
     version: 20.4.5
+  '@types/toastify-js':
+    specifier: ^1.12.0
+    version: 1.12.0
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -747,6 +753,10 @@ packages:
 
   /@types/node@20.4.5:
     resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
+    dev: true
+
+  /@types/toastify-js@1.12.0:
+    resolution: {integrity: sha512-fqpDHaKhFukN9KRm24bbH0wozvHmSwjvkaLjBUrWcSfSS4zysIwTYqNLG3XbSNhRlsTNRNLGS23tp/VhPwsfHQ==}
     dev: true
 
   /@unocss/astro@0.54.0(vite@4.4.5):
@@ -1873,6 +1883,10 @@ packages:
     dependencies:
       is-number: 7.0.0
     dev: true
+
+  /toastify-js@1.12.0:
+    resolution: {integrity: sha512-HeMHCO9yLPvP9k0apGSdPUWrUbLnxUKNFzgUoZp1PHCLploIX/4DSQ7V8H25ef+h4iO9n0he7ImfcndnN6nDrQ==}
+    dev: false
 
   /totalist@3.0.1:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}

@@ -1,6 +1,7 @@
 import Kuroshiro from 'kuroshiro';
 import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
 import { lyricElements, options, scriptElement } from './init';
+import createToast from './toast';
 
 const kuroshiro = new Kuroshiro();
 const kuromojiAnalyzer = new KuromojiAnalyzer({
@@ -25,6 +26,8 @@ async function convertLyrics() {
     convertedElement.classList.add('converted-lyrics');
     lyricElement.insertAdjacentElement('beforeend', convertedElement);
   }
+
+  createToast('Japanese romanization generated').showToast();
 }
 
 async function applyRomanization() {

@@ -1,6 +1,8 @@
 import { MoegiOptions } from '@/services/options';
 import { HistoryChangeEvent } from '@/types';
 import { addHistoryListener } from './listeners';
+import './toast';
+import createToast from './toast';
 
 // Module imports are below to avoid export not defined errors
 
@@ -34,6 +36,7 @@ function initLyrics() {
     originalElement.replaceChildren(lyricsElement);
   });
 
+  createToast('Lyrics loaded', 5000).showToast();
   dispatchEvent(new CustomEvent('lyricsready'));
 }
 

@@ -1,5 +1,6 @@
 import { googleTranslateApi } from 'google-translate-api-x';
 import { lyricElements, options, scriptElement } from './init';
+import createToast from './toast';
 
 const extensionId = scriptElement.dataset.extensionId!;
 const translate = (
@@ -30,12 +31,17 @@ async function translateLyrics() {
   const lastTitle = titleElement.textContent!;
 
   // Translate the string, split into array, and append to lyric container
+  const toast = createToast('Loading translation', 5000);
+  toast.showToast();
   const translations = await translate(lastTitle, lyricsString, {
     to: options.languageTarget
   });
   const newTitle = titleElement.textContent!;
 
   if (newTitle !== lastTitle) return;
+
+  toast.hideToast();
+  createToast('Translation loaded').showToast();
 
   lyricsArray.forEach((lyricElement, index) => {
     const originalElement = lyricElement.firstElementChild!;
