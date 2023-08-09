@@ -3,7 +3,6 @@ import { defineConfig, transformerVariantGroup } from 'unocss'
 export default defineConfig({
   theme: {
     fontFamily: {
-      title: '"RocknRoll One", sans-serif',
       text: '"Quicksand", sans-serif'
     },
     colors: {

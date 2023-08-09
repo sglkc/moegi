@@ -1,12 +1,13 @@
 import { JSX, TargetedEvent } from 'preact/compat'
 import { languages } from 'google-translate-api-x'
 import { moegiOptions } from '@/services/options'
+import moegiText from '@/assets/moegi-text.svg'
 import Checkbox from './components/Checkbox'
 import Color from './components/Color'
 import Input from './components/Input'
+import Range from './components/Range'
 import Select, { SelectProps } from './components/Select'
 import { formInputHandler, resetStorageHandler } from './handler'
-import Range from './components/Range'
 
 type FormEventHandler = JSX.EventHandler<TargetedEvent<HTMLFormElement, Event>>
 
@@ -58,7 +59,7 @@ export default function Popup() {
       >
 
         <div class="mt-2 mb-4 flex justify-between items-center">
-          <h1 class="color-gray-800 font-bold font-title text-3xl">もえぎ</h1>
+          <img class="max-h-8" src={moegiText} alt="もえぎ" />
           <p class="max-w-32 line-height-4 text-end">
             <small class="text-xs">Spotify lyrics utility extension</small>
           </p>

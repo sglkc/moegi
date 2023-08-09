@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@fontsource/quicksand": "^5.0.8",
-    "@fontsource/rocknroll-one": "^5.0.7",
     "@preact/signals": "^1.1.5",
     "@unocss/reset": "^0.54.0",
     "google-translate-api-x": "^10.6.7",
