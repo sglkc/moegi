@@ -35,6 +35,7 @@ export default defineManifest((env) => {
       default_popup: 'index.html'
     },
     permissions: [
+      'activeTab',
       'declarativeContent',
       'storage'
     ],

@@ -2,18 +2,21 @@ import './translate'
 
 // Enable extension action only on Spotify lyrics tabs
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.action.disable();
+  chrome.action.disable()
 
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
     const isSpotify = {
       conditions: [
         new chrome.declarativeContent.PageStateMatcher({
-          pageUrl: { hostEquals: 'open.spotify.com', pathPrefix: '/lyrics' },
+          pageUrl: {
+            hostEquals: 'open.spotify.com',
+            pathPrefix: '/lyrics'
+          },
         })
       ],
       actions: [new chrome.declarativeContent.ShowAction()],
-    };
+    }
 
-    chrome.declarativeContent.onPageChanged.addRules([isSpotify]);
-  });
-});
+    chrome.declarativeContent.onPageChanged.addRules([isSpotify])
+  })
+})
