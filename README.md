@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Moegi</h1>
-  <img src="docs/preview.png" alt="Moegi preview" height="360" />
+  <img src="docs/preview.png?raw=true" alt="Moegi preview" width="360" />
   <br /><br />
 
   [![MIT License](https://img.shields.io/github/license/sglkc/moegi)](LICENSE)
@@ -8,40 +8,41 @@
   [![Pull Requests](https://img.shields.io/github/issues-pr/sglkc/moegi)](https://github.com/sglkc/moegi/pulls)
   [![Latest Release](https://img.shields.io/github/v/release/sglkc/moegi)](https://github.com/sglkc/moegi/releases/latest)
 
-  <strong>An extension for Google Chrome to customize lyrics in Spotify Web Player.</strong>
+  <strong>An extension for Chromium browsers to customize lyrics in Spotify Web Player.</strong>
 
   <a href="https://github.com/sglkc/moegi/issues">Report a Bug</a>
   <strong>·</strong>
   <a href="https://github.com/sglkc/moegi/issues">Request a Feature</a>
 
   Features lyrics translation for over 100 languages powered by Google Translate and \
-  Japanese lyrics romanization to romaji, hiragana, and katakana in different formats including furigana!
+  Japanese lyrics romanization to romaji, hiragana, and katakana in different formats including furigana! \
+  *Tested on Google Chrome (115.0.5790.170) and Brave Browser (115.1.56.20) on Linux*
 
   <br />
 </div>
 
 ## Getting Started
 
-Google Chrome doesn't support installing extensions directly outside of Chrome Web Store, so follow these steps carefully:
+Chromium browsers doesn't support installing extensions directly outside of Chrome Web Store, so follow these steps carefully:
 
-1. Download the **latest release (moegi-x-x-x.zip)** archive from https://github.com/sglkc/moegi/releases/latest
-2. **Extract and remember the location** of the extracted folder (moegi-x-x-x)
+1. Download the **latest release (moegi-x.x.x.zip)** archive from https://github.com/sglkc/moegi/releases/latest
+2. **Extract and remember the location** of the extracted folder (moegi-x.x.x)
 3. Open Chrome extensions page at ***chrome://extensions***
 4. Toggle **developer mode** at the topmost bar
 5. Click on the new **Load unpacked** button
-6. Find and **select the folder** you extracted earlier (moegi-x-x-x)
+6. Find and **select the folder** you extracted earlier (moegi-x.x.x)
 7. Moegi should be added to the list and switched on, pin the extension for easy access
    - Click on the puzzle piece icon on the top-right
    - Find Moegi and click on the pin icon
-8. Open Spotify Web Player (https://open.spotify.com), Moegi icon should now turn green
+8. Open Spotify Web Player (https://open.spotify.com)
 9. Play any song and open the lyrics page by clicking the microphone icon on bottom-right
 10. If you click on Moegi, it should now display a popup, nice!
 
-### Notes
-
-- You can only open the popup in Spotify lyrics page, even if it's green
-- If the extension is broken, reset it to default, and if the problem still occurs, create an issue or contact me directly
-- Not every song in Spotify has lyrics and it's beyond Moegi's scope
+<details>
+  <summary>Screenshots</summary>
+  <img src="docs/extensions.png" alt="Moegi installation" />
+  <img src="docs/loaded.png" alt="Moegi loaded" />
+</details>
 
 ## Features
 
