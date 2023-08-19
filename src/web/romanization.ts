@@ -1,5 +1,5 @@
-import Kuroshiro from 'kuroshiro';
-import KuromojiAnalyzer from 'kuroshiro-analyzer-kuromoji';
+import Kuroshiro from '@sglkc/kuroshiro';
+import KuromojiAnalyzer from '@sglkc/kuroshiro-analyzer-kuromoji';
 import { MoegiOptionsKey } from '@/services/options';
 import {
   lyricElements,

@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Moegi</h1>
-  <img src="docs/preview.png?raw=true" alt="Moegi preview" width="360" />
+  <video src="https://github.com/sglkc/moegi/assets/31957516/b8ed69f7-66fd-4686-a88a-3bd7335cea2a" width="360" autoplay="true" />
   <br /><br />
 
   [![MIT License](https://img.shields.io/github/license/sglkc/moegi)](LICENSE)
@@ -75,8 +75,8 @@ Note that translations are not accurate and should not be used literally! [Read 
 
 ### Romanization
 
-Libraries used: [kuroshiro](https://github.com/sglkc/kuroshiro-ts),
-  [kuroshiro-analyzer-kuromoji](https://github.com/sglkc/kuroshiro-analyzer-kuromoji-ts)
+Libraries used: [@sglkc/kuroshiro](https://github.com/sglkc/kuroshiro-ts),
+[@sglkc/kuroshiro-analyzer-kuromoji](https://github.com/sglkc/kuroshiro-analyzer-kuromoji-ts)
 
 Romanize lyrics that has Japanese characters, if no Japanese characters are found then it will skip the line.
 Note that generated romanization may not be accurate!
