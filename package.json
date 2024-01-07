@@ -3,7 +3,7 @@
   "description": "A Spotify lyrics utility extension with Japanese romanization",
   "homepage": "https://github.com/sglkc/moegi",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

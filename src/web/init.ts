@@ -1,10 +1,10 @@
 import { MoegiOptions } from '@/services/options';
 import { HistoryChangeEvent } from '@/types';
 import { addHistoryListener } from './listeners';
-import './toast';
 import createToast from './toast';
 
 // Module imports are below to avoid export not defined errors
+const loadedToast = createToast('Lyrics loaded', 3000);
 
 // Get saved options from extension script dataset and apply to window object
 const scriptElement = document
@@ -18,15 +18,19 @@ const options: MoegiOptions = window.__moegiOptions;
 
 // Move lyrics from text node to paragraph element in the container
 function initLyrics() {
+
+  // Check if lyrics exist before iterating
+  if (!lyricElements.size) return;
+
   lyricElements.forEach((originalElement) => {
 
     // There are empty lyric elements from Spotify, if any are removed Spotify
     // will happen to error on the next song load
-    if (!originalElement.firstChild)
+    if (!originalElement.firstChild?.textContent)
       return lyricElements.delete(originalElement);
 
     // If element lyric is already moved to paragraph element
-    if (originalElement.firstChild.nodeType !== Node.TEXT_NODE) return;
+    if (originalElement.firstChild.nodeName !== 'DIV') return;
 
     // Initialize paragraph elements for romanization and translation
     const lyricsElement = document.createElement('p');
@@ -46,8 +50,13 @@ function initLyrics() {
     );
   });
 
-  createToast('Lyrics loaded', 3000).showToast();
-  dispatchEvent(new CustomEvent('lyricsready'));
+  try {
+    loadedToast.hideToast();
+  } catch {
+  } finally {
+    loadedToast.showToast();
+    dispatchEvent(new CustomEvent('lyricsready'));
+  }
 }
 
 const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
@@ -61,6 +70,7 @@ let checkLyricsMutationTimeout: ReturnType<Window['setTimeout']> | undefined;
 
 function checkLyricsMutation(node: Node) {
   if (node.nodeName !== 'DIV') return;
+  if (!(node as Element).querySelector(lyricElementSelector)) return;
 
   const newLyrics: HTMLDivElement[] = Array.from(
     (node as Element).querySelectorAll(lyricElementSelector)
@@ -107,7 +117,10 @@ addHistoryListener((event) => {
     ? (event as HistoryChangeEvent).detail[2]?.toString().includes('lyrics')
     : location.pathname.includes('lyrics');
 
-  if (isLyricsPage) initLyrics();
+  if (isLyricsPage) {
+    lyricElements.clear()
+    initLyrics();
+  }
 });
 
 // If user's already in lyrics page and lyric elements exist in first try,

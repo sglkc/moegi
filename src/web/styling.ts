@@ -2,12 +2,15 @@ import { MoegiOptionsKey } from '@/services/options';
 import { options, scrollToActiveLyric } from './init';
 
 // If styling active then comment entire lyrics rule
-const isStylingActive = () => options.styling ? '' : '/*';
+const isStylingActive = () => (options.styling ? '' : '/*');
 // If translation and romanization is disabled, force show original lyrics
 const shouldHideOriginal = () =>
   (options.translation || options.romanization) && options.hideOriginal;
 // Style element for elements styling and append immediately if styling is on
 const generateStyles = () => `
+  .original-lyrics { display: ${shouldHideOriginal() ? 'none' : 'inherit'}; }
+  .converted-lyrics { font-size: ${options.romanization_size}em; }
+  .translated-lyrics { font-size: ${options.translation_size}em; }
   ${isStylingActive()}
   [data-testid="fullscreen-lyric"] {
     margin-top: ${options.lyrics_spacing}px;
@@ -15,10 +18,6 @@ const generateStyles = () => `
     text-align: ${options.lyrics_align};
     line-height: 1.5;
   }
-  ${isStylingActive()}
-  .original-lyrics { display: ${shouldHideOriginal() ? 'none' : 'inherit'}; }
-  .converted-lyrics { font-size: ${options.romanization_size}em; }
-  .translated-lyrics { font-size: ${options.translation_size}em; }
 `.trim();
 
 const styleElement = document.createElement('style');
