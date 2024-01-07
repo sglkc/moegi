@@ -10,7 +10,6 @@ chrome.runtime.onInstalled.addListener(() => {
         new chrome.declarativeContent.PageStateMatcher({
           pageUrl: {
             hostEquals: 'open.spotify.com',
-            pathPrefix: '/lyrics'
           },
         })
       ],
