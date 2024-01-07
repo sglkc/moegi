@@ -1,9 +1,9 @@
 {
   "name": "moegi",
-  "description": "A Spotify lyrics utility extension with Japanese romanization",
+  "description": "A Spotify lyrics extension for styling, translation, and (Japanese & Korean) romanization",
   "homepage": "https://github.com/sglkc/moegi",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@fontsource/quicksand": "^5.0.16",
     "@preact/signals": "^1.2.2",
+    "@romanize/korean": "^0.1.1",
     "@sglkc/kuroshiro": "^1.0.1",
     "@sglkc/kuroshiro-analyzer-kuromoji": "^1.0.1",
     "@unocss/reset": "^0.54.3",

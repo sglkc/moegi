@@ -19,13 +19,32 @@ export default function Form() {
 
   const selects: SelectProps[] = [
     {
+      label: 'Language',
+      name: 'romanization_lang',
+      options: [
+        { text: 'Japanese', value: 'ja' },
+        { text: 'Korean', value: 'kr' },
+      ]
+    },
+    {
+      label: 'Hangul System',
+      name: 'hangul_system',
+      options: [
+        { text: 'Revised', value: 'RR' },
+        { text: 'McCune', value: 'MR' },
+        { text: 'Yale', value: 'YL' },
+      ],
+      hidden: (moegiOptions.value.romanization_lang !== 'kr')
+    },
+    {
       label: 'To',
       name: 'to',
       options: [
         { text: 'Romaji', value: 'romaji' },
         { text: 'Hiragana', value: 'hiragana' },
         { text: 'Katakana', value: 'katakana' },
-      ]
+      ],
+      hidden: (moegiOptions.value.romanization_lang !== 'ja')
     },
     {
       label: 'Mode',
@@ -35,7 +54,8 @@ export default function Form() {
         { text: 'Spaced', value: 'spaced' },
         { text: 'Okurigana', value: 'okurigana' },
         { text: 'Furigana', value: 'furigana' },
-      ]
+      ],
+      hidden: (moegiOptions.value.romanization_lang !== 'ja')
     },
     {
       label: 'Romaji System',
@@ -45,6 +65,7 @@ export default function Form() {
         { text: 'Nippon', value: 'nippon' },
         { text: 'Passport', value: 'passport' },
       ],
+      hidden: (moegiOptions.value.romanization_lang !== 'ja'),
       disabled: (moegiOptions.value.to !== 'romaji')
     }
   ]
@@ -65,7 +86,7 @@ export default function Form() {
         </Checkbox>
 
         <Checkbox name="romanization">
-          <strong>Japanese Romanization</strong>
+          <strong>Romanization</strong>
         </Checkbox>
 
         {(moegiOptions.value.translation || moegiOptions.value.romanization) &&
@@ -148,21 +169,23 @@ export default function Form() {
 
             { selects.map((select) => (<Select {...select} />)) }
 
-            <div class="col-span-2 grid grid-cols-4 gap-2">
-              <p class="col-span-4 text-center">Okurigana Delimiter</p>
-              <Input
-                label="Start"
-                name="delimiter_start"
-                placeholder="("
-                disabled={moegiOptions.value.mode !== 'okurigana'}
-              />
-              <Input
-                label="End"
-                name="delimiter_end"
-                placeholder=")"
-                disabled={moegiOptions.value.mode !== 'okurigana'}
-              />
-            </div>
+            { ((moegiOptions.value.romanization_lang === 'ja') &&
+                moegiOptions.value.mode === 'okurigana')
+              &&
+              <div class="col-span-2 grid grid-cols-4 gap-2">
+                <p class="col-span-4 text-center">Okurigana Delimiter</p>
+                <Input
+                  label="Start"
+                  name="delimiter_start"
+                  placeholder="("
+                />
+                <Input
+                  label="End"
+                  name="delimiter_end"
+                  placeholder=")"
+                />
+              </div>
+            }
           </div>
         </>
       }

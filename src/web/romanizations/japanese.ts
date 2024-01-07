@@ -6,8 +6,8 @@ import {
   options,
   scriptElement,
   scrollToActiveLyric
-} from './init';
-import createToast from './toast';
+} from '../init';
+import createToast from '../toast';
 
 const romanizationKeys: Array<MoegiOptionsKey> = [
   'romanization', 'to', 'mode', 'romajiSystem', 'delimiter_end',
@@ -49,7 +49,8 @@ async function applyRomanization(e: WindowEventMap['moegioptions']) {
   document.querySelectorAll('.converted-lyrics')
     .forEach((el) => el.innerHTML = '');
 
-  if (options.romanization) await convertLyrics();
+  if (options.romanization && options.romanization_lang === 'ja')
+    await convertLyrics();
 
   scrollToActiveLyric();
 }
