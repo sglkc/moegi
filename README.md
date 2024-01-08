@@ -1,7 +1,8 @@
 <div align="center">
   <h1>Moegi</h1>
-  <video src="https://github.com/sglkc/moegi/assets/31957516/b8ed69f7-66fd-4686-a88a-3bd7335cea2a" width="360" autoplay="true" />
-  <br /><br />
+  <video src="https://github.com/sglkc/moegi/assets/31957516/811b1143-d51f-4084-84ff-39da63b99c47" width="360" autoplay="false" ></video>
+
+  <br />
 
   [![MIT License](https://img.shields.io/github/license/sglkc/moegi)](LICENSE)
   [![Issues](https://img.shields.io/github/issues/sglkc/moegi)](https://github.com/sglkc/moegi/issues)
@@ -14,9 +15,10 @@
   <strong>·</strong>
   <a href="https://github.com/sglkc/moegi/issues">Request a Feature</a>
 
-  Features lyrics translation for over 100 languages powered by Google Translate and \
+  Features lyrics translation for over 100 languages powered by Google Translate, \
+  Korean lyrics romanization with Revised, McCune, and Yale system, and  \
   Japanese lyrics romanization to romaji, hiragana, and katakana in different formats including furigana! \
-  *Tested on Google Chrome (115.0.5790.170) and Brave Browser (115.1.56.20) on Linux*
+  *Tested on Google Chrome (120.0.6099.129) and Brave Browser (120.1.61.100) on Linux*
 
   <br />
 </div>
@@ -39,7 +41,7 @@ Chromium browsers doesn't support installing extensions directly outside of Chro
 10. If you click on Moegi, it should now display a popup, nice!
 
 <details>
-  <summary>Screenshots</summary>
+  <summary>Steps screenshot</summary>
   <img src="docs/extensions.png" alt="Moegi installation" />
   <img src="docs/loaded.png" alt="Moegi loaded" />
 </details>
@@ -47,8 +49,8 @@ Chromium browsers doesn't support installing extensions directly outside of Chro
 ## Features
 
 <details>
-  <summary>Show extension features screenshot</summary>
-  <img src="docs/features.png?raw=true" alt="Moegi all features" width="320" />
+  <summary>Show full extension features screenshot</summary>
+  <img src="https://github.com/sglkc/moegi/assets/31957516/a53cb8cb-3162-49f0-973d-e9558edcaa83" alt="Moegi all features" width="320" />
 </details>
 
 ### Lyrics Styling
@@ -75,13 +77,22 @@ Note that translations are not accurate and should not be used literally! [Read 
 
 ### Romanization
 
+There are currently supported languages:
+- [Japanese](#japanese)
+- [Korean](#korean)
+
+Romanize lyrics that has the selected language's characters, if none then it will skip to the next line.
+
+- **Language**: Language to romanize. *Default: Korean, Options: Korean, Japanese.*
+- **Font Size**: Set the romanization line relative to lyrics font size. *Default: 1em, Options: 0.5-1.5em.*
+
+#### Japanese
+
 Libraries used: [@sglkc/kuroshiro](https://github.com/sglkc/kuroshiro-ts),
 [@sglkc/kuroshiro-analyzer-kuromoji](https://github.com/sglkc/kuroshiro-analyzer-kuromoji-ts)
 
-Romanize lyrics that has Japanese characters, if no Japanese characters are found then it will skip the line.
-Note that generated romanization may not be accurate!
+Note that Japanese romanization may not be accurate, particularly on kanji!
 
-- **Font Size**: Set the translation line relative to lyrics font size. *Default: 1em, Options: 0.5-1.5em.*
 - **To**: Romanization target for Japanese lyrics. *Default: Romaji, Options: Romaji, Hiragana, Katakana.*
 - **Mode**: How generated romanization should be written. *Default: Spaced, Options: Normal, Spaced, Okurigana, Furigana.*
 - **Romaji System**: What romanization system to use for romaji. *Default: Hepburn, Options: Nippon, Passport, Hepburn.*
@@ -108,6 +119,29 @@ Note that generated romanization may not be accurate!
 </details>
 
 > [Read about romaji romanization systems (for nerds).](https://github.com/sglkc/kuroshiro-ts#romanization-system)
+
+### Korean
+
+Library used: [@romanize/korean](https://www.npmjs.com/package/@romanize/korean)
+
+- **Hangul System**: Romanization system used. *Default: Revised, Options: Revised, McCune, Yale.*
+
+<details>
+  <summary>Differences between each romanization system</summary>
+  <br />
+
+  **Original Text: 우두커니 그 자리에 서서 기다리려나 봐**
+
+  1. Revised ([Revised Romanization of Korean](https://en.wikipedia.org/wiki/Revised_Romanization_of_Korean)): \
+     udukeoni geu jarie seoseo gidariryeona bwa
+
+  2. McCune ([McCune–Reischauer romanization](https://en.wikipedia.org/wiki/McCune%E2%80%93Reischauer)): \
+     utuk'ŏni kŭ carie sŏsŏ kitariryŏna pwa
+
+  3. Yale ([Yale romanization of Korean](https://en.wikipedia.org/wiki/Yale_romanization_of_Korean)): \
+     utukheni ku caliey sese kitalilyena pwa
+
+</details>
 
 ## Development
 
