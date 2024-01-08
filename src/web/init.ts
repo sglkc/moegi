@@ -69,6 +69,8 @@ const lyricElements = new Set<HTMLDivElement>(
 let checkLyricsMutationTimeout: ReturnType<Window['setTimeout']> | undefined;
 
 function checkLyricsMutation(node: Node) {
+
+  // Check if node is the lyrics container and has a lyric element
   if (node.nodeName !== 'DIV') return;
   if (!(node as Element).querySelector(lyricElementSelector)) return;
 
@@ -81,8 +83,11 @@ function checkLyricsMutation(node: Node) {
   clearTimeout(checkLyricsMutationTimeout);
 
   checkLyricsMutationTimeout = (setTimeout as Window['setTimeout'])(() => {
-    checkLyricsMutationTimeout = undefined;
 
+    // Check again in case the node mutates
+    if (!(node as Element).querySelector(lyricElementSelector)) return;
+
+    checkLyricsMutationTimeout = undefined;
     lyricElements.clear();
     newLyrics.forEach((el) => lyricElements.add(el));
     initLyrics();

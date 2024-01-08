@@ -10,8 +10,8 @@ import {
 import createToast from '../toast';
 
 const romanizationKeys: Array<MoegiOptionsKey> = [
-  'romanization', 'to', 'mode', 'romajiSystem', 'delimiter_end',
-  'delimiter_start'
+  'romanization', 'romanization_lang', 'to', 'mode', 'romajiSystem',
+  'delimiter_end', 'delimiter_start'
 ];
 const kuroshiro = new Kuroshiro();
 const kuromojiAnalyzer = new KuromojiAnalyzer({
