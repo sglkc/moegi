@@ -46,24 +46,24 @@ export default defineManifest((env) => {
     content_scripts: [
       {
         js: ['src/content/script.ts'],
-        matches: ['*://open.spotify.com/*']
+        matches: ['https://open.spotify.com/*']
       }
     ],
     externally_connectable: {
       ids: ['*'],
-      matches: ['*://open.spotify.com/*'],
+      matches: ['https://open.spotify.com/*'],
       accepts_tls_channel_id: false
     },
     host_permissions: [
-      'https://translate.google.com/'
+      'https://translate.google.com/*'
     ],
     web_accessible_resources: [
       {
-        matches: ['*://open.spotify.com/*'],
+        matches: ['https://open.spotify.com/*'],
         resources: ['dict/*']
       },
       defineDynamicResource({
-        matches: ['*://open.spotify.com/*']
+        matches: ['https://open.spotify.com/*']
       }),
     ]
   }
