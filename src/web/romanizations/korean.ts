@@ -26,7 +26,7 @@ async function convertLyrics() {
     if (!isHangul(originalText)) continue;
 
     const convertedElement = lyricElement.querySelector('.converted-lyrics')!;
-    const convertedText = romanize(originalText, options.hangul_system);
+    const convertedText = romanize(originalText, { system: options.hangul_system });
 
     convertedElement.innerHTML = convertedText.toString();
   }
