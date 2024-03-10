@@ -16,7 +16,7 @@ export type MoegiOptions = {
   translation_size: number
   languageTarget: TranslationLanguage
   romanization: boolean
-  romanization_lang: 'ja' | 'kr'
+  romanization_lang: 'ja' | 'kr' | 'ru' | 'uk'
   romanization_size: number
   hangul_system: 'RR' | 'MR' | 'YL'
   to: 'romaji' | 'hiragana' | 'katakana'

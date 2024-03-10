@@ -24,6 +24,8 @@ export default function Form() {
       options: [
         { text: 'Japanese', value: 'ja' },
         { text: 'Korean', value: 'kr' },
+        { text: 'Russian', value: 'ru' },
+        { text: 'Ukrainian', value: 'uk' },
       ]
     },
     {

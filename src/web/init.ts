@@ -137,5 +137,6 @@ import('./styling');
 import('./translation');
 import('./romanizations/japanese');
 import('./romanizations/korean');
+import('./romanizations/cyrillic');
 
 export { lyricElements, options, scriptElement, scrollToActiveLyric };
