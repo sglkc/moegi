@@ -1,6 +1,6 @@
 {
   "name": "moegi",
-  "description": "A Spotify lyrics extension for styling, translation, and (Japanese & Korean) romanization",
+  "description": "A Spotify lyrics extension for styling, translation, and romanization",
   "homepage": "https://github.com/sglkc/moegi",
   "private": true,
   "version": "1.2.0",
@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource/quicksand": "^5.0.16",
+    "@fontsource/quicksand": "^5.0.17",
     "@preact/signals": "^1.2.2",
     "@romanize/korean": "^0.1.1",
     "@sglkc/kuroshiro": "^1.0.1",
@@ -20,7 +20,7 @@
     "cyrillic-to-translit-js": "^3.2.1",
     "google-translate-api-x": "^10.6.8",
     "pinyin-pro": "^3.19.6",
-    "preact": "^10.19.3",
+    "preact": "^10.19.6",
     "react-colorful": "^5.6.1",
     "toastify-js": "^1.12.0"
   },
@@ -28,9 +28,9 @@
     "@crxjs/vite-plugin": "2.0.0-beta.18",
     "@preact/preset-vite": "^2.8.1",
     "@types/chrome": "^0.0.242",
-    "@types/node": "^20.10.6",
+    "@types/node": "^20.11.25",
     "@types/toastify-js": "^1.12.3",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.2",
     "unocss": "^0.54.3",
     "vite": "^4.5.2",
     "vite-plugin-cp": "^1.0.0"

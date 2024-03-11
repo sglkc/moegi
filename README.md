@@ -16,9 +16,11 @@
   <a href="https://github.com/sglkc/moegi/issues">Request a Feature</a>
 
   Features lyrics translation for over 100 languages powered by Google Translate, \
-  Korean lyrics romanization with Revised, McCune, and Yale system, and  \
+  Cyrillic lyrics romanization for Russian and Ukrainian language,
+  Chinese lyrics romanization to pinyin in text or ruby format,
+  Korean lyrics romanization with Revised, McCune, and Yale system,  \
   Japanese lyrics romanization to romaji, hiragana, and katakana in different formats including furigana! \
-  *Tested on Google Chrome (120.0.6099.129) and Brave Browser (120.1.61.100) on Linux*
+  *Tested on Google Chrome (122.0.6261.111) and Brave Browser (122.1.63.169) on Linux*
 
   <br />
 </div>
@@ -143,11 +145,37 @@ Library used: [@romanize/korean](https://www.npmjs.com/package/@romanize/korean)
 
 </details>
 
+### Cyrillic
+
+Library used: [cyrillic-to-translit-js](https://www.npmjs.com/package/cyrillic-to-translit-js)
+
+- **Language**: Cyrillic language. *Default: Russian, Options: Russian, Ukrainian.*
+
+### Chinese
+
+Library used: [pinyin-pro](https://www.npmjs.com/package/pinyin-pro)
+
+- **Ruby text**: Show romanization on top of original characters. *Default: OFF.*
+
+<details>
+  <summary>Ruby text ON/OFF</summary>
+  <br />
+
+  **Original Text: 你不知道你有多可愛**
+
+  1. OFF \
+     nǐ bù zhī dào nǐ yǒu duō kě ài
+
+  2. ON \
+     <ruby>你<rp>(</rp><rt>nǐ</rt><rp>)</rp></ruby><ruby>不<rp>(</rp><rt>bù</rt><rp>)</rp></ruby><ruby>知<rp>(</rp><rt>zhī</rt><rp>)</rp></ruby><ruby>道<rp>(</rp><rt>dào</rt><rp>)</rp></ruby><ruby>你<rp>(</rp><rt>nǐ</rt><rp>)</rp></ruby><ruby>有<rp>(</rp><rt>yǒu</rt><rp>)</rp><ruby>多<rp>(</rp><rt>duō</rt><rp>)</rp></ruby><ruby>可<rp>(</rp><rt>kě</rt><rp>)</rp></ruby><ruby>愛<rp>(</rp><rt>ài</rt><rp>)</rp></ruby>
+
+</details>
+
 ## Development
 
 ### Prerequisites
 
-- Node ^16.14
+- Node ^18
 - pnpm ^8 (https://pnpm.io/installation)
 
   ```sh
