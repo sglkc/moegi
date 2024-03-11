@@ -135,6 +135,6 @@ if (location.pathname.includes('lyrics') && lyricElements.size) initLyrics();
 // Use dynamic import so it doesn't bundle to the top
 import('./styling');
 import('./translation');
-import('./romanization')
+import('./romanization');
 
 export { lyricElements, options, scriptElement, scrollToActiveLyric };

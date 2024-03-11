@@ -13,7 +13,8 @@ export default defineConfig(() => {
 
   return {
     build: {
-      target: 'esnext'
+      target: 'esnext',
+      modulePreload: false,
     },
     plugins: [
       preact(),
