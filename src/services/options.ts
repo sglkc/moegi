@@ -16,8 +16,9 @@ export type MoegiOptions = {
   translation_size: number
   languageTarget: TranslationLanguage
   romanization: boolean
-  romanization_lang: 'ja' | 'kr' | 'ru' | 'uk'
+  romanization_lang: 'japanese' | 'korean' | 'cyrillic'
   romanization_size: number
+  cyrillic_lang: 'ru' | 'uk'
   hangul_system: 'RR' | 'MR' | 'YL'
   to: 'romaji' | 'hiragana' | 'katakana'
   mode: 'normal' | 'spaced' | 'okurigana' | 'furigana'
@@ -42,8 +43,9 @@ export const moegiDefaultOptions: MoegiOptions = {
   translation_size: 1,
   languageTarget: 'auto',
   romanization: false,
-  romanization_lang: 'ja',
+  romanization_lang: 'japanese',
   romanization_size: 1,
+  cyrillic_lang: 'ru',
   hangul_system: 'RR',
   to: 'romaji',
   mode: 'spaced',

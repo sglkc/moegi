@@ -19,14 +19,22 @@ export default function Form() {
 
   const selects: SelectProps[] = [
     {
-      label: 'Language',
+      label: 'Romanization',
       name: 'romanization_lang',
       options: [
-        { text: 'Japanese', value: 'ja' },
-        { text: 'Korean', value: 'kr' },
+        { text: 'Japanese', value: 'japanese' },
+        { text: 'Korean', value: 'korean' },
+        { text: 'Cyrillic', value: 'cyrillic' },
+      ]
+    },
+    {
+      label: 'Language',
+      name: 'cyrillic_lang',
+      options: [
         { text: 'Russian', value: 'ru' },
         { text: 'Ukrainian', value: 'uk' },
-      ]
+      ],
+      hidden: (moegiOptions.value.romanization_lang !== 'cyrillic')
     },
     {
       label: 'Hangul System',
@@ -36,7 +44,7 @@ export default function Form() {
         { text: 'McCune', value: 'MR' },
         { text: 'Yale', value: 'YL' },
       ],
-      hidden: (moegiOptions.value.romanization_lang !== 'kr')
+      hidden: (moegiOptions.value.romanization_lang !== 'korean')
     },
     {
       label: 'To',
@@ -46,7 +54,7 @@ export default function Form() {
         { text: 'Hiragana', value: 'hiragana' },
         { text: 'Katakana', value: 'katakana' },
       ],
-      hidden: (moegiOptions.value.romanization_lang !== 'ja')
+      hidden: (moegiOptions.value.romanization_lang !== 'japanese')
     },
     {
       label: 'Mode',
@@ -57,7 +65,7 @@ export default function Form() {
         { text: 'Okurigana', value: 'okurigana' },
         { text: 'Furigana', value: 'furigana' },
       ],
-      hidden: (moegiOptions.value.romanization_lang !== 'ja')
+      hidden: (moegiOptions.value.romanization_lang !== 'japanese')
     },
     {
       label: 'Romaji System',
@@ -67,7 +75,7 @@ export default function Form() {
         { text: 'Nippon', value: 'nippon' },
         { text: 'Passport', value: 'passport' },
       ],
-      hidden: (moegiOptions.value.romanization_lang !== 'ja'),
+      hidden: (moegiOptions.value.romanization_lang !== 'japanese'),
       disabled: (moegiOptions.value.to !== 'romaji')
     }
   ]
@@ -171,7 +179,7 @@ export default function Form() {
 
             { selects.map((select) => (<Select {...select} />)) }
 
-            { ((moegiOptions.value.romanization_lang === 'ja') &&
+            { ((moegiOptions.value.romanization_lang === 'japanese') &&
                 moegiOptions.value.mode === 'okurigana')
               &&
               <div class="col-span-2 grid grid-cols-4 gap-2">
