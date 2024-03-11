@@ -8,7 +8,7 @@ const kuromojiAnalyzer = new KuromojiAnalyzer({
   dictPath: scriptElement.dataset.dictPath!
 });
 
-kuroshiro.init(kuromojiAnalyzer);
+await kuroshiro.init(kuromojiAnalyzer);
 
 const Japanese: Romanization = {
   name: 'Japanese',
@@ -18,7 +18,7 @@ const Japanese: Romanization = {
     'delimiter_end', 'delimiter_start'
   ],
   check: (text) => kuroshiro.Util.hasJapanese(text),
-  convert: async (text, options) => kuroshiro.convert(text, options),
-};
+  convert: async (text, options) => await kuroshiro.convert(text, options),
+}
 
 export default Japanese;

@@ -25,6 +25,7 @@ export default function Form() {
         { text: 'Japanese', value: 'japanese' },
         { text: 'Korean', value: 'korean' },
         { text: 'Cyrillic', value: 'cyrillic' },
+        { text: 'Chinese', value: 'chinese' },
       ]
     },
     {
@@ -178,6 +179,12 @@ export default function Form() {
             </div>
 
             { selects.map((select) => (<Select {...select} />)) }
+
+            { (moegiOptions.value.romanization_lang === 'chinese') &&
+              <Checkbox name="chinese_ruby">
+                <strong>Ruby text</strong>
+              </Checkbox>
+            }
 
             { ((moegiOptions.value.romanization_lang === 'japanese') &&
                 moegiOptions.value.mode === 'okurigana')

@@ -16,7 +16,8 @@ export interface Romanization {
 const romanizations = {
   japanese: import('./romanizations/japanese'),
   korean: import('./romanizations/korean'),
-  cyrillic: import('./romanizations/cyrillic')
+  cyrillic: import('./romanizations/cyrillic'),
+  chinese: import('./romanizations/chinese'),
 }
 
 // Convert lyric lines using hangul-romanization if they have any Korean characters
@@ -32,7 +33,7 @@ async function convertLyrics(romanization: Romanization) {
     const convertedElement = lyricElement.querySelector('.converted-lyrics')!;
     const convertedText = await romanization.convert(originalText, options);
 
-    convertedElement.innerHTML = convertedText.toString();
+    convertedElement.innerHTML = convertedText;
     matches = true;
   }
 
@@ -42,6 +43,7 @@ async function convertLyrics(romanization: Romanization) {
 
 async function applyRomanization() {
   // This used to be a check if romanization should update or not
+  // But its already checked in popup form
 
   // Clear past conversions to avoid duplicate elements
   document.querySelectorAll('.converted-lyrics')

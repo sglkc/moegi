@@ -12,7 +12,7 @@ const Korean: Romanization = {
     /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
     .test(text)
   ),
-  convert: (text, options) => romanize(text, { system: options.hangul_system })
-};
+  convert: async (text, options) => romanize(text, { system: options.hangul_system })
+}
 
 export default Korean;
