@@ -41,18 +41,20 @@ async function convertLyrics(romanization: Romanization) {
     createToast(`${romanization.name} romanization generated`).showToast();
 }
 
-async function applyRomanization() {
-  // This used to be a check if romanization should update or not
-  // But its already checked in popup form
+async function applyRomanization(event: WindowEventMap['moegioptions']) {
+  const language = await romanizations[options.romanization_lang].then(e => e.default)
+
+  // Check if romanization should update or not based on updateKeys
+  const updateDetail = Object.keys(event.detail ?? {}) as Array<MoegiOptionsKey>
+  const shouldUpdate = updateDetail.find(key => language.updateKeys.includes(key))
+
+  if ((event.type === 'moegioptions') && !shouldUpdate) return
 
   // Clear past conversions to avoid duplicate elements
   document.querySelectorAll('.converted-lyrics')
     .forEach((el) => el.innerHTML = '');
 
-  if (options.romanization) {
-    const language = await romanizations[options.romanization_lang].then(e => e.default)
-    await convertLyrics(language);
-  }
+  if (options.romanization) await convertLyrics(language);
 
   scrollToActiveLyric();
 }
