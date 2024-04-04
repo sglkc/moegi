@@ -16,7 +16,7 @@ export type MoegiOptions = {
   translation_size: number
   languageTarget: TranslationLanguage
   romanization: boolean
-  romanization_lang: 'japanese' | 'korean' | 'cyrillic' | 'chinese'
+  romanization_lang: 'japanese' | 'korean' | 'cyrillic' | 'chinese' | 'any'
   romanization_size: number
   chinese_ruby: boolean
   cyrillic_lang: 'ru' | 'uk'

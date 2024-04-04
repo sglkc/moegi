@@ -15,12 +15,9 @@
   <strong>·</strong>
   <a href="https://github.com/sglkc/moegi/issues">Request a Feature</a>
 
-  Features lyrics translation for over 100 languages powered by Google Translate, \
-  Cyrillic lyrics romanization for Russian and Ukrainian language,
-  Chinese lyrics romanization to pinyin in text or ruby format,
-  Korean lyrics romanization with Revised, McCune, and Yale system,  \
-  Japanese lyrics romanization to romaji, hiragana, and katakana in different formats including furigana! \
-  *Tested on Google Chrome (122.0.6261.111) and Brave Browser (122.1.63.169) on Linux*
+  Features lyrics translation for over 100 languages powered by Google Translate and \
+  romanization for Chinese, Korean, Japanese, Cyrillic, and many more non-latin scripts! \
+  *Tested on Google Chrome (122.0.6261.111) and Brave Browser (123.1.64.113) on Linux*
 
   <br />
 </div>
@@ -79,9 +76,13 @@ Note that translations are not accurate and should not be used literally! [Read 
 
 ### Romanization
 
-There are currently supported languages:
-- [Japanese](#japanese)
-- [Korean](#korean)
+Mainly supported languages:
+1. [Japanese](#japanese)
+2. [Korean](#korean)
+3. [Chinese](#chinese)
+4. [Cyrillic](#cyrillic)
+
+Other than that, use [Anything else](#any).
 
 Romanize lyrics that has the selected language's characters, if none then it will skip to the next line.
 
@@ -170,6 +171,12 @@ Library used: [pinyin-pro](https://www.npmjs.com/package/pinyin-pro)
      <ruby>你<rp>(</rp><rt>nǐ</rt><rp>)</rp></ruby><ruby>不<rp>(</rp><rt>bù</rt><rp>)</rp></ruby><ruby>知<rp>(</rp><rt>zhī</rt><rp>)</rp></ruby><ruby>道<rp>(</rp><rt>dào</rt><rp>)</rp></ruby><ruby>你<rp>(</rp><rt>nǐ</rt><rp>)</rp></ruby><ruby>有<rp>(</rp><rt>yǒu</rt><rp>)</rp><ruby>多<rp>(</rp><rt>duō</rt><rp>)</rp></ruby><ruby>可<rp>(</rp><rt>kě</rt><rp>)</rp></ruby><ruby>愛<rp>(</rp><rt>ài</rt><rp>)</rp></ruby>
 
 </details>
+
+### Any
+
+Library used: [any-ascii](https://github.com/anyascii/anyascii)
+
+Provides a lot of conversions at the cost of accuracy, read more from the package repository.
 
 ## Development
 

@@ -18,6 +18,7 @@ const romanizations = {
   korean: import('./romanizations/korean'),
   cyrillic: import('./romanizations/cyrillic'),
   chinese: import('./romanizations/chinese'),
+  any: import('./romanizations/any'),
 }
 
 // Convert lyric lines using hangul-romanization if they have any Korean characters
@@ -46,7 +47,8 @@ async function applyRomanization(event: WindowEventMap['moegioptions']) {
 
   // Check if romanization should update or not based on updateKeys
   const updateDetail = Object.keys(event.detail ?? {}) as Array<MoegiOptionsKey>
-  const shouldUpdate = updateDetail.find(key => language.updateKeys.includes(key))
+  const shouldUpdate = updateDetail.includes('romanization_lang')
+    || updateDetail.find(key => language.updateKeys.includes(key))
 
   if ((event.type === 'moegioptions') && !shouldUpdate) return
 

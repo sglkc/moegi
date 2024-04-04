@@ -26,6 +26,7 @@ export default function Form() {
         { text: 'Korean', value: 'korean' },
         { text: 'Cyrillic', value: 'cyrillic' },
         { text: 'Chinese', value: 'chinese' },
+        { text: 'Anything else', value: 'any' },
       ]
     },
     {
