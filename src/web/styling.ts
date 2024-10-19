@@ -18,6 +18,10 @@ const generateStyles = () => `
     text-align: ${options.lyrics_align};
     line-height: 1.5;
   }
+  ${isStylingActive() === '/*' ? '*/' : ''}
+  .npv-lyrics__content--full-screen {
+    height: 70vh !important;
+  }
 `.trim();
 
 const styleElement = document.createElement('style');
