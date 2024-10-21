@@ -21,7 +21,7 @@ chrome.tabs
 
 // Event handler for input changes in popup
 type FormEvent = TargetedEvent<HTMLFormElement, Event> & Readonly<{
-  target: Omit<HTMLInputElement & HTMLSelectElement, 'name'> & Readonly<{
+  target: Omit<HTMLInputElement, 'name'> & Readonly<{
     name: MoegiOptionsKey
   }>
 }>
