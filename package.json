@@ -3,7 +3,7 @@
   "description": "A Spotify lyrics extension for styling, translation, and romanization",
   "homepage": "https://github.com/sglkc/moegi",
   "private": true,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -26,7 +26,7 @@
     "toastify-js": "^1.12.0"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.18",
+    "@crxjs/vite-plugin": "2.0.0-beta.26",
     "@preact/preset-vite": "^2.8.2",
     "@types/chrome": "^0.0.242",
     "@types/node": "^20.12.10",
