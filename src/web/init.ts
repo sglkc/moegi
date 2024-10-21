@@ -57,12 +57,16 @@ function initLyrics() {
     loadedToast.showToast();
     dispatchEvent(new CustomEvent('lyricsready'));
   }
+
+  setupLyricsObserver();
 }
 
 const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
 const lyricElements = new Set<HTMLDivElement>(
   Array.from(document.querySelectorAll(lyricElementSelector))
 );
+
+const fullscreenButtonSelector = '[data-testid="fullscreen-mode-button"]';
 
 // Setup observer to detect lyrics elements on slow network or UI changes
 // use debounce to prevent performance leak
@@ -131,6 +135,110 @@ addHistoryListener((event) => {
 // If user's already in lyrics page and lyric elements exist in first try,
 // initialize lyrics immediately
 if (location.pathname.includes('lyrics') && lyricElements.size) initLyrics();
+
+// Debounce function to limit the sync calls
+function debounce(fn: () => void, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      fn();
+      timeoutId = null;
+    }, delay);
+  };
+}
+
+// Function to sync the lyrics in full screen mode
+async function updateFullscreenLyrics() {
+  // Grab all non-fullscreen lyrics
+  const nonFullscreenLyrics = document.querySelectorAll('[data-testid="fullscreen-lyric"]');
+
+  // Grab all fullscreen lyrics
+  const fullscreenLyrics = document.querySelectorAll('.npv-lyrics__text-wrapper>p');
+
+  if (!nonFullscreenLyrics.length || !fullscreenLyrics.length) return;
+
+  // Outside full screen some lyrics are empty, so keep track of their count
+  let emptyLyricCount = 2;
+
+  // Loop through non-fullscreen lyrics and sync to fullscreen
+  for (let index = 2; index < nonFullscreenLyrics.length; index++) {
+    const nonFullscreenLyric = nonFullscreenLyrics[index];
+    const originalText = nonFullscreenLyric.querySelector('.original-lyrics')?.textContent || '';
+    const romanizedText = nonFullscreenLyric.querySelector('.converted-lyrics')?.textContent || '';
+    const translatedText = nonFullscreenLyric.querySelector('.translated-lyrics')?.textContent || '';
+
+    if (!originalText) {
+      // Do not increment empty lyric count if the lyric is empty because it will corrupt the sync
+      continue;
+    }
+
+    // Adjust index to account for empty lyrics
+    const adjustedIndex = index - emptyLyricCount;
+
+    const fullscreenLyric = fullscreenLyrics[adjustedIndex];
+
+    if (fullscreenLyric) {
+      // Clear the existing content before inserting
+      fullscreenLyric.textContent = originalText;
+
+      // Ensure romanized and translated text is valid
+      if (romanizedText) {
+        fullscreenLyric.insertAdjacentHTML('beforeend', `<p class="converted-lyrics">${romanizedText}</p>`);
+      }
+
+      if (translatedText) {
+        fullscreenLyric.insertAdjacentHTML('beforeend', `<p class="translated-lyrics">${translatedText}</p>`);
+      }
+    } else {
+      // No matching lyric
+    }
+  }
+}
+
+// Create a debounced version of the sync function
+const debouncedSyncLyrics = debounce(updateFullscreenLyrics, 500);
+
+// Observer for full-screen button click
+const fullscreenObserver = new MutationObserver(() => {
+  const fullscreenButton = document.querySelector(fullscreenButtonSelector);
+
+  if (fullscreenButton) {
+    fullscreenButton.addEventListener('click', debouncedSyncLyrics);
+  }
+});
+
+// Start observing the DOM for the full-screen button
+fullscreenObserver.observe(document.body, { childList: true, subtree: true });
+
+// Ensure the button listener is attached immediately if the button exists
+const fullscreenButton = document.querySelector(fullscreenButtonSelector);
+if (fullscreenButton) {
+  fullscreenButton.addEventListener('click', debouncedSyncLyrics);
+}
+
+const lyricsChangeObserver = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+      debouncedSyncLyrics(); 
+      break; // No need to check other mutations if one has been handled
+    }
+  }
+});
+
+// Select all non-fullscreen lyric elements initially
+const setupLyricsObserver = () => {
+  const nonFullscreenLyrics = document.querySelectorAll('[data-testid="fullscreen-lyric"]');
+
+  nonFullscreenLyrics.forEach((lyric) => {
+    // Observe changes to child nodes and character data (text content)
+    lyricsChangeObserver.observe(lyric, { 
+      childList: true, 
+      subtree: true, 
+      characterData: true 
+    });
+  });
+};
 
 // Use dynamic import so it doesn't bundle to the top
 import('./styling');
