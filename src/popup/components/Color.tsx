@@ -1,4 +1,4 @@
-import { StateUpdater, useState } from 'preact/hooks'
+import { Dispatch, StateUpdater, useState } from 'preact/hooks'
 import { HexAlphaColorPicker } from 'react-colorful'
 import { MoegiOptionsKey, moegiOptions } from '@/services/options'
 
@@ -13,7 +13,7 @@ const styleProps = [
 
 type ColorLabelProps = typeof styleProps[number] & {
   current: InputType
-  set: StateUpdater<InputType>
+  set: Dispatch<StateUpdater<InputType>>
 }
 
 function ColorLabel({ current, label, name, set }: ColorLabelProps) {
