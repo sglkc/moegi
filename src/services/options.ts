@@ -8,6 +8,8 @@ export type MoegiOptions = {
   lyrics_size: number
   lyrics_spacing: number
   lyrics_align: 'left' | 'center' | 'right'
+  lyrics_translated: string
+  lyrics_romanized: string
   lyrics_active: string
   lyrics_inactive: string
   lyrics_passed: string
@@ -36,10 +38,12 @@ export const moegiDefaultOptions: MoegiOptions = {
   lyrics_size: 1,
   lyrics_spacing: 5,
   lyrics_align: 'left',
-  lyrics_active: '#ffffffff',
-  lyrics_inactive: '#000000ff',
-  lyrics_passed: '#ffffffb3',
-  lyrics_background: '#6495edff',
+  lyrics_translated: '',
+  lyrics_romanized: '',
+  lyrics_active: '',
+  lyrics_inactive: '',
+  lyrics_passed: '',
+  lyrics_background: '',
   translation: false,
   translation_size: 1,
   languageTarget: 'auto',

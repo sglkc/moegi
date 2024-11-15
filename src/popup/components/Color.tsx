@@ -9,6 +9,8 @@ const styleProps = [
   { label: 'Active', name: 'lyrics_active' },
   { label: 'Inactive', name: 'lyrics_inactive' },
   { label: 'Passed', name: 'lyrics_passed' },
+  { label: 'Translation', name: 'lyrics_translated' },
+  { label: 'Romanization', name: 'lyrics_romanized' },
 ] as const
 
 type ColorLabelProps = typeof styleProps[number] & {
@@ -27,7 +29,7 @@ function ColorLabel({ current, label, name, set }: ColorLabelProps) {
     >
       <input type="hidden" id={name} name={name} value={color} />
       <div class="text-center">{ label }</div>
-      <div class="px-4 py-2 rounded" style={`background-color: ${color}`}></div>
+      <div class="px-4 py-2 b-1 rounded" style={`background-color: ${color}`}></div>
     </label>
   )
 }
@@ -39,6 +41,11 @@ export type ColorProps = {
 
 export default function Color() {
   const [input, setInput] = useState<InputType>()
+  const changeColor = (val: string) => {
+    const elm = document.querySelector<HTMLInputElement>('#' + input)!
+    elm.value = val
+    elm.dispatchEvent(new Event('input', { bubbles: true }))
+  }
 
   return (
     <>
@@ -48,12 +55,20 @@ export default function Color() {
       ))}
       { input &&
         <div class="flex flex-col items-center gap-1 col-span-2 text-center">
-          <button
-            class="color-accent underline cursor-pointer"
-            onClick={() => setInput(undefined)}
-          >
-            [CLOSE]
-          </button>
+          <div class="flex gap-8">
+            <button
+              class="color-accent underline cursor-pointer"
+              onClick={() => changeColor('')}
+            >
+              [SET TO DEFAULT]
+            </button>
+            <button
+              class="color-accent underline cursor-pointer"
+              onClick={() => setInput(undefined)}
+            >
+              [CLOSE]
+            </button>
+          </div>
           <p>
             Picking color for {' '}
             <strong>
@@ -62,12 +77,7 @@ export default function Color() {
           </p>
           <HexAlphaColorPicker
             color={moegiOptions.value[input]}
-            onChange={(val) => {
-              const elm = document.querySelector<HTMLInputElement>('#' + input)!
-              elm.value = val
-              elm.dispatchEvent(new Event('input', { bubbles: true }))
-            }
-            }
+            onChange={changeColor}
           />
         </div>
       }

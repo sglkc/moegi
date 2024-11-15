@@ -9,8 +9,14 @@ const shouldHideOriginal = () =>
 // Style element for elements styling and append immediately if styling is on
 const generateStyles = () => `
   .original-lyrics { display: ${shouldHideOriginal() ? 'none' : 'inherit'}; }
-  .converted-lyrics { font-size: ${options.romanization_size}em; }
-  .translated-lyrics { font-size: ${options.translation_size}em; }
+  .converted-lyrics {
+    font-size: ${options.romanization_size}em;
+    color: var(--lyrics-color-romanized);
+  }
+  .translated-lyrics {
+    font-size: ${options.translation_size}em;
+    color: var(--lyrics-color-translated);
+  }
   ${isStylingActive()}
   [data-testid="fullscreen-lyric"] {
     margin-top: ${options.lyrics_spacing}px;
@@ -30,7 +36,14 @@ document.head.append(styleElement);
 
 // Lyrics colors styling
 const defaultColors = new Map();
-const colorProperties = ['active', 'inactive', 'passed', 'background'] as const;
+const colorProperties = [
+  'translated',
+  'romanized',
+  'active',
+  'inactive',
+  'passed',
+  'background',
+] as const;
 let lyricsStyles: CSSStyleDeclaration;
 
 function styleLyrics() {
