@@ -1,10 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './style.css';
+import { render } from 'preact';
+import Popup from './Popup.tsx';
+import '@unocss/reset/tailwind-compat.css';
+import 'virtual:uno.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+render(<Popup />, document.getElementById('root')!);
