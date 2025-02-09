@@ -19,6 +19,7 @@
     "@fontsource/quicksand": "^5.1.0",
     "@preact/signals": "^1.3.0",
     "@romanize/korean": "^0.1.1",
+    "@sglkc/kuromoji": "^1.1.0",
     "@sglkc/kuroshiro": "^1.0.1",
     "@sglkc/kuroshiro-analyzer-kuromoji": "^1.0.1",
     "@unocss/reset": "^0.54.3",

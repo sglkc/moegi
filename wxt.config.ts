@@ -5,16 +5,14 @@ import { defineConfig } from 'wxt'
 export default defineConfig({
   extensionApi: 'chrome',
   manifest: {
-    permissions: ['activeTab', 'scripting'],
-    host_permissions: ['<all_urls>'],
-    web_accessible_resources: [
-      {
-        matches: ['<all_urls>'],
-        resources: [
-          '/audio/*'
-        ]
-      }
-    ],
+    permissions: ['activeTab', 'declarativeContent', 'storage'],
+    host_permissions: ['https://translate.google.com/*'],
+    // TODO: better security mybe
+    externally_connectable: {
+      ids: ['*'],
+      matches: ['https://open.spotify.com/*'],
+      accepts_tls_channel_id: false,
+    },
   },
   modules: ['@wxt-dev/unocss'],
   vite: () => ({

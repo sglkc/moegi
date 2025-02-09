@@ -17,6 +17,9 @@ importers:
       '@romanize/korean':
         specifier: ^0.1.1
         version: 0.1.1
+      '@sglkc/kuromoji':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@sglkc/kuroshiro':
         specifier: ^1.0.1
         version: 1.0.1
