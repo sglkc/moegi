@@ -3,6 +3,7 @@ import { MoegiOptionsKey, moegiOptions } from '@/services/options'
 
 export type RangeProps = Omit<HTMLAttributes<HTMLInputElement>, 'name'> & {
   name: MoegiOptionsKey
+  label: string
   prefix?: string
 }
 
