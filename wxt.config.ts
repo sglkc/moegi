@@ -15,9 +15,12 @@ export default defineConfig({
     },
   },
   modules: ['@wxt-dev/unocss'],
+  runner: {
+    chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
+  },
   vite: () => ({
     plugins: [
       preact(),
     ],
-  })
+  }),
 })

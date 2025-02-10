@@ -23,6 +23,7 @@
     "@sglkc/kuroshiro": "^1.0.1",
     "@sglkc/kuroshiro-analyzer-kuromoji": "^1.0.1",
     "@unocss/reset": "^0.54.3",
+    "@webext-core/messaging": "^2.2.0",
     "any-ascii": "^0.3.2",
     "cyrillic-to-translit-js": "^3.2.1",
     "google-translate-api-x": "^10.7.2",
