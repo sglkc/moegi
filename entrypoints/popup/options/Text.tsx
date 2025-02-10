@@ -6,8 +6,16 @@ interface TextOptionsProps {
 
 export default function TextOptions({ signal }: TextOptionsProps) {
   return (
-    <Container name="fonts" label="Font Style" enabled={signal.$enabled}>
-      <div>TE</div>
+    <Container label="Font Style" enabled={signal.$enabled}>
+      <Select<FontOptions['align']>
+        label="Alignment"
+        signal={signal.$align}
+        options={[
+          { text: 'Left', value: 'left' },
+          { text: 'Center', value: 'center' },
+          { text: 'Right', value: 'right' },
+        ]}
+      />
     </Container>
   )
 }

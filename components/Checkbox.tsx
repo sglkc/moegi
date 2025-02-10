@@ -1,25 +1,25 @@
 import { ComponentChildren } from 'preact'
 import { Signal } from '@preact/signals'
+import { useId } from 'preact/hooks'
 
 export type CheckboxProps = {
   children: ComponentChildren
-  name: keyof MoegiOptions
   checked?: Signal<boolean>
 }
 
-export default function Checkbox({ children, name, checked }: CheckboxProps) {
+export default function Checkbox({ children, checked }: CheckboxProps) {
+  const id = useId()
   const toggleChecked = () => checked && (checked.value = !checked.peek())
 
   return (
     <label
       class="relative h-6 grow col-span-2 cursor-pointer"
-      for={name}
+      for={id}
     >
       <input
-        id={name}
+        id={id}
         class="peer sr-only"
         type="checkbox"
-        name={name}
         checked={checked}
         onChange={toggleChecked}
       />
