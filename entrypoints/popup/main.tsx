@@ -1,5 +1,5 @@
 import { render } from 'preact'
-// import Form from './form'
+import Form from './layouts/Form.tsx'
 import NotLyrics from './layouts/NotLyrics.tsx'
 import NotSpotify from './layouts/NotSpotify.tsx'
 import Main from './layouts/Main.tsx'
@@ -15,10 +15,9 @@ chrome.tabs.query({ active: true, currentWindow: true, windowType: 'normal' })
 
     const Elem = tabUrlNot('open.spotify.com')
       ? NotSpotify
-      : tabUrlNot('open.spotify.com/lyrics')
-        ? NotLyrics
-        : () => <></>;
-    // : Form
+      // : tabUrlNot('open.spotify.com/lyrics')
+      //   ? NotLyrics
+        : Form;
 
     render(<Main children={<Elem />} />, document.getElementById('root')!)
   })

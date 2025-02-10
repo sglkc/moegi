@@ -4,10 +4,12 @@ import { Signal } from '@preact/signals'
 export type CheckboxProps = {
   children: ComponentChildren
   name: keyof MoegiOptions
-  checked: Signal<boolean>
+  checked?: Signal<boolean>
 }
 
 export default function Checkbox({ children, name, checked }: CheckboxProps) {
+  const toggleChecked = () => checked && (checked.value = !checked.peek())
+
   return (
     <label
       class="relative h-6 grow col-span-2 cursor-pointer"
@@ -19,6 +21,7 @@ export default function Checkbox({ children, name, checked }: CheckboxProps) {
         type="checkbox"
         name={name}
         checked={checked}
+        onChange={toggleChecked}
       />
       <span
         class="absolute inset-0 w-10 rounded-full bg-accent/10 transition peer-checked:bg-accent/25"
