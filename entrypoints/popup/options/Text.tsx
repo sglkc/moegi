@@ -31,6 +31,11 @@ export default function TextOptions({ signal }: TextOptionsProps) {
         prefix="px"
         max={64}
       />
+      <Checkbox
+        label="Hide Original Lyrics"
+        signal={signal.$hideOriginal}
+        mirror
+      />
     </Container>
   )
 }

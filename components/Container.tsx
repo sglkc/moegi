@@ -4,7 +4,7 @@ import { ComponentChildren } from 'preact'
 interface ContainerProps {
   label: string
   children: ComponentChildren
-  enabled?: Signal<boolean>
+  enabled: Signal<boolean> | undefined
 }
 
 /**
@@ -17,11 +17,9 @@ export default function Container({
 }: ContainerProps) {
   return (
     <div class="grid gap-4">
-      <div>
-        <Checkbox checked={enabled}>
-          <strong>{ label }</strong>
-        </Checkbox>
-      </div>
+      <Checkbox signal={enabled}>
+        <strong>{ label }</strong>
+      </Checkbox>
       <div class="grid gap-4">
         { children }
       </div>

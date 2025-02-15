@@ -2,34 +2,43 @@ import { ComponentChildren } from 'preact'
 import { Signal } from '@preact/signals'
 import { useId } from 'preact/hooks'
 
-export type CheckboxProps = {
-  children: ComponentChildren
-  checked?: Signal<boolean>
+export interface CheckboxProps {
+  children?: ComponentChildren
+  label?: string
+  signal: Signal<boolean> | undefined
+  mirror?: boolean
 }
 
-export default function Checkbox({ children, checked }: CheckboxProps) {
+export default function Checkbox({ children, label, signal, mirror }: CheckboxProps) {
   const id = useId()
-  const toggleChecked = () => checked && (checked.value = !checked.peek())
+  const toggleChecked = () => signal && (signal.value = !signal.peek())
 
   return (
-    <label
-      class="block relative h-6 grow col-span-2 cursor-pointer"
-      for={id}
-    >
+    <label class="block relative h-6 grow cursor-pointer" for={id}>
       <input
         id={id}
         class="peer sr-only"
         type="checkbox"
-        checked={checked}
+        checked={signal}
         onChange={toggleChecked}
       />
       <span
-        class="absolute inset-0 w-10 rounded-full bg-accent/10 transition peer-checked:bg-accent/25"
+        class={[
+          'absolute inset-y-0 w-10 rounded-full bg-accent/10',
+          'transition peer-checked:bg-accent/25',
+          mirror ? 'right-0' : 'left-0'
+        ].join(' ')}
       ></span>
       <span
-        class="absolute inset-y-0 start-0 m-1 h-4 w-4 rounded-full bg-accent/50 transition-all peer-checked:bg-accent peer-checked:start-4"
+        class={[
+          'absolute inset-y-0 m-1 h-4 w-4 rounded-full bg-accent/50',
+          'transition-all peer-checked:bg-accent',
+          mirror ? 'right-4 peer-checked:right-0' : 'left-0 peer-checked:left-4'
+        ].join(' ')}
       ></span>
-      <span class="absolute left-13 top-0.5">{ children }</span>
+      <span class={['absolute top-0.5', mirror ? 'left-0' : 'left-13'].join(' ')}>
+        { children ?? label }
+      </span>
     </label>
   )
 }
