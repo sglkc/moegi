@@ -13,7 +13,7 @@ export default function Checkbox({ children, checked }: CheckboxProps) {
 
   return (
     <label
-      class="relative h-6 grow col-span-2 cursor-pointer"
+      class="block relative h-6 grow col-span-2 cursor-pointer"
       for={id}
     >
       <input

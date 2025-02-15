@@ -16,13 +16,15 @@ export default function Container({
   enabled,
 }: ContainerProps) {
   return (
-    <>
-      <Checkbox checked={enabled}>
-        <strong>{ label }</strong>
-      </Checkbox>
-      <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+    <div class="grid gap-4">
+      <div>
+        <Checkbox checked={enabled}>
+          <strong>{ label }</strong>
+        </Checkbox>
+      </div>
+      <div class="grid gap-4">
         { children }
       </div>
-    </>
+    </div>
   )
 }
