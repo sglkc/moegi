@@ -11,6 +11,7 @@ export default function TextOptions({ signal }: TextOptionsProps) {
       <Select<FontOptions['align']>
         label="Alignment"
         signal={signal.$align}
+        default="left"
         options={[
           { text: 'Left', value: 'left' },
           { text: 'Center', value: 'center' },

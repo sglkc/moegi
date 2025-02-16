@@ -1,4 +1,6 @@
+import RomanizationOptions from '../options/Romanization'
 import TextOptions from '../options/Text'
+import TranslationOptions from '../options/Translation'
 import { options } from '../signal'
 
 export default function Form() {
@@ -8,8 +10,10 @@ export default function Form() {
   }
 
   return (
-    <form id="form" class="grid gap-4">
+    <form id="form" class="grid gap-6">
       <TextOptions signal={options.fonts} />
+      <TranslationOptions signal={options.translation} />
+      <RomanizationOptions signal={options.romanization} />
 
       <button
         id="reset"

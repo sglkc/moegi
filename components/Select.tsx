@@ -4,7 +4,7 @@ import { ChangeEvent, useId } from 'preact/compat'
 export interface SelectProps<T extends string> {
   label: string
   signal: Signal<string> | undefined
-  hidden?: boolean
+  default?: T,
   options: Array<{
     text: string
     value: T
@@ -14,7 +14,7 @@ export interface SelectProps<T extends string> {
 export default function Select<T extends string>({
   label,
   signal,
-  hidden,
+  default: def,
   options,
 }: SelectProps<T>) {
   const id = useId()
@@ -22,12 +22,13 @@ export default function Select<T extends string>({
     signal && (signal.value = e.currentTarget.value)
 
   return (
-    <label class="grid grid-cols-2 items-center" for={id} hidden={hidden}>
+    <label class="grid grid-cols-2 items-center" for={id}>
       <span>{ label }:</span>
       <select
         id={id}
         class="appearance-none bg-secondary disabled:bg-secondary/50 p-1 px-2 b-1 rounded b-primary/50"
         onChange={onChange}
+        defaultValue={def}
       >
         { options.map(({ text, value }) => (
           <option
@@ -36,8 +37,7 @@ export default function Select<T extends string>({
           >
             { text }
           </option>)
-        )
-        }
+        )}
       </select>
     </label>
   )
