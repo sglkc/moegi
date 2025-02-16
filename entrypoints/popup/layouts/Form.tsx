@@ -10,7 +10,7 @@ export default function Form() {
   }
 
   return (
-    <form id="form" class="grid gap-6">
+    <form id="form" class="grid gap-4">
       <TextOptions signal={options.fonts} />
       <TranslationOptions signal={options.translation} />
       <RomanizationOptions signal={options.romanization} />

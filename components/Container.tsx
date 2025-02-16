@@ -1,26 +1,32 @@
-import { Signal } from '@preact/signals'
+import { DeepSignal } from 'deepsignal'
 import { ComponentChildren } from 'preact'
 
 interface ContainerProps {
   label: string
   children: ComponentChildren
-  enabled: Signal<boolean> | undefined
+  signal: DeepSignal<MoegiOptions[keyof MoegiOptions]>
 }
 
 /**
- * @todo accordion, toggle visibility
+ * @todo better accordion, toggle visibility
  */
 export default function Container({
   label,
   children,
-  enabled,
+  signal,
 }: ContainerProps) {
   return (
-    <div class="grid gap-4">
-      <Checkbox signal={enabled}>
+    <div>
+      <Checkbox signal={signal.$enabled}>
         <strong>{ label }</strong>
       </Checkbox>
-      <div class="grid gap-4">
+      <div
+        class={[
+          'grid gap-4 overflow-y-hidden transition-transform transform-origin-top',
+          signal.enabled ? 'scale-y-full' : 'h-0 scale-y-0'
+        ].join(' ')}
+      >
+        <hr class="b-0" />
         { children }
       </div>
     </div>

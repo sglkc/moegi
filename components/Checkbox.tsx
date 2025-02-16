@@ -14,7 +14,7 @@ export default function Checkbox({ children, label, signal, mirror }: CheckboxPr
   const toggleChecked = () => signal && (signal.value = !signal.peek())
 
   return (
-    <label class="block relative h-6 grow cursor-pointer" for={id}>
+    <label class="block relative h-6 grow cursor-pointer select-none" for={id}>
       <input
         id={id}
         class="peer sr-only"

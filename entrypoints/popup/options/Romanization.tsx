@@ -7,7 +7,7 @@ interface RomanizationOptionsProps {
 
 export default function RomanizationOptions({ signal }: RomanizationOptionsProps) {
   return (
-    <Container label="Romanization" enabled={signal.$enabled}>
+    <Container label="Romanization" signal={signal}>
       <Select<RomanizationOptions['language']>
         label="Language"
         signal={signal.$language}

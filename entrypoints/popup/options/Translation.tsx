@@ -12,7 +12,7 @@ const options: { text: string, value: string }[] = Object.entries(languages)
 
 export default function TranslationOptions({ signal }: TranslationOptionsProps) {
   return (
-    <Container label="Translation" enabled={signal.$enabled}>
+    <Container label="Translation" signal={signal}>
       <Select
         label="Target"
         signal={signal.$target}
