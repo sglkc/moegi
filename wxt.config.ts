@@ -3,7 +3,6 @@ import { defineConfig } from 'wxt'
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  extensionApi: 'chrome',
   manifest: {
     permissions: ['activeTab', 'declarativeContent', 'storage'],
     host_permissions: ['https://translate.google.com/*'],
@@ -15,7 +14,7 @@ export default defineConfig({
     },
   },
   modules: ['@wxt-dev/unocss'],
-  runner: {
+  webExt: {
     chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
   },
   vite: () => ({
