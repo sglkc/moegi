@@ -26,7 +26,7 @@ export default function Container({
           signal.enabled ? 'scale-y-full' : 'h-0 scale-y-0'
         ].join(' ')}
       >
-        <hr class="b-0" />
+        <hr class="b-0 col-span-full" />
         { children }
       </div>
     </div>

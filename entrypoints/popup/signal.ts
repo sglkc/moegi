@@ -5,12 +5,12 @@ import { deepSignal } from 'deepsignal'
 export const options = deepSignal(await optionsStorage.getValue())
 
 // Save every changes to storage
-effect(() => {
+effect(debounce(() => {
   optionsStorage.setValue(options)
   chrome.runtime.sendMessage(options)
-})
+}, 1000))
 
 // TODO: send effects to content scripts
 effect(() => {
-  console.log({ ...options.fonts })
+  // console.log({ ...options.fonts })
 })
