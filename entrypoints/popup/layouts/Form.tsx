@@ -1,3 +1,4 @@
+import ColorOptions from '../options/Color'
 import RomanizationOptions from '../options/Romanization'
 import TextOptions from '../options/Text'
 import TranslationOptions from '../options/Translation'
@@ -12,6 +13,7 @@ export default function Form() {
   return (
     <form id="form" class="grid gap-4">
       <TextOptions signal={options.fonts} />
+      <ColorOptions signal={options.colors} />
       <TranslationOptions signal={options.translation} />
       <RomanizationOptions signal={options.romanization} />
 
