@@ -84,7 +84,7 @@ export const moegiDefaultOptions: MoegiOptions = {
   romanization: {
     enabled: false,
     size: 1,
-    language: 'japanese',
+    language: 'any',
     chinese: {
       ruby: false,
     },
