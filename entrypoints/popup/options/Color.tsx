@@ -17,7 +17,7 @@ interface ColorLabelProps {
 
 type InputLabel = keyof ColorOptions
 
-export default function ColorOptions({ signal }: ColorOptionsProps) {
+export default function ColorOption({ signal }: ColorOptionsProps) {
   const [label, setLabel] = useState<InputLabel | false>(false)
   const labelSignal = useRef<Signal>()
 

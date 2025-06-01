@@ -1,7 +1,7 @@
-import ColorOptions from '../options/Color'
-import RomanizationOptions from '../options/Romanization'
-import TextOptions from '../options/Text'
-import TranslationOptions from '../options/Translation'
+import ColorOption from '../options/Color'
+import RomanizationOption from '../options/Romanization'
+import TextOption from '../options/Text'
+import TranslationOption from '../options/Translation'
 import { options } from '../signal'
 
 export default function Form() {
@@ -12,10 +12,10 @@ export default function Form() {
 
   return (
     <form id="form" class="grid gap-4">
-      <TextOptions signal={options.fonts} />
-      <ColorOptions signal={options.colors} />
-      <TranslationOptions signal={options.translation} />
-      <RomanizationOptions signal={options.romanization} />
+      <TextOption signal={options.fonts} />
+      <ColorOption signal={options.colors} />
+      <TranslationOption signal={options.translation} />
+      <RomanizationOption signal={options.romanization} />
 
       <button
         id="reset"

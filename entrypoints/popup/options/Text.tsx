@@ -5,7 +5,7 @@ interface TextOptionsProps {
   signal: DeepSignal<FontOptions>
 }
 
-export default function TextOptions({ signal }: TextOptionsProps) {
+export default function TextOption({ signal }: TextOptionsProps) {
   return (
     <Container label="Font Style" signal={signal}>
       <Select<FontOptions['align']>

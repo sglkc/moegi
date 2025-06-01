@@ -10,7 +10,7 @@ const options: { text: string, value: string }[] = Object.entries(languages)
   .map(([ value, text ]) => ({ text, value }))
   .filter((el) => el.value !== 'auto')
 
-export default function TranslationOptions({ signal }: TranslationOptionsProps) {
+export default function TranslationOption({ signal }: TranslationOptionsProps) {
   return (
     <Container label="Translation" signal={signal}>
       <Select
