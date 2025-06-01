@@ -44,12 +44,12 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
     console.log('rerender')
     return (
       <button
-        class="cursor-pointer"
+        class="cursor-pointer appearance-none bg-secondary py-1 px-2 b-1 rounded b-primary/60"
         onClick={onClick(label.toLowerCase() as InputLabel)}
         type="button"
       >
-        <div class="text-center">{ label }</div>
-        <div class="px-4 py-2 b-1 rounded" style={{ background: color }}></div>
+        <div class="mb-1 text-center">{ label }</div>
+        <div class="px-4 py-2 b-1 b-gray/50 rounded" style={{ background: color }}></div>
       </button>
     )
   })
