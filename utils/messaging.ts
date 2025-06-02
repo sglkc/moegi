@@ -1,7 +1,18 @@
-import { defineExtensionMessaging } from '@webext-core/messaging';
+import { defineExtensionMessaging } from '@webext-core/messaging'
+import { defineCustomEventMessaging } from '@webext-core/messaging/page'
 
-interface ProtocolMap {
-  sendToast(data: string): void;
+export interface ToastMessage {
+  text: string
+  duration?: number
 }
 
-export const { sendMessage, onMessage } = defineExtensionMessaging<ProtocolMap>();
+interface ProtocolMap {
+  createToast(data: ToastMessage): number
+  destroyToast(id: number): boolean
+}
+
+export const Background = defineExtensionMessaging<ProtocolMap>()
+
+export const Content = defineCustomEventMessaging<ProtocolMap>({
+  namespace: 'content-messenger'
+})
