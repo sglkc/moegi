@@ -1,5 +1,4 @@
 import { DeepSignal } from 'deepsignal'
-import { RomanizationOptions } from '@/utils/options'
 import Container from '@/components/Container'
 import Range from '@/components/Range'
 import Select from '@/components/Select'

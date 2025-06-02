@@ -1,6 +1,6 @@
 import { DeepSignal } from 'deepsignal'
-import Range from '@/components/Range'
 import { languages } from 'google-translate-api-x'
+import Range from '@/components/Range'
 
 interface TranslationOptionsProps {
   signal: DeepSignal<TranslationOptions>

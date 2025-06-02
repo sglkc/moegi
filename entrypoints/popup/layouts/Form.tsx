@@ -1,13 +1,12 @@
-import ColorOption from '../options/Color'
-import RomanizationOption from '../options/Romanization'
-import TextOption from '../options/Text'
-import TranslationOption from '../options/Translation'
-import { options } from '../signal'
+import ColorOption from '@/components/options/Color'
+import RomanizationOption from '@/components/options/Romanization'
+import TextOption from '@/components/options/Text'
+import TranslationOption from '@/components/options/Translation'
 
 export default function Form() {
   const resetOptions = async () => {
     Object.assign(options, optionsStorage.fallback)
-    await optionsStorage.removeValue()
+    await optionsStorage.setValue(optionsStorage.fallback)
   }
 
   return (

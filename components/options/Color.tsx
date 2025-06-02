@@ -1,8 +1,8 @@
 import { debounce } from '@/utils/debounce'
 import { Signal } from '@preact/signals'
-import { DeepSignal, RevertDeepSignal } from 'deepsignal'
+import { DeepSignal } from 'deepsignal'
 import { memo } from 'preact/compat'
-import { Dispatch, StateUpdater, useCallback, useRef, useState } from 'preact/hooks'
+import { useCallback, useRef, useState } from 'preact/hooks'
 import { HexAlphaColorPicker } from 'react-colorful'
 
 interface ColorOptionsProps {
@@ -48,7 +48,7 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
         onClick={onClick(label.toLowerCase() as InputLabel)}
         type="button"
       >
-        <div class="mb-1 text-center">{ label }</div>
+        <div class="mb-1 text-center">{label}</div>
         <div class="px-4 py-2 b-1 b-gray/50 rounded" style={{ background: color }}></div>
       </button>
     )
@@ -57,7 +57,7 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
   return (
     <Container label="Color Style" signal={signal}>
       <div class="grid grid-cols-2 gap-4 col-span-2">
-        { colorLabels.map(({ label, color }) => (
+        {colorLabels.map(({ label, color }) => (
           <ColorLabel
             key={label}
             label={label}
@@ -66,7 +66,7 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
           />
         ))}
       </div>
-      { label &&
+      {label &&
         <div class="flex flex-col items-center gap-1 col-span-2 text-center">
           <div class="flex gap-8">
             <button
@@ -83,7 +83,7 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
             </button>
           </div>
           <p>
-            Picking color for <strong>{ label }</strong>:
+            Picking color for <strong>{label}</strong>:
           </p>
           <HexAlphaColorPicker
             color={labelSignal.current?.value}
