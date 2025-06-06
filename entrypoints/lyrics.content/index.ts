@@ -1,3 +1,4 @@
+import lyricsAutoScroll from "./auto-scroll"
 import romanize from "./romanization"
 
 export default defineContentScript({
@@ -43,6 +44,8 @@ export default defineContentScript({
         text: `Found ${lyrics.length} lyric lines!`,
         duration: 1000
       })
+
+      lyricsAutoScroll()
     }
 
     function processLyricElement(element: HTMLElement): void {
