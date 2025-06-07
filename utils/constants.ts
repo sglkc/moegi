@@ -1,10 +1,6 @@
-const constants = {
-  TRANSLATED_LYRIC: 'translated-lyric',
-  ORIGINAL_LYRIC: 'original-lyric',
-  ROMANIZED_LYRIC: 'romanized-lyric',
-  LYRIC_SELECTOR: '[data-testid="fullscreen-lyric"]',
-  FULLSCREEN_BUTTON: '[data-testid="fullscreen-mode-button"]',
-  FULLSCREEN_LYRIC: '.npv-lyrics__text-wrapper>p',
-} as const
-
-export default constants
+export const TRANSLATED_LYRIC = 'translated-lyric'
+export const ORIGINAL_LYRIC = 'original-lyric'
+export const ROMANIZED_LYRIC = 'romanized-lyric'
+export const LYRIC_SELECTOR = '[data-testid="fullscreen-lyric"]'
+export const FULLSCREEN_BUTTON = '[data-testid="fullscreen-mode-button"]'
+export const FULLSCREEN_LYRIC = '.npv-lyrics__text-wrapper>p'

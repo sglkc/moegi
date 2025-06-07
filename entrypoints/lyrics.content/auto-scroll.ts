@@ -17,7 +17,7 @@ export default function lyricsAutoScroll() {
   })
 
   // Assume everything is ok since its initialized after lyrics processing
-  const lyricsContainer = document.querySelector(constants.LYRIC_SELECTOR)!.parentElement!
+  const lyricsContainer = document.querySelector(LYRIC_SELECTOR)!.parentElement!
   observer.observe(
     lyricsContainer,
     { childList: true, subtree: true, attributeFilter: ['class'] }

@@ -1,4 +1,5 @@
 import lyricsInit from './init'
+import lyricsStyling from './styling'
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
@@ -11,6 +12,14 @@ export default defineContentScript({
     // Get latest options to apply on first open
     optionsStorage.getValue().then((storedOptions) => {
       sessionStorage.setItem('moegi_options', JSON.stringify(storedOptions))
+    })
+
+    // Save latest options to session storage
+    // Since there's only one listener allowed, re-register options
+    // TODO: duplicate in `init.ts`
+    Background.onMessage('applyOptions', ({ data }) => {
+      sessionStorage.setItem('moegi_options', JSON.stringify(data))
+      lyricsStyling(data)
     })
 
     // TODO: handle fullscreen page?
@@ -32,8 +41,8 @@ export default defineContentScript({
           if (!(node instanceof HTMLElement)) continue
 
           if (
-            node.matches(constants.LYRIC_SELECTOR)
-              || node.querySelector(constants.LYRIC_SELECTOR)
+            node.matches(LYRIC_SELECTOR)
+              || node.querySelector(LYRIC_SELECTOR)
           ) {
             console.log('Matching lyrics element added, initializing')
             debouncedInitLyrics()

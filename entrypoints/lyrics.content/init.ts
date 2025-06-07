@@ -1,6 +1,6 @@
 import lyricsAutoScroll from './auto-scroll'
 import romanize from './romanization'
-// import lyricsStyling from './styling'
+import lyricsStyling from './styling'
 
 export default async function lyricsInit() {
   const lyricElements = new Set<HTMLElement>()
@@ -9,7 +9,7 @@ export default async function lyricsInit() {
     text: 'Processing lyrics...'
   })
 
-  const elements = document.querySelectorAll(constants.LYRIC_SELECTOR)
+  const elements = document.querySelectorAll(LYRIC_SELECTOR)
   const lyrics = Array.from(elements) as HTMLElement[]
 
   if (lyrics.length === 0) {
@@ -39,7 +39,7 @@ export default async function lyricsInit() {
 
   // TODO: add auto scroll toggle
   lyricsAutoScroll()
-  // lyricsStyling(storedOptions)
+  lyricsStyling(storedOptions)
 }
 
 function processLyricElement(element: HTMLElement): void {
@@ -51,23 +51,22 @@ function processLyricElement(element: HTMLElement): void {
 
   if (!originalLyric) return
 
-  // Clear existing content
-  element.innerHTML = ''
-
   // Create containers for different lyric types
   const originalElement = document.createElement('p')
-  originalElement.className = constants.ORIGINAL_LYRIC
+  originalElement.className = ORIGINAL_LYRIC
   originalElement.textContent = originalLyric
 
   const romanizedElement = document.createElement('p')
-  romanizedElement.className = constants.ROMANIZED_LYRIC
+  romanizedElement.className = ROMANIZED_LYRIC
   romanizedElement.textContent = romanize(originalLyric)
 
   const translatedElement = document.createElement('p')
-  translatedElement.className = constants.TRANSLATED_LYRIC
+  translatedElement.className = TRANSLATED_LYRIC
 
   // Add all elements to the container
-  element.appendChild(originalElement)
-  element.appendChild(romanizedElement)
-  element.appendChild(translatedElement)
+  element.replaceChildren(
+    originalElement,
+    romanizedElement,
+    translatedElement
+  )
 }
