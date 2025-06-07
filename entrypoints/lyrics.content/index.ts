@@ -1,5 +1,6 @@
 import lyricsAutoScroll from "./auto-scroll"
 import romanize from "./romanization"
+import lyricsStyling from "./styling"
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
@@ -46,6 +47,7 @@ export default defineContentScript({
       })
 
       lyricsAutoScroll()
+      lyricsStyling()
     }
 
     function processLyricElement(element: HTMLElement): void {
@@ -91,7 +93,10 @@ export default defineContentScript({
         for (const node of mutation.addedNodes) {
           if (!(node instanceof HTMLElement)) continue
 
-          if (node.querySelector(constants.LYRIC_SELECTOR)) {
+          if (
+            node.matches(constants.LYRIC_SELECTOR)
+              || node.querySelector(constants.LYRIC_SELECTOR)
+          ) {
             console.log('Matching lyrics element added, initializing')
             debouncedInitLyrics()
             return

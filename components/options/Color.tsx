@@ -72,12 +72,14 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
             <button
               class="color-accent underline cursor-pointer"
               onClick={resetColor}
+              type="button"
             >
               [SET TO DEFAULT]
             </button>
             <button
               class="color-accent underline cursor-pointer"
               onClick={() => setLabel(false)}
+              type="button"
             >
               [CLOSE]
             </button>
