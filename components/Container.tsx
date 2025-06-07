@@ -1,5 +1,7 @@
-import { DeepSignal } from 'deepsignal'
 import { ComponentChildren } from 'preact'
+import { DeepSignal } from 'deepsignal'
+import { MoegiOptions } from '@/utils/options'
+import Checkbox from './Checkbox'
 
 interface ContainerProps {
   label: string

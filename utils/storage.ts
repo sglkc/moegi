@@ -1,5 +1,8 @@
+import { storage } from '#imports'
 import { effect, signal } from '@preact/signals'
 import { deepSignal } from 'deepsignal'
+import { moegiDefaultOptions, MoegiOptions } from './options'
+import { debounce } from './debounce'
 
 export const optionsStorage = storage.defineItem('sync:moegiOptions', {
   init: () => moegiDefaultOptions,

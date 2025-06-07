@@ -4,6 +4,7 @@ import {
   TRANSLATED_LYRIC as TRANSLATED,
   ROMANIZED_LYRIC as ROMANIZED,
 } from '@/utils/constants'
+import { MoegiOptions } from '@/utils/options'
 
 export default function lyricsStyling(data: MoegiOptions): void {
   let style = document.querySelector<HTMLStyleElement>('#moegi-style')

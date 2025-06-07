@@ -1,4 +1,6 @@
+import { storage } from '#imports'
 import { translate } from 'google-translate-api-x'
+import { Background } from '@/utils/messaging'
 
 type TranslationCache = Record<string, string>
 

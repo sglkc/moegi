@@ -1,7 +1,12 @@
+import { defineContentScript } from '#imports'
 import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
+import { LYRIC_SELECTOR } from '@/utils/constants'
+import { debounce } from '@/utils/debounce'
+import { Background } from '@/utils/messaging'
+import { optionsStorage } from '@/utils/storage'
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],

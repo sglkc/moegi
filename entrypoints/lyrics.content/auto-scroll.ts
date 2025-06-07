@@ -1,3 +1,5 @@
+import { LYRIC_SELECTOR } from '@/utils/constants'
+
 /**
  * Scroll to active lyric element automatically
  * @see {@link https://github.com/sglkc/moegi/issues/18#issuecomment-2645727922|GitHub}

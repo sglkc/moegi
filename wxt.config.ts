@@ -14,6 +14,7 @@ export default defineConfig({
     },
   },
   modules: ['@wxt-dev/unocss'],
+  imports: false,
   webExt: {
     chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
   },

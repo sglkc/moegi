@@ -1,9 +1,10 @@
 import { DeepSignal } from 'deepsignal'
-import Container from '@/components/Container'
-import Range from '@/components/Range'
-import Select from '@/components/Select'
 import Checkbox from '@/components/Checkbox'
+import Container from '@/components/Container'
 import Input from '@/components/Input'
+import Select from '@/components/Select'
+import Slider from '@/components/Slider'
+import { RomanizationOptions } from '@/utils/options'
 
 interface RomanizationOptionsProps {
   signal: DeepSignal<RomanizationOptions>
@@ -25,7 +26,7 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
         ]}
       />
 
-      <Range
+      <Slider
         label="Font Size"
         signal={signal.$size}
         prefix="em"

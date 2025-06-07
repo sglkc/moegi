@@ -1,5 +1,5 @@
-import { PropsWithChildren } from 'preact/compat';
-import moegiText from '@/assets/moegi-text.svg';
+import { PropsWithChildren } from 'preact/compat'
+import moegiText from '@/assets/moegi-text.svg'
 
 export default function Main({ children }: PropsWithChildren) {
   return (
@@ -12,5 +12,5 @@ export default function Main({ children }: PropsWithChildren) {
       </div>
       { children }
     </main>
-  );
+  )
 }

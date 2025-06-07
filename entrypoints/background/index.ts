@@ -1,6 +1,9 @@
+import { defineBackground } from '#imports'
+import { debounce } from '@/utils/debounce'
+import { Background } from '@/utils/messaging'
+import { MoegiOptions } from '@/utils/options'
+
 export default defineBackground(() => {
-  chrome.runtime.onMessage.addListener((data) => console.info('BG:', data));
-  console.log('Hello background!', { id: browser.runtime.id });
   import('./translate')
 
   const sendOptionsToContent = debounce((tabId: number, data: MoegiOptions) => {
@@ -20,4 +23,4 @@ export default defineBackground(() => {
     // TODO: move debouncing to storage.ts
     sendOptionsToContent(tab.id, data)
   })
-});
+})

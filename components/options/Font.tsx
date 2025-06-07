@@ -1,11 +1,15 @@
 import { DeepSignal } from 'deepsignal'
-import Range from '@/components/Range'
+import Checkbox from '@/components/Checkbox'
+import Container from '@/components/Container'
+import Select from '@/components/Select'
+import Slider from '@/components/Slider'
+import { FontOptions } from '@/utils/options'
 
 interface TextOptionsProps {
   signal: DeepSignal<FontOptions>
 }
 
-export default function TextOption({ signal }: TextOptionsProps) {
+export default function FontOption({ signal }: TextOptionsProps) {
   return (
     <Container label="Font Style" signal={signal}>
       <Select<FontOptions['align']>
@@ -18,7 +22,7 @@ export default function TextOption({ signal }: TextOptionsProps) {
           { text: 'Right', value: 'right' },
         ]}
       />
-      <Range
+      <Slider
         label="Font Size"
         signal={signal.$size}
         prefix="em"
@@ -26,7 +30,7 @@ export default function TextOption({ signal }: TextOptionsProps) {
         step={0.05}
         max={2.5}
       />
-      <Range
+      <Slider
         label="Spacing"
         signal={signal.$spacing}
         prefix="px"

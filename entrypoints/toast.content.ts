@@ -1,5 +1,7 @@
+import { defineContentScript } from '#imports'
 import Toastify from 'toastify-js'
 import StartToastifyInstance from 'toastify-js'
+import { Background, Content, ToastMessage } from '@/utils/messaging'
 import 'toastify-js/src/toastify.css'
 
 const toasts = new Map<number, ReturnType<typeof StartToastifyInstance>>()

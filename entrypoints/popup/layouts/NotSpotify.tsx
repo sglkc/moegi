@@ -2,7 +2,7 @@ export default function NotSpotify() {
   const openSpotify = () => chrome.tabs.create({
     active: true,
     url: 'https://open.spotify.com',
-  });
+  })
 
   return (
     <div class="flex flex-col gap-2">
@@ -15,5 +15,5 @@ export default function NotSpotify() {
         Open Spotify Web Player
       </a>
     </div>
-  );
+  )
 }

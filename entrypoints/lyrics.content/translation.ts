@@ -1,3 +1,7 @@
+import { LYRIC_SELECTOR, SONG_TITLE, TRANSLATED_LYRIC } from '@/utils/constants'
+import { Background, Content } from '@/utils/messaging'
+import { TranslationOptions } from '@/utils/options'
+
 export default async function lyricsTranslation(data: TranslationOptions): Promise<void> {
   const lyrics = Array.from(document.querySelectorAll(LYRIC_SELECTOR))
   const title = document.querySelector(SONG_TITLE)?.textContent

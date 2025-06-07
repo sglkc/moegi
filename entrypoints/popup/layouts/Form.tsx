@@ -1,7 +1,8 @@
 import ColorOption from '@/components/options/Color'
 import RomanizationOption from '@/components/options/Romanization'
-import TextOption from '@/components/options/Text'
+import FontOption from '@/components/options/Font'
 import TranslationOption from '@/components/options/Translation'
+import { options, optionsStorage } from '@/utils/storage'
 
 export default function Form() {
   const resetOptions = async () => {
@@ -11,7 +12,7 @@ export default function Form() {
 
   return (
     <form id="form" class="grid gap-4">
-      <TextOption signal={options.fonts} />
+      <FontOption signal={options.fonts} />
       <ColorOption signal={options.colors} />
       <TranslationOption signal={options.translation} />
       <RomanizationOption signal={options.romanization} />

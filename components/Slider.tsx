@@ -2,13 +2,13 @@ import { Signal } from '@preact/signals'
 import { ChangeEvent, InputHTMLAttributes } from 'preact/compat'
 import { useId } from 'preact/hooks'
 
-export interface RangeProps extends InputHTMLAttributes {
+export interface SliderProps extends InputHTMLAttributes {
   label: string
   signal: Signal<number> | undefined
   prefix?: string
 }
 
-export default function Range({ label, signal, prefix, ...props }: RangeProps) {
+export default function Slider({ label, signal, prefix, ...props }: SliderProps) {
   const id = useId()
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     signal && (signal.value = Number(e.currentTarget.value))

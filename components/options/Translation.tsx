@@ -1,6 +1,9 @@
 import { DeepSignal } from 'deepsignal'
 import { languages } from 'google-translate-api-x'
-import Range from '@/components/Range'
+import Container from '@/components/Container'
+import Select from '@/components/Select'
+import Slider from '@/components/Slider'
+import { TranslationOptions } from '@/utils/options'
 
 interface TranslationOptionsProps {
   signal: DeepSignal<TranslationOptions>
@@ -19,7 +22,7 @@ export default function TranslationOption({ signal }: TranslationOptionsProps) {
         default="en"
         options={options}
       />
-      <Range
+      <Slider
         label="Font Size"
         signal={signal.$size}
         prefix="em"

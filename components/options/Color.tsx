@@ -1,9 +1,11 @@
-import { debounce } from '@/utils/debounce'
 import { Signal } from '@preact/signals'
 import { DeepSignal } from 'deepsignal'
 import { memo } from 'preact/compat'
 import { useCallback, useRef, useState } from 'preact/hooks'
 import { HexAlphaColorPicker } from 'react-colorful'
+import Container from '@/components/Container'
+import { debounce } from '@/utils/debounce'
+import { ColorOptions } from '@/utils/options'
 
 interface ColorOptionsProps {
   signal: DeepSignal<ColorOptions>

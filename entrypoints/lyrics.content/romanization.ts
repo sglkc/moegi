@@ -1,3 +1,7 @@
+import { LYRIC_SELECTOR, ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
+import { Content } from '@/utils/messaging'
+import { RomanizationOptions } from '@/utils/options'
+
 export interface RomanizationProvider {
   check: (text: string) => boolean
   convert: (text: string, data: RomanizationOptions) => Promise<string>

@@ -2,6 +2,14 @@ import lyricsAutoScroll from './auto-scroll'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
+import {
+  LYRIC_SELECTOR,
+  ORIGINAL_LYRIC,
+  ROMANIZED_LYRIC,
+  TRANSLATED_LYRIC,
+} from '@/utils/constants'
+import { Content } from '@/utils/messaging'
+import { MoegiOptions } from '@/utils/options'
 
 export default async function lyricsInit() {
   const lyricElements = new Set<HTMLElement>()

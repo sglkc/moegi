@@ -1,5 +1,6 @@
 import { defineExtensionMessaging } from '@webext-core/messaging'
 import { defineCustomEventMessaging } from '@webext-core/messaging/page'
+import { MoegiOptions } from './options'
 
 export interface ToastMessage {
   text: string
