@@ -3,9 +3,13 @@
  * @see {@link https://github.com/sglkc/moegi/issues/18#issuecomment-2645727922|GitHub}
  */
 export default function lyricsAutoScroll() {
-  // Active lyric class always at the end
+  // Only scroll if the lyric changes, prevents jumping on song change
+  // First element is inactive, second element is active
   const observer = new MutationObserver((mutations) => {
-    const activeLyric = mutations.at(-1)?.target
+    console.log(mutations.length)
+    if (mutations.length !== 2) return
+
+    const activeLyric = mutations[1].target
 
     if (!(activeLyric instanceof HTMLElement)) return
 
