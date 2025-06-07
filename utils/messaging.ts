@@ -9,6 +9,7 @@ export interface ToastMessage {
 interface ProtocolMap {
   createToast(data: ToastMessage): number
   destroyToast(id: number): boolean
+  applyOptions(data: MoegiOptions): void
 }
 
 export const Background = defineExtensionMessaging<ProtocolMap>()

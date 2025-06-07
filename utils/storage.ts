@@ -1,5 +1,5 @@
-import { effect } from '@preact/signals'
-import { DeepSignal, deepSignal } from 'deepsignal'
+import { effect, signal } from '@preact/signals'
+import { deepSignal } from 'deepsignal'
 
 export const optionsStorage = storage.defineItem('sync:moegiOptions', {
   init: () => moegiDefaultOptions,
@@ -8,24 +8,37 @@ export const optionsStorage = storage.defineItem('sync:moegiOptions', {
 })
 
 // Make options reactive and save to storage on every change
-export const options: DeepSignal<MoegiOptions> = deepSignal<MoegiOptions>(moegiDefaultOptions)
+export const options = deepSignal<MoegiOptions>(moegiDefaultOptions)
 
-let hasImported = false
+const hasImported = signal(false)
 
 // Top-level await prevents build
 optionsStorage.getValue().then((storedOptions) => {
   Object.assign(options, storedOptions)
-  setTimeout(() => hasImported = true, 1000)
+  hasImported.value = true
 })
+
+const saveOptions = debounce(() => {
+  optionsStorage.setValue(options)
+  console.log('Saving options...')
+}, 1000)
 
 // Save every changes to storage with debouncing
 effect(() => {
-  chrome.runtime.sendMessage(options)
+  if (!hasImported.value) return
 
-  return debounce(() => {
-    if (!hasImported) return
+  // TODO: debounce sending message here if possible
+  chrome.runtime.sendMessage({
+    data: options,
+    id: Math.round(Math.random() * 1000),
+    sender: {
+      id: chrome.runtime.id,
+      origin: window.origin
+    },
+    timestamp: Date.now(),
+    type: 'applyOptions'
+  })
 
-    optionsStorage.setValue(options)
-    console.log('Saving options...')
-  }, 1000)
+  // Background.sendMessage('applyOptions', currentOptions)
+  saveOptions()
 })
