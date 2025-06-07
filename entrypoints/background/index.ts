@@ -1,9 +1,10 @@
 export default defineBackground(() => {
   chrome.runtime.onMessage.addListener((data) => console.info('BG:', data));
   console.log('Hello background!', { id: browser.runtime.id });
+  import('./translate')
 
   const sendOptionsToContent = debounce((tabId: number, data: MoegiOptions) => {
-    console.log('forward options to content')
+    console.log('forward options to content', data)
     Background.sendMessage('applyOptions', data, { tabId })
   }, 1000)
 

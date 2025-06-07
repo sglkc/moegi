@@ -1,6 +1,7 @@
 import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
+import lyricsTranslation from './translation'
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
@@ -21,7 +22,8 @@ export default defineContentScript({
     Background.onMessage('applyOptions', ({ data }) => {
       sessionStorage.setItem('moegi_options', JSON.stringify(data))
       lyricsStyling(data)
-      lyricsRomanization(data)
+      lyricsRomanization(data.romanization)
+      lyricsTranslation(data.translation)
     })
 
     // TODO: handle fullscreen page?
@@ -44,7 +46,7 @@ export default defineContentScript({
 
           if (
             node.matches(LYRIC_SELECTOR)
-              || node.querySelector(LYRIC_SELECTOR)
+            || node.querySelector(LYRIC_SELECTOR)
           ) {
             console.log('Matching lyrics element added, initializing')
             debouncedInitLyrics()

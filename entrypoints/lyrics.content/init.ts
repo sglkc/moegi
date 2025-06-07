@@ -1,6 +1,7 @@
 import lyricsAutoScroll from './auto-scroll'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
+import lyricsTranslation from './translation'
 
 export default async function lyricsInit() {
   const lyricElements = new Set<HTMLElement>()
@@ -40,7 +41,8 @@ export default async function lyricsInit() {
   // TODO: add auto scroll toggle
   lyricsAutoScroll()
   lyricsStyling(storedOptions)
-  lyricsRomanization(storedOptions)
+  lyricsRomanization(storedOptions.romanization)
+  lyricsTranslation(storedOptions.translation)
 }
 
 function processLyricElement(element: HTMLElement): void {

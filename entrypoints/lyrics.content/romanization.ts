@@ -12,11 +12,14 @@ const romanizations = {
   japanese: import('./romanizations/japanese'),
 }
 
-export default async function lyricsRomanization(data: MoegiOptions): Promise<void> {
-  if (!data.romanization) return
+export default async function lyricsRomanization(data: RomanizationOptions): Promise<void> {
+  if (!(data.language in romanizations)) return
 
-  const romanize = await romanizations[data.romanization.language].then(e => e.default)
   const lyrics = Array.from(document.querySelectorAll(LYRIC_SELECTOR))
+  if (!lyrics.length) return
+
+  const toastId = await Content.sendMessage('createToast', { text: 'Romanizing...' })
+  const romanize = await romanizations[data.language].then(e => e.default)
 
   for (const lyric of lyrics) {
     const original = lyric.querySelector('.'+ORIGINAL_LYRIC)
@@ -25,8 +28,10 @@ export default async function lyricsRomanization(data: MoegiOptions): Promise<vo
     const text = original.textContent
     if (!text) continue
 
-    const romanized = await romanize.convert(text, data.romanization)
+    const romanized = await romanize.convert(text, data)
 
     lyric.querySelector('.'+ROMANIZED_LYRIC)!.textContent = romanized
   }
+
+  await Content.sendMessage('destroyToast', toastId)
 }
