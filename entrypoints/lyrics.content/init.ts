@@ -1,5 +1,5 @@
 import lyricsAutoScroll from './auto-scroll'
-import romanize from './romanization'
+import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 
 export default async function lyricsInit() {
@@ -40,6 +40,7 @@ export default async function lyricsInit() {
   // TODO: add auto scroll toggle
   lyricsAutoScroll()
   lyricsStyling(storedOptions)
+  lyricsRomanization(storedOptions)
 }
 
 function processLyricElement(element: HTMLElement): void {
@@ -58,7 +59,6 @@ function processLyricElement(element: HTMLElement): void {
 
   const romanizedElement = document.createElement('p')
   romanizedElement.className = ROMANIZED_LYRIC
-  romanizedElement.textContent = romanize(originalLyric)
 
   const translatedElement = document.createElement('p')
   translatedElement.className = TRANSLATED_LYRIC

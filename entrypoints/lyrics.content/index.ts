@@ -1,4 +1,5 @@
 import lyricsInit from './init'
+import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 
 export default defineContentScript({
@@ -20,6 +21,7 @@ export default defineContentScript({
     Background.onMessage('applyOptions', ({ data }) => {
       sessionStorage.setItem('moegi_options', JSON.stringify(data))
       lyricsStyling(data)
+      lyricsRomanization(data)
     })
 
     // TODO: handle fullscreen page?
@@ -53,7 +55,7 @@ export default defineContentScript({
     })
 
     const intervalId = setInterval(() => {
-      // @ts-ignore: intended nullable at start
+      // @ts-expect-error: intended nullable at start
       rootElement = document.body.querySelector('#main')
 
       if (!rootElement || !sessionStorage.getItem('moegi_options')) return

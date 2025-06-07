@@ -15,8 +15,8 @@ importers:
         specifier: ^1.3.2
         version: 1.3.2(preact@10.26.6)
       '@romanize/korean':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.3
+        version: 0.1.3
       '@sglkc/kuromoji':
         specifier: ^1.1.0
         version: 1.1.0
@@ -724,8 +724,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@romanize/korean@0.1.1':
-    resolution: {integrity: sha512-+9bIexgEkk691qE3PiO8KtAgNIM45cPHy6vjI7R8RgZnb7TERa0xR8ng8A6abkMsaAG/gVo8+Qes200xwSc90A==}
+  '@romanize/korean@0.1.3':
+    resolution: {integrity: sha512-Bfxze35S7ktKqm7ge78x3v7OW/TrbPV0gcvrHuTXUeeID7mGiWWUIH/fOS9lO25N1LY+n1S9xsixtxT9KggEYg==}
 
   '@sglkc/kuromoji@1.1.0':
     resolution: {integrity: sha512-uKxXYUM5XNjZw0ia0yMYTI3jHSh/c1gEMNvcvS6J49B4mI+PAq8iRYPTxh2ma0RWm45LyWWrILxCJAIXpi/pww==}
@@ -3282,7 +3282,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.40.2':
     optional: true
 
-  '@romanize/korean@0.1.1': {}
+  '@romanize/korean@0.1.3': {}
 
   '@sglkc/kuromoji@1.1.0':
     dependencies:
