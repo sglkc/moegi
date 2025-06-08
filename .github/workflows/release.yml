@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    name: Check Version Change
+    runs-on: ubuntu-latest
+    outputs:
+      version-changed: ${{ steps.check.outputs.changed }}
+      new-version: ${{ steps.check.outputs.version }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - name: Check if version changed
+      id: check
+      run: |
+        if git diff HEAD~1 HEAD --name-only | grep -q "package.json"; then
+          OLD_VERSION=$(git show HEAD~1:package.json | jq -r '.version')
+          NEW_VERSION=$(jq -r '.version' package.json)
+          if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "Version changed from $OLD_VERSION to $NEW_VERSION"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+
+  cd:
+    name: Continuous Deployment (Build & Release)
+    needs: [check-version]
+    runs-on: ubuntu-latest
+    if: needs.check-version.outputs.version-changed == 'true' && github.ref == 'refs/heads/master'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: latest
+
+    - name: Setup Node.js 22
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: TypeScript compilation check
+      run: pnpm run compile
+
+    - name: Build for Chrome
+      run: pnpm run build
+
+    - name: Build for Firefox
+      run: pnpm run build:firefox
+
+    - name: Create extension packages
+      run: |
+        pnpm run zip
+        pnpm run zip:firefox
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ needs.check-version.outputs.new-version }}
+        release_name: Release v${{ needs.check-version.outputs.new-version }}
+        body: |
+          ## Moegi v${{ needs.check-version.outputs.new-version }}
+
+          Spotify lyrics extension for styling, translation, and romanization.
+
+          ### Downloads
+          - **Chrome/Chromium**: moegi-v${{ needs.check-version.outputs.new-version }}-chrome.zip
+          - **Firefox**: moegi-v${{ needs.check-version.outputs.new-version }}-firefox.zip
+        draft: false
+        prerelease: false
