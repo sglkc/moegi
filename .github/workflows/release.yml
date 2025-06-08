@@ -7,6 +7,10 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: read
+
 jobs:
   check-version:
     name: Check Version Change
@@ -39,7 +43,7 @@ jobs:
         fi
 
   cd:
-    name: Continuous Deployment (Build & Release)
+    name: Build & Release
     needs: [check-version]
     runs-on: ubuntu-latest
     if: needs.check-version.outputs.version-changed == 'true' && github.ref == 'refs/heads/master'
@@ -66,31 +70,33 @@ jobs:
       run: pnpm run compile
 
     - name: Build for Chrome
-      run: pnpm run build
+      run: pnpm run zip
 
     - name: Build for Firefox
-      run: pnpm run build:firefox
+      run: pnpm run zip:firefox
 
-    - name: Create extension packages
-      run: |
-        pnpm run zip
-        pnpm run zip:firefox
-
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create GitHub Release with Assets
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ needs.check-version.outputs.new-version }}
-        release_name: Release v${{ needs.check-version.outputs.new-version }}
+        name: Release v${{ needs.check-version.outputs.new-version }}
         body: |
           ## Moegi v${{ needs.check-version.outputs.new-version }}
 
           Spotify lyrics extension for styling, translation, and romanization.
 
           ### Downloads
-          - **Chrome/Chromium**: moegi-v${{ needs.check-version.outputs.new-version }}-chrome.zip
-          - **Firefox**: moegi-v${{ needs.check-version.outputs.new-version }}-firefox.zip
+          - **Chrome/Chromium**: Download the chrome.zip file below
+          - **Firefox**: Download the firefox.zip file below
+
+          ### Installation
+          1. Download the appropriate zip file for your browser
+          2. Extract the zip file
+          3. Load the extension in developer mode
+        files: |
+          .output/moegi-*-chrome.zip
+          .output/moegi-*-firefox.zip
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
