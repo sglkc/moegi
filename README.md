@@ -17,10 +17,21 @@
 
   Features lyrics translation for over 100 languages powered by Google Translate and \
   romanization for Chinese, Korean, Japanese, Cyrillic, and many more non-latin scripts! \
-  *Tested on Google Chrome (122.0.6261.111) and Brave Browser (123.1.64.113) on Linux*
+  *Tested on Google Chrome (135.0.7049.52) and Brave Browser (137.1.79.119) on Linux*
 
   <br />
 </div>
+
+## Version 2 Todo
+
+- Rework to WXT 💚
+- Auto-release on new tags (ci/cd)
+- Reset defaults button
+- DeepL translation
+- Reimplement fullscreen handling
+- Implement active lyric listener
+- Picture-in-picture lyrics
+- Update README, video, and screenshots
 
 ## Getting Started
 
@@ -206,7 +217,7 @@ If you wish to make modifications or just want to build the extension yourself:
   pnpm install
   ```
 
-3. Start extension development with hot reload
+3. Start extension development and launch test browser
 
   ```sh
   pnpm dev
