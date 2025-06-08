@@ -15,6 +15,7 @@ export default function lyricsStyling(data: MoegiOptions): void {
     document.head.appendChild(style)
   }
 
+  const fontsEnabled = data.fonts.enabled
   const colorsEnabled = data.colors.enabled
 
   const hideOriginal =
@@ -25,21 +26,36 @@ export default function lyricsStyling(data: MoegiOptions): void {
    * @see {@link https://github.com/sglkc/moegi/issues/17#issuecomment-2645904494|GitHub}
    */
   const css = `
+    ${!fontsEnabled ? '/*' : ''}
+    ${LYRIC} {
+      margin-top: ${data.fonts.spacing}px;
+      font-size: ${data.fonts.size}em;
+      text-align: ${data.fonts.align};
+      line-height: 1.5;
+    }
+
     .${ORIGINAL}:has(~ :is(.${ROMANIZED}, .${TRANSLATED}):not(:empty)) {
       display: ${hideOriginal ? 'none' : 'inherit'};
     }
 
     .${ROMANIZED} {
       font-size: ${data.romanization.size}em;
-      color: var(--lyrics-color-romanization);
     }
 
     .${TRANSLATED} {
       font-size: ${data.translation.size}em;
+    }
+    ${!fontsEnabled ? '*/' : ''}
+
+    ${!colorsEnabled ? '/*' : ''}
+    .${ROMANIZED} {
+      color: var(--lyrics-color-romanization);
+    }
+
+    .${TRANSLATED} {
       color: var(--lyrics-color-translation);
     }
 
-    ${!colorsEnabled ? '/*' : ''}
     ${LYRIC}:has(~ .active-lyric) {
       --lyrics-color-passed: ${data.colors.passed};
     }
@@ -53,13 +69,6 @@ export default function lyricsStyling(data: MoegiOptions): void {
       --lyrics-color-inactive: ${data.colors.inactive};
       --lyrics-color-romanization: ${data.colors.romanization};
       --lyrics-color-translation: ${data.colors.translation};
-    }
-
-    ${LYRIC} {
-      margin-top: ${data.fonts.spacing}px;
-      font-size: ${data.fonts.size}em;
-      text-align: ${data.fonts.align};
-      line-height: 1.5;
     }
     ${!colorsEnabled ? '*/' : ''}
 

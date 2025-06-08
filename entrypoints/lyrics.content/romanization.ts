@@ -17,6 +17,7 @@ const romanizations = {
 }
 
 export default async function lyricsRomanization(data: RomanizationOptions): Promise<void> {
+  if (!data.enabled) return
   if (!(data.language in romanizations)) return
 
   const lyrics = Array.from(document.querySelectorAll(LYRIC_SELECTOR))

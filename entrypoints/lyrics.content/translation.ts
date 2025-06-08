@@ -3,6 +3,8 @@ import { Background, Content } from '@/utils/messaging'
 import { TranslationOptions } from '@/utils/options'
 
 export default async function lyricsTranslation(data: TranslationOptions): Promise<void> {
+  if (!data.enabled) return
+
   const lyrics = Array.from(document.querySelectorAll(LYRIC_SELECTOR))
   const title = document.querySelector(SONG_TITLE)?.textContent
 
