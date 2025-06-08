@@ -7,7 +7,7 @@ type Prev = [never, 0, 1, 2, 3, 4, 5]
 /**
  * Extract deep keys with dot notation for objects
  */
-export type DeepKeys<T, D extends number = 10> = [D] extends [never]
+export type DeepKeys<T, D extends number = 5> = [D] extends [never]
   ? never
   : T extends Primitive
   ? never
@@ -24,7 +24,7 @@ export type DeepKeys<T, D extends number = 10> = [D] extends [never]
  */
 export function getDeepKeys<T extends Record<string, any>>(
   obj: T,
-  maxDepth: number = 10,
+  maxDepth: number = 5,
   prefix: string = ''
 ): DeepKeys<T>[] {
   if (maxDepth <= 0 || obj === null || typeof obj !== 'object') {
@@ -55,8 +55,6 @@ export function getDeepKeys<T extends Record<string, any>>(
 /**
  * Find if array has element of any of elements, because Set is not serializable :(
  */
-export function createArrayHas<T>(array: T[]): (elements: T | T[]) => boolean {
-  return (elements) => Array.isArray(elements)
-    ? elements.some(element => array.includes(element))
-    : array.includes(elements)
+export function createArrayHas<T>(array: T[]): (...elements: T[]) => boolean {
+  return (...elements) => elements.some(element => array.includes(element))
 }

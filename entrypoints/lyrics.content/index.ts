@@ -20,17 +20,35 @@ export default defineContentScript({
     // TODO: duplicate in `init.ts` ??
     Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
       const has = createArrayHas(changes)
+      console.log('Applying changes', changes, options)
 
       // Must have dependency options to prevent multiple reloads
-      if (has(['fonts', 'colors', 'translation.enabled', 'romanization.enabled' ])) {
+      if (has(
+        'fonts',
+        'colors',
+        'translation.enabled',
+        'translation.size',
+        'romanization.enabled',
+        'romanization.size',
+      )) {
         lyricsStyling(options)
       }
 
-      if (has('romanization')) {
+      if (has(
+        'romanization.enabled',
+        'romanization.language',
+        'romanization.chinese',
+        'romanization.cyrillic',
+        'romanization.japanese',
+        'romanization.korean',
+      )) {
         lyricsRomanization(options.romanization)
       }
 
-      if (has('translation')) {
+      if (has(
+        'translation.enabled',
+        'translation.target'
+      )) {
         lyricsTranslation(options.translation)
       }
     })

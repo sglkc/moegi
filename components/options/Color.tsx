@@ -24,14 +24,17 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
   const labelSignal = useRef<Signal>()
 
   const onClick = useCallback((label: InputLabel) => () => {
+    console.log('kliking on label kolor', label)
     labelSignal.current = signal[`$${label}`]
     setLabel(label)
-  }, [])
+  }, [signal])
 
   const resetColor = () => labelSignal.current && (labelSignal.current.value = '')
 
-  const changeColor = debounce((color: string) =>
-    labelSignal.current && (labelSignal.current.value = color), 500)
+  const changeColor = debounce((color: string) => {
+    console.log('changing color', labelSignal.current, 'to', color)
+    return labelSignal.current && (labelSignal.current.value = color)
+  }, 500)
 
   const colorLabels = [
     { label: 'Background', color: signal.background },
@@ -42,11 +45,11 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
     { label: 'Romanization', color: signal.romanization },
   ]
 
-  const ColorLabel = memo(({ color, label }: ColorLabelProps) => {
+  const ColorLabel = memo(({ color, label, onClick }: ColorLabelProps) => {
     return (
       <button
         class="cursor-pointer appearance-none bg-secondary py-1 px-2 b-1 rounded b-primary/60"
-        onClick={onClick(label.toLowerCase() as InputLabel)}
+        onClick={onClick}
         type="button"
       >
         <div class="mb-1 text-center">{label}</div>

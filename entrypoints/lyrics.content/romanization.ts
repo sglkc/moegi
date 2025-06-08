@@ -35,10 +35,16 @@ export default async function lyricsRomanization(data: RomanizationOptions): Pro
     const text = original.textContent
     if (!text) continue
 
-    const romanized = await romanize.convert(text, data)
+    // Korean romanization returns error for invalid characters
+    try {
+      const romanized = await romanize.convert(text, data)
 
-    // Japanese furigana uses ruby elements
-    lyric.querySelector('.'+ROMANIZED_LYRIC)!.innerHTML = romanized
+      // Japanese furigana uses ruby elements
+      lyric.querySelector('.'+ROMANIZED_LYRIC)!.innerHTML = romanized
+    } catch (error) {
+      console.error('Romanization error:', error)
+      lyric.querySelector('.'+ROMANIZED_LYRIC)!.textContent = ''
+    }
   }
 
   await Content.sendMessage('destroyToast', toastId)

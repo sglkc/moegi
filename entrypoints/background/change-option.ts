@@ -28,10 +28,11 @@ Background.onMessage('applyOptions', async ({ data: { options } }) => {
 
   // get updated keys then update old data
   const updates = updatedDiff(oldOptions, options)
+  const changes = getDeepKeys(updates)
   oldOptions = options
 
-  sendOptionsToContent(tab.id, {
-    changes: getDeepKeys(updates),
-    options: options,
-  })
+  // Only send if there's any updates
+  if (!changes.length) return
+
+  sendOptionsToContent(tab.id, { changes, options })
 })
