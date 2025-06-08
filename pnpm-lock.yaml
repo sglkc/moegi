@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@deeplx/core':
+        specifier: ^0.1.3
+        version: 0.1.3
       '@fontsource/quicksand':
         specifier: ^5.2.7
         version: 5.2.7
@@ -212,6 +215,10 @@ packages:
 
   '@crxjs/vite-plugin@2.0.0-beta.26':
     resolution: {integrity: sha512-fZiSeOB4LOwq3cLIwHJnJ4x/duBU/Gkn3JKF7b7mZIRAXtu1waorJ6QaH7qoZPcN5LzyA3J+/t3Kuwa/oo8XNg==}
+
+  '@deeplx/core@0.1.3':
+    resolution: {integrity: sha512-PUo+4V/3eT2hVWhr8xpMg4BksEl26V5dw19zhSgaapMstcPSEtiqmGdO77MvYa3AN+pjaP6WYf2JJBMU+pXsBw==}
+    engines: {node: ^12.20 || ^14.18.0 || >=16.0.0}
 
   '@devicefarmer/adbkit-logcat@2.1.3':
     resolution: {integrity: sha512-yeaGFjNBc/6+svbDeul1tNHtNChw6h8pSHAt5D+JsedUrMTN7tla7B15WLDyekxsuS2XlZHRxpuC6m92wiwCNw==}
@@ -2657,6 +2664,88 @@ packages:
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
+  whatlang-node-android-arm-eabi@0.1.0:
+    resolution: {integrity: sha512-cib4KyAkpj6kvbNSiVx3X0p16Vwhpv3dwC+G2qNGrdvnOdO8jJhZ4vcG4Vzm1FhqRX9FB8z9rA5ink7t8l1hRg==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [android]
+
+  whatlang-node-android-arm64@0.1.0:
+    resolution: {integrity: sha512-dnjsG4KlDRNZu3KeU9aqTQin3WoxkFsJBepGZFCAYjvkzFxe/YX9lrhcTJF6HuaxerDHmj2i3i/yJ1WCUExEIQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  whatlang-node-darwin-arm64@0.1.0:
+    resolution: {integrity: sha512-CyYw6ro09ydAfw9v+p+VFKtQDwm4E4vmr+hYJnkDD2Pxf6MlFnQpa3udJrfU8n7JOy4G6q0SFVVcNBEWWmeDGA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  whatlang-node-darwin-x64@0.1.0:
+    resolution: {integrity: sha512-7wELSpCG8HF8t7CT5D04ApoiEY89dx7MCoCdGjtxCxORIYhqFfL4vd8UPfkwjgmM/bCK9e569XKThfE8u/mjiQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  whatlang-node-freebsd-x64@0.1.0:
+    resolution: {integrity: sha512-xO4FaC6lhlbVwtl8N7blsdFofEjplV6PbsIFN4YSNHU97ZrYUG0T/L3J/RLQUsSDFGhF4fFCHZfRPxnuN+ramQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [freebsd]
+
+  whatlang-node-linux-arm-gnueabihf@0.1.0:
+    resolution: {integrity: sha512-R1bKVF05i1FXJ7CY+1HGH3y5FQkQFiN9kUdytgDvjaBAPfY9YEFQZ/zNkpv0CAe6OQolr8zXGSCWNoBfFDxZkA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  whatlang-node-linux-arm64-gnu@0.1.0:
+    resolution: {integrity: sha512-7/jAlxgf7nuHg/CO3AxjsdTFwxIHD8MJoRZN0uby3rq4Je9TkYNTz5Y0YGwyV9TcIrglVX/LVaU+Shyc50nuhw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  whatlang-node-linux-arm64-musl@0.1.0:
+    resolution: {integrity: sha512-c8FwWXshHpLGxrHI+KyQEGcPUE6bbm4VWtnDyoVn4i/LPuJUm447sSaG98FsuRBP6sx0u+1RzSr0WxQyo6ZnMQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  whatlang-node-linux-x64-gnu@0.1.0:
+    resolution: {integrity: sha512-BUq4YM7fN3zj/OSNoifmcW6IeYpA3MNj+E0NOI16pUhgMLba0LWCTBHMAhqDYpdNFlQmMviu+PzTtJJJG9yxOw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  whatlang-node-linux-x64-musl@0.1.0:
+    resolution: {integrity: sha512-isvGfVljIMGlCUtf7fwlFyx/+QCn+YbmrDw7xiPwrFO7o/Iw4am/G70vpDQr6b264iOW2pPf9ZrmDLY+EXYzgA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  whatlang-node-win32-arm64-msvc@0.1.0:
+    resolution: {integrity: sha512-SGenJFMZY56c2nz03NZVKn27hwYG/cv5unoSBl5/JnULg3DpxwG16e8ijoaIHFUakC87BcpyV1aj7NG5JDG5vw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+
+  whatlang-node-win32-ia32-msvc@0.1.0:
+    resolution: {integrity: sha512-2VNisaNXzO06r8FCu6Som7h9uRtqHw6kLkdifTHfAXRqHCPa8JTUVUTAYo+fI4LvSR5s0oCb8OEj5cPeidUFAA==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+
+  whatlang-node-win32-x64-msvc@0.1.0:
+    resolution: {integrity: sha512-IHrPCWah7VqU6myPwZd711R+2py+h33uwOIzclvxYvgVxbDWI4PrY+PmA0e6eEboYL6EUB/t96vAZVUEDaqhxw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  whatlang-node@0.1.0:
+    resolution: {integrity: sha512-KPfuaaKNE9KqdwH57MVhX7Vw1P6WG6quTqcO5WVu67iNuT6qtL0di75yDYCVvGDMFQ+88hQhrymbKTeVwEZFXg==}
+    engines: {node: '>= 10'}
+
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
@@ -2713,6 +2802,10 @@ packages:
   wxt@0.20.6:
     resolution: {integrity: sha512-CdExyv2yWfpmPWFjhrKBA+nUSHOTRpRKqScod66AaLpMQ0famZ18tM0+4a9m7oX4Pts1XZH4nw79XQp06QsC2Q==}
     hasBin: true
+
+  x-fetch@0.2.6:
+    resolution: {integrity: sha512-yHne8a291wWzF/rwCB51kuE4efMMGlCiK1I95W4IOeY7TWESltuNgK4rpw3ukdJXEYQrVcwdypZ/ULT6e6/CfA==}
+    engines: {node: '>=14.0.0'}
 
   xdg-basedir@5.1.0:
     resolution: {integrity: sha512-GCPAHLvrIH13+c0SuacwvRYj2SxJXQ4kaVTT5xgL3kPrz56XxkF21IGhjSE1+W0aw7gpBWRGXLCPnPby6lSpmQ==}
@@ -2939,6 +3032,12 @@ snapshots:
       rxjs: 7.5.7
     transitivePeerDependencies:
       - supports-color
+
+  '@deeplx/core@0.1.3':
+    dependencies:
+      node-fetch-native: 1.6.6
+      whatlang-node: 0.1.0
+      x-fetch: 0.2.6
 
   '@devicefarmer/adbkit-logcat@2.1.3': {}
 
@@ -5379,6 +5478,61 @@ snapshots:
 
   webpack-virtual-modules@0.6.2: {}
 
+  whatlang-node-android-arm-eabi@0.1.0:
+    optional: true
+
+  whatlang-node-android-arm64@0.1.0:
+    optional: true
+
+  whatlang-node-darwin-arm64@0.1.0:
+    optional: true
+
+  whatlang-node-darwin-x64@0.1.0:
+    optional: true
+
+  whatlang-node-freebsd-x64@0.1.0:
+    optional: true
+
+  whatlang-node-linux-arm-gnueabihf@0.1.0:
+    optional: true
+
+  whatlang-node-linux-arm64-gnu@0.1.0:
+    optional: true
+
+  whatlang-node-linux-arm64-musl@0.1.0:
+    optional: true
+
+  whatlang-node-linux-x64-gnu@0.1.0:
+    optional: true
+
+  whatlang-node-linux-x64-musl@0.1.0:
+    optional: true
+
+  whatlang-node-win32-arm64-msvc@0.1.0:
+    optional: true
+
+  whatlang-node-win32-ia32-msvc@0.1.0:
+    optional: true
+
+  whatlang-node-win32-x64-msvc@0.1.0:
+    optional: true
+
+  whatlang-node@0.1.0:
+    optionalDependencies:
+      whatlang-node-android-arm-eabi: 0.1.0
+      whatlang-node-android-arm64: 0.1.0
+      whatlang-node-darwin-arm64: 0.1.0
+      whatlang-node-darwin-x64: 0.1.0
+      whatlang-node-freebsd-x64: 0.1.0
+      whatlang-node-linux-arm-gnueabihf: 0.1.0
+      whatlang-node-linux-arm64-gnu: 0.1.0
+      whatlang-node-linux-arm64-musl: 0.1.0
+      whatlang-node-linux-x64-gnu: 0.1.0
+      whatlang-node-linux-x64-musl: 0.1.0
+      whatlang-node-win32-arm64-msvc: 0.1.0
+      whatlang-node-win32-ia32-msvc: 0.1.0
+      whatlang-node-win32-x64-msvc: 0.1.0
+
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
@@ -5483,6 +5637,8 @@ snapshots:
       - tsx
       - utf-8-validate
       - yaml
+
+  x-fetch@0.2.6: {}
 
   xdg-basedir@5.1.0: {}
 

@@ -16,6 +16,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "@deeplx/core": "^0.1.3",
     "@fontsource/quicksand": "^5.2.7",
     "@preact/signals": "^1.3.2",
     "@romanize/korean": "^0.1.3",
