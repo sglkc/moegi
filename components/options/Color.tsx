@@ -43,7 +43,6 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
   ]
 
   const ColorLabel = memo(({ color, label }: ColorLabelProps) => {
-    console.log('rerender')
     return (
       <button
         class="cursor-pointer appearance-none bg-secondary py-1 px-2 b-1 rounded b-primary/60"

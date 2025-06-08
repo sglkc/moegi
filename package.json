@@ -26,6 +26,7 @@
     "@webext-core/messaging": "^2.2.0",
     "any-ascii": "^0.3.2",
     "cyrillic-to-translit-js": "^3.2.1",
+    "deep-object-diff": "^1.1.9",
     "deepsignal": "^1.6.0",
     "google-translate-api-x": "^10.7.2",
     "pinyin-pro": "^3.26.0",

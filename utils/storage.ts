@@ -32,7 +32,7 @@ effect(() => {
 
   // TODO: debounce sending message here if possible
   chrome.runtime.sendMessage({
-    data: options,
+    data: { options },
     id: Math.round(Math.random() * 1000),
     sender: {
       id: chrome.runtime.id,

@@ -3,13 +3,16 @@ import { Background, Content } from '@/utils/messaging'
 import { TranslationOptions } from '@/utils/options'
 
 export default async function lyricsTranslation(data: TranslationOptions): Promise<void> {
-  if (!data.enabled) return
+  if (!data.enabled) {
+    document.querySelectorAll('.'+TRANSLATED_LYRIC).forEach(el => el.textContent = '')
+    return
+  }
 
-  const lyrics = Array.from(document.querySelectorAll(LYRIC_SELECTOR))
+  const lyrics = document.querySelectorAll(LYRIC_SELECTOR)
   const title = document.querySelector(SONG_TITLE)?.textContent
 
   // Concat every line to save translation rate limit
-  const text = lyrics
+  const text = Array.from(lyrics)
     .map(el => el.firstElementChild!.textContent)
     .join('\n')
 
@@ -32,7 +35,6 @@ export default async function lyricsTranslation(data: TranslationOptions): Promi
   let i = 0
   for (const lyric of lyrics) {
     const el = lyric.querySelector('.'+TRANSLATED_LYRIC)
-    console.log(el, lyric, lines[i])
 
     if (!el) continue
 

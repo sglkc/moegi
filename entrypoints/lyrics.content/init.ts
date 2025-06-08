@@ -9,7 +9,7 @@ import {
   TRANSLATED_LYRIC,
 } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
-import { MoegiOptions } from '@/utils/options'
+import { optionsStorage } from '@/utils/storage'
 
 export default async function lyricsInit() {
   const lyricElements = new Set<HTMLElement>()
@@ -44,7 +44,7 @@ export default async function lyricsInit() {
   })
 
   // Get latest options to apply on first open
-  const storedOptions: MoegiOptions = JSON.parse(sessionStorage.getItem('moegi_options')!)
+  const storedOptions = await optionsStorage.getValue()
 
   // TODO: add auto scroll toggle
   lyricsAutoScroll()

@@ -19,7 +19,7 @@ export default function lyricsStyling(data: MoegiOptions): void {
   const colorsEnabled = data.colors.enabled
 
   const hideOriginal =
-    (data.translation || data.romanization) && data.fonts.hideOriginal;
+    (data.translation.enabled || data.romanization.enabled) && data.fonts.hideOriginal;
 
   /**
    * TODO: passed lyric variable no longer used in latest Spotify

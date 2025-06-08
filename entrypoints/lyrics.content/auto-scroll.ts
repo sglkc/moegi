@@ -8,7 +8,6 @@ export default function lyricsAutoScroll() {
   // Only scroll if the lyric changes, prevents jumping on song change
   // First element is inactive, second element is active
   const observer = new MutationObserver((mutations) => {
-    console.log(mutations.length)
     if (mutations.length !== 2) return
 
     const activeLyric = mutations[1].target

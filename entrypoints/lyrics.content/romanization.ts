@@ -17,12 +17,14 @@ const romanizations = {
 }
 
 export default async function lyricsRomanization(data: RomanizationOptions): Promise<void> {
-  if (!data.enabled) return
+  if (!data.enabled) {
+    document.querySelectorAll('.'+ROMANIZED_LYRIC).forEach(el => el.textContent = '')
+    return
+  }
+
   if (!(data.language in romanizations)) return
 
-  const lyrics = Array.from(document.querySelectorAll(LYRIC_SELECTOR))
-  if (!lyrics.length) return
-
+  const lyrics = document.querySelectorAll(LYRIC_SELECTOR)
   const toastId = await Content.sendMessage('createToast', { text: 'Romanizing...' })
   const romanize = await romanizations[data.language].then(e => e.default)
 
@@ -35,7 +37,8 @@ export default async function lyricsRomanization(data: RomanizationOptions): Pro
 
     const romanized = await romanize.convert(text, data)
 
-    lyric.querySelector('.'+ROMANIZED_LYRIC)!.textContent = romanized
+    // Japanese furigana uses ruby elements
+    lyric.querySelector('.'+ROMANIZED_LYRIC)!.innerHTML = romanized
   }
 
   await Content.sendMessage('destroyToast', toastId)

@@ -5,8 +5,8 @@ import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
 import { LYRIC_SELECTOR } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
+import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
-import { optionsStorage } from '@/utils/storage'
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
@@ -16,19 +16,23 @@ export default defineContentScript({
     // Store react root element
     let rootElement: HTMLElement
 
-    // Get latest options to apply on first open
-    optionsStorage.getValue().then((storedOptions) => {
-      sessionStorage.setItem('moegi_options', JSON.stringify(storedOptions))
-    })
-
-    // Save latest options to session storage
     // Since there's only one listener allowed, re-register options
-    // TODO: duplicate in `init.ts`
-    Background.onMessage('applyOptions', ({ data }) => {
-      sessionStorage.setItem('moegi_options', JSON.stringify(data))
-      lyricsStyling(data)
-      lyricsRomanization(data.romanization)
-      lyricsTranslation(data.translation)
+    // TODO: duplicate in `init.ts` ??
+    Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
+      const has = createArrayHas(changes)
+
+      // Must have dependency options to prevent multiple reloads
+      if (has(['fonts', 'colors', 'translation.enabled', 'romanization.enabled' ])) {
+        lyricsStyling(options)
+      }
+
+      if (has('romanization')) {
+        lyricsRomanization(options.romanization)
+      }
+
+      if (has('translation')) {
+        lyricsTranslation(options.translation)
+      }
     })
 
     // TODO: handle fullscreen page?
@@ -64,8 +68,7 @@ export default defineContentScript({
     const intervalId = setInterval(() => {
       // @ts-expect-error: intended nullable at start
       rootElement = document.body.querySelector('#main')
-
-      if (!rootElement || !sessionStorage.getItem('moegi_options')) return
+      if (!rootElement) return
 
       lyricsObserver.observe(rootElement, { childList: true, subtree: true })
       clearInterval(intervalId)
