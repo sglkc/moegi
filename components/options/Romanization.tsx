@@ -16,7 +16,6 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
       <Select<RomanizationOptions['language']>
         label="Language"
         signal={signal.$language}
-        default={signal.language ?? "any"}
         options={[
           { text: 'Japanese', value: 'japanese' },
           { text: 'Korean', value: 'korean' },
@@ -40,7 +39,6 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
         <Select<RomanizationOptions['cyrillic']['lang']>
           label="Language"
           signal={signal.cyrillic.$lang}
-          default="ru"
           options={[
             { text: 'Russian', value: 'ru' },
             { text: 'Ukrainian', value: 'uk' },
@@ -53,7 +51,6 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
         <Select<RomanizationOptions['korean']['system']>
           label="Hangul System"
           signal={signal.korean.$system}
-          default="RR"
           options={[
             { text: 'Revised', value: 'RR' },
             { text: 'McCune', value: 'MR' },
@@ -68,7 +65,6 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
           <Select<RomanizationOptions['japanese']['to']>
             label="To"
             signal={signal.japanese.$to}
-            default="romaji"
             options={[
               { text: 'Romaji', value: 'romaji' },
               { text: 'Hiragana', value: 'hiragana' },
@@ -79,7 +75,6 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
           <Select<RomanizationOptions['japanese']['mode']>
             label="Mode"
             signal={signal.japanese.$mode}
-            default="spaced"
             options={[
               { text: 'Normal', value: 'normal' },
               { text: 'Spaced', value: 'spaced' },
@@ -91,7 +86,6 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
           <Select<RomanizationOptions['japanese']['system']>
             label="Romaji System"
             signal={signal.japanese.$system}
-            default="hepburn"
             options={[
               { text: 'Hepburn', value: 'hepburn' },
               { text: 'Nippon', value: 'nippon' },

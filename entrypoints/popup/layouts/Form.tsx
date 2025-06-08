@@ -8,6 +8,7 @@ export default function Form() {
   const resetOptions = async () => {
     Object.assign(options, optionsStorage.fallback)
     await optionsStorage.setValue(optionsStorage.fallback)
+    location.reload()
   }
 
   return (

@@ -28,7 +28,7 @@ export default function Select<T extends string>({
         id={id}
         class="appearance-none bg-secondary disabled:bg-secondary/50 p-1 px-2 b-1 rounded b-primary/50"
         onChange={onChange}
-        defaultValue={def}
+        defaultValue={def ?? signal?.value}
       >
         { options.map(({ text, value }) => (
           <option

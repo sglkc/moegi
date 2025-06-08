@@ -19,7 +19,6 @@ export default function TranslationOption({ signal }: TranslationOptionsProps) {
       <Select
         label="Target"
         signal={signal.$target}
-        default="en"
         options={options}
       />
       <Slider
