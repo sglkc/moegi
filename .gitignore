@@ -12,9 +12,12 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.output
+stats.html
+stats-*.json
+.wxt
+web-ext.config.ts
 dist
-dist-ssr
-*.local
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +29,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
