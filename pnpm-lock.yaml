@@ -4,13 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@deeplx/core':
+    hash: 63f958d5a991b9195dd4aa0f16ee7f3fa432d8d43fd4067f7868680497e483bc
+    path: patches/@deeplx__core.patch
+
 importers:
 
   .:
     dependencies:
       '@deeplx/core':
         specifier: ^0.1.3
-        version: 0.1.3
+        version: 0.1.3(patch_hash=63f958d5a991b9195dd4aa0f16ee7f3fa432d8d43fd4067f7868680497e483bc)
       '@fontsource/quicksand':
         specifier: ^5.2.7
         version: 5.2.7
@@ -3033,7 +3038,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@deeplx/core@0.1.3':
+  '@deeplx/core@0.1.3(patch_hash=63f958d5a991b9195dd4aa0f16ee7f3fa432d8d43fd4067f7868680497e483bc)':
     dependencies:
       node-fetch-native: 1.6.6
       whatlang-node: 0.1.0

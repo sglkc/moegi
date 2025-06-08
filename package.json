@@ -51,6 +51,9 @@
       "dtrace-provider",
       "esbuild",
       "spawn-sync"
-    ]
+    ],
+    "patchedDependencies": {
+      "@deeplx/core": "patches/@deeplx__core.patch"
+    }
   }
 }
