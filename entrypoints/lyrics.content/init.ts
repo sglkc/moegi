@@ -54,10 +54,6 @@ export default async function lyricsInit() {
 }
 
 function processLyricElement(element: HTMLElement): void {
-  if (element.hasAttribute('data-moegi-processed')) return
-
-  element.setAttribute('data-moegi-processed', 'true')
-
   const originalLyric = element.textContent?.trim() || ''
 
   if (!originalLyric) return

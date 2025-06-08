@@ -24,17 +24,14 @@ export default function ColorOption({ signal }: ColorOptionsProps) {
   const labelSignal = useRef<Signal>()
 
   const onClick = useCallback((label: InputLabel) => () => {
-    console.log('kliking on label kolor', label)
     labelSignal.current = signal[`$${label}`]
     setLabel(label)
   }, [signal])
 
   const resetColor = () => labelSignal.current && (labelSignal.current.value = '')
 
-  const changeColor = debounce((color: string) => {
-    console.log('changing color', labelSignal.current, 'to', color)
-    return labelSignal.current && (labelSignal.current.value = color)
-  }, 500)
+  const changeColor = debounce((color: string) =>
+    labelSignal.current && (labelSignal.current.value = color), 500)
 
   const colorLabels = [
     { label: 'Background', color: signal.background },

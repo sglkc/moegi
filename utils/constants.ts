@@ -1,3 +1,4 @@
+export const LYRICS_CONTAINER = '[style^=--lyrics]'
 export const TRANSLATED_LYRIC = 'translated-lyric'
 export const ORIGINAL_LYRIC = 'original-lyric'
 export const ROMANIZED_LYRIC = 'romanized-lyric'

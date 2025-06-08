@@ -37,6 +37,7 @@ export default function lyricsStyling(data: MoegiOptions): void {
     .${ORIGINAL}:has(~ :is(.${ROMANIZED}, .${TRANSLATED}):not(:empty)) {
       display: ${hideOriginal ? 'none' : 'inherit'};
     }
+    ${!fontsEnabled ? '*/' : ''}
 
     .${ROMANIZED} {
       font-size: ${data.romanization.size}em;
@@ -45,7 +46,6 @@ export default function lyricsStyling(data: MoegiOptions): void {
     .${TRANSLATED} {
       font-size: ${data.translation.size}em;
     }
-    ${!fontsEnabled ? '*/' : ''}
 
     ${!colorsEnabled ? '/*' : ''}
     .${ROMANIZED} {

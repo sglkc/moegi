@@ -3,7 +3,7 @@ import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { LYRIC_SELECTOR } from '@/utils/constants'
+import { LYRICS_CONTAINER } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
@@ -53,34 +53,22 @@ export default defineContentScript({
       }
     })
 
-    // TODO: handle fullscreen page?
-    function checkLyricsPage(): boolean {
-      return window.location.pathname.startsWith('/lyrics')
-    }
-
     // Debounced version of initLyrics in case of multiple mutation
     const debouncedInitLyrics = debounce(lyricsInit, 1000)
 
     const lyricsObserver = new MutationObserver((mutations) => {
-      if (!rootElement || !checkLyricsPage()) return
+      // TODO: early returns for anything else for performance ig
+      const addedNodes = mutations.reduce((val, mut) => val + mut.addedNodes.length, 0)
+      if (!rootElement || !addedNodes) return
 
-      // There must be the lyrics element added
-      for (const mutation of mutations) {
-        if (!mutation.addedNodes.length) continue
+      // If there are lyrics, then there must be the container, simple
+      // Also prevent infinite loop by tracking initialization status
+      const container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)
+      if (!container || container.hasAttribute('moegi-initialized')) return
 
-        for (const node of mutation.addedNodes) {
-          if (!(node instanceof HTMLElement)) continue
-
-          if (
-            node.matches(LYRIC_SELECTOR)
-            || node.querySelector(LYRIC_SELECTOR)
-          ) {
-            console.log('Matching lyrics element added, initializing')
-            debouncedInitLyrics()
-            return
-          }
-        }
-      }
+      console.log('Found uninitialized lyrics container, starting...')
+      container.setAttribute('moegi-initialized', 'true')
+      debouncedInitLyrics()
     })
 
     const intervalId = setInterval(() => {
