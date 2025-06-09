@@ -22,13 +22,16 @@
   <br />
 </div>
 
-## Version 2 Todo
+## What's New in Version 2?
 
+Most of the changes affects developer experience instead of users, you may not notice anything different from version 1 except some layout or text changes. My main focus is to migrate the framework from CRXJS to WXT for more streamlined development.
+
+There are some things to do:
 - Rework to WXT 💚
-- Auto-release on new tags (ci/cd)
+- Auto-release on new tags (ci/cd) 💚
 - Reset defaults button
-- DeepL translation
-- Reimplement fullscreen handling
+- DeepL translation 💔 (https://github.com/sglkc/moegi/pull/20)
+- Reimplement fullscreen handling 💚
 - Implement active lyric listener
 - Picture-in-picture lyrics
 - Update README, video, and screenshots
@@ -67,11 +70,12 @@ Chromium browsers doesn't support installing extensions directly outside of Chro
 
 The most basic feature to customize your Spotify lyrics screen:
 
-- **Text Align**: Where the lyrics should align. *Default: Left, Options: Left, Center, Right.*
-- **Font Size**: Set the lyrics relative font size including translation and romanization if active. *Default: 1em, Options: 0.5-2.5em.*
-- **Spacing**: How much space between lyric lines. *Default: 0px, Options: 0-64px.*
-- **Colors**: Set background and lyrics colors using a color picker. \
-  *Default: Background (blueish), Active (white), Inactive (black), Passed (white with opacity)*
+| Feature | Default | Options |
+|--------|---------|------------------|
+| Text Align | Left | Left, Center, Right |
+| Font Size | 1em | 0.5-2.5em |
+| Spacing | 0px | 0-64px |
+| Colors | None | Background, Passed, Active, Inactive, Translation, Romanization |
 
 > There is an integration issue with the colors, so if you want to reset the colors, use the Reset to defaults button
 
@@ -82,8 +86,10 @@ Library used: [google-translate-api-x](https://github.com/AidanWelch/google-tran
 Translate lyrics line-by-line using Google Translate, successful translations are cached temporarily in storage to avoid Google Translate limit.
 Note that translations are not accurate and should not be used literally! [Read about privacy policy.](#privacy-policy)
 
-- **Font Size**: Set the translation line relative to lyrics font size. *Default: 1em, Options: 0.5-1.5em.*
-- **Language Target**: Translation language target. *Default: auto, Options: [Over 100 languages](https://cloud.google.com/translate/docs/languages).*
+| Feature | Default | Options |
+|--------|---------|------------------|
+| Font Size | 1em | 0.5-1.5em |
+| Language Target | auto | [Over 100 languages](https://cloud.google.com/translate/docs/languages) |
 
 ### Romanization
 
@@ -97,8 +103,10 @@ Other than that, use [Anything else](#any).
 
 Romanize lyrics that has the selected language's characters, if none then it will skip to the next line.
 
-- **Language**: Language to romanize. *Default: Korean, Options: Korean, Japanese.*
-- **Font Size**: Set the romanization line relative to lyrics font size. *Default: 1em, Options: 0.5-1.5em.*
+| Feature | Default | Options |
+|--------|---------|------------------|
+| Language | Any | Japanese, Korean, Chinese, Cyrillic, Any |
+| Font Size | 1em | 0.5-1.5em |
 
 #### Japanese
 
@@ -107,10 +115,12 @@ Libraries used: [@sglkc/kuroshiro](https://github.com/sglkc/kuroshiro-ts),
 
 Note that Japanese romanization may not be accurate, particularly on kanji!
 
-- **To**: Romanization target for Japanese lyrics. *Default: Romaji, Options: Romaji, Hiragana, Katakana.*
-- **Mode**: How generated romanization should be written. *Default: Spaced, Options: Normal, Spaced, Okurigana, Furigana.*
-- **Romaji System**: What romanization system to use for romaji. *Default: Hepburn, Options: Nippon, Passport, Hepburn.*
-- **Okurigana Delimiter**: What should okurigana starts and ends with. *Default: (  ).*
+| Feature | Default | Options |
+|--------|---------|------------------|
+| To | Romaji | Romaji, Hiragana, Katakana |
+| Mode | Spaced | Normal, Spaced, Okurigana, Furigana |
+| Romaji System | Hepburn | Nippon, Passport, Hepburn |
+| Okurigana Delimiter | (  ) | Custom delimiters |
 
 <details>
   <summary>Differences between each mode in hiragana</summary>
@@ -138,7 +148,9 @@ Note that Japanese romanization may not be accurate, particularly on kanji!
 
 Library used: [@romanize/korean](https://www.npmjs.com/package/@romanize/korean)
 
-- **Hangul System**: Romanization system used. *Default: Revised, Options: Revised, McCune, Yale.*
+| Feature | Default | Options |
+|--------|---------|------------------|
+| Hangul System | Revised | Revised, McCune, Yale |
 
 <details>
   <summary>Differences between each romanization system</summary>
@@ -161,27 +173,17 @@ Library used: [@romanize/korean](https://www.npmjs.com/package/@romanize/korean)
 
 Library used: [cyrillic-to-translit-js](https://www.npmjs.com/package/cyrillic-to-translit-js)
 
-- **Language**: Cyrillic language. *Default: Russian, Options: Russian, Ukrainian.*
+| Feature | Default | Options |
+|--------|---------|------------------|
+| Language | Russian | Russian, Ukrainian |
 
 ### Chinese
 
 Library used: [pinyin-pro](https://www.npmjs.com/package/pinyin-pro)
 
-- **Ruby text**: Show romanization on top of original characters. *Default: OFF.*
-
-<details>
-  <summary>Ruby text ON/OFF</summary>
-  <br />
-
-  **Original Text: 你不知道你有多可愛**
-
-  1. OFF \
-     nǐ bù zhī dào nǐ yǒu duō kě ài
-
-  2. ON \
-     <ruby>你<rp>(</rp><rt>nǐ</rt><rp>)</rp></ruby><ruby>不<rp>(</rp><rt>bù</rt><rp>)</rp></ruby><ruby>知<rp>(</rp><rt>zhī</rt><rp>)</rp></ruby><ruby>道<rp>(</rp><rt>dào</rt><rp>)</rp></ruby><ruby>你<rp>(</rp><rt>nǐ</rt><rp>)</rp></ruby><ruby>有<rp>(</rp><rt>yǒu</rt><rp>)</rp><ruby>多<rp>(</rp><rt>duō</rt><rp>)</rp></ruby><ruby>可<rp>(</rp><rt>kě</rt><rp>)</rp></ruby><ruby>愛<rp>(</rp><rt>ài</rt><rp>)</rp></ruby>
-
-</details>
+| Feature | Default | Options |
+|--------|---------|------------------|
+| Ruby text | OFF | ON, OFF |
 
 ### Any
 
@@ -193,8 +195,8 @@ Provides a lot of conversions at the cost of accuracy, read more from the packag
 
 ### Prerequisites
 
-- Node ^18
-- pnpm ^8 (https://pnpm.io/installation)
+- Node ^22
+- [pnpm](https://pnpm.io/installation) ^10
 
   ```sh
   npm install -g pnpm
@@ -236,7 +238,7 @@ Any kind of contributions are **greatly appreciated**! You can start by forking 
 1. [Fork](https://github.com/sglkc/moegi/fork) the repository
 2. Clone the forked repository to your machine
 3. Create your branch (`git checkout -b feat/new-feature`)
-4. Commit your changes (`git commit -m 'feat: add new command'`)
+4. Commit your changes (`git commit -m 'feat: add this and that'`)
 5. Push to the branch (`git push origin feat/new-feature`)
 6. Open a [pull request](https://github.com/sglkc/moegi/pulls)
 
