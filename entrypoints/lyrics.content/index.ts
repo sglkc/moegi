@@ -3,7 +3,7 @@ import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { LYRICS_CONTAINER } from '@/utils/constants'
+import { LYRIC_SELECTOR, LYRICS_CONTAINER } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
@@ -67,8 +67,18 @@ export default defineContentScript({
       if (!container || container.hasAttribute('moegi-initialized')) return
 
       console.log('Found uninitialized lyrics container, starting...')
-      container.setAttribute('moegi-initialized', 'true')
-      debouncedInitLyrics()
+
+      // Sometimes the lyrics doesn't show up instantly, probs network
+      const intervalId = setInterval(() => {
+        if (!container.querySelector(LYRIC_SELECTOR)) {
+          console.error('Container found but no lyrics, restarting in 500ms...')
+          return
+        }
+
+        container.setAttribute('moegi-initialized', 'true')
+        debouncedInitLyrics()
+        clearInterval(intervalId)
+      }, 500)
     })
 
     const intervalId = setInterval(() => {
