@@ -5,7 +5,10 @@ import { defineConfig } from 'wxt'
 export default defineConfig({
   manifest: {
     permissions: ['activeTab', 'declarativeContent', 'storage'],
-    host_permissions: ['https://translate.google.com/*'],
+    host_permissions: [
+      'https://translate.google.com/*',
+      'https://www2.deepl.com/*'
+    ],
     // TODO: better security mybe
     externally_connectable: {
       ids: ['*'],

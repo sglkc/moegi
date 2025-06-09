@@ -23,6 +23,8 @@ export default async function lyricsTranslation(data: TranslationOptions): Promi
     text,
     title,
     to: data.target,
+    from: data.from,
+    provider: data.provider,
   })
 
   if (!translated.length) {
