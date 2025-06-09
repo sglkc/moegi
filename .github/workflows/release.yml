@@ -1,52 +1,26 @@
 name: Release
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release'
+        required: false
+        default: latest
+  push:
+    branches:
+      - master
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
   contents: write
   pull-requests: read
 
 jobs:
-  check-version:
-    name: Check Version Change
-    runs-on: ubuntu-latest
-    outputs:
-      version-changed: ${{ steps.check.outputs.changed }}
-      new-version: ${{ steps.check.outputs.version }}
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 2
-
-    - name: Check if version changed
-      id: check
-      run: |
-        if git diff HEAD~1 HEAD --name-only | grep -q "package.json"; then
-          OLD_VERSION=$(git show HEAD~1:package.json | jq -r '.version')
-          NEW_VERSION=$(jq -r '.version' package.json)
-          if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-            echo "Version changed from $OLD_VERSION to $NEW_VERSION"
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
-        else
-          echo "changed=false" >> $GITHUB_OUTPUT
-        fi
-
   cd:
     name: Build & Release
-    needs: [check-version]
     runs-on: ubuntu-latest
-    if: needs.check-version.outputs.version-changed == 'true' && github.ref == 'refs/heads/master'
 
     steps:
     - name: Checkout code
@@ -69,34 +43,91 @@ jobs:
     - name: TypeScript compilation check
       run: pnpm run compile
 
+    - name: Determine release info
+      id: release-info
+      run: |
+        BASE_VERSION=$(node -p "require('./package.json').version")
+        COMMIT_HASH=$(git rev-parse --short HEAD)
+
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          TAG_NAME="${{ github.event.inputs.tag_name }}"
+          if [ "$TAG_NAME" == "latest" ]; then
+            VERSION="${BASE_VERSION}-${COMMIT_HASH}"
+            IS_PRERELEASE=true
+          else
+            VERSION="$TAG_NAME"
+            IS_PRERELEASE=true
+          fi
+        elif [ "${{ github.ref_type }}" == "tag" ]; then
+          TAG_NAME="${{ github.ref_name }}"
+          VERSION="${{ github.ref_name }}"
+          IS_PRERELEASE=false
+        else
+          # Push to master branch
+          VERSION="${BASE_VERSION}-${COMMIT_HASH}"
+          TAG_NAME="latest"
+          IS_PRERELEASE=true
+        fi
+
+        echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "base_version=$BASE_VERSION" >> $GITHUB_OUTPUT
+        echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+        echo "is_prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
+
     - name: Build for Chrome
       run: pnpm run zip
 
     - name: Build for Firefox
       run: pnpm run zip:firefox
 
+    - name: Rename zip files for latest builds
+      if: steps.release-info.outputs.is_prerelease == 'true'
+      run: |
+        cd .output
+        # Rename Chrome zip
+        if [ -f "moegi-${{ steps.release-info.outputs.base_version }}-chrome.zip" ]; then
+          mv "moegi-${{ steps.release-info.outputs.base_version }}-chrome.zip" "moegi-${{ steps.release-info.outputs.version }}-chrome.zip"
+        fi
+        # Rename Firefox zip
+        if [ -f "moegi-${{ steps.release-info.outputs.base_version }}-firefox.zip" ]; then
+          mv "moegi-${{ steps.release-info.outputs.base_version }}-firefox.zip" "moegi-${{ steps.release-info.outputs.version }}-firefox.zip"
+        fi
+        # List files to verify
+        ls -la *.zip
+
+    - name: Delete existing release for latest
+      if: steps.release-info.outputs.tag_name == 'latest'
+      run: |
+        gh release delete ${{ steps.release-info.outputs.tag_name }} --yes || true
+        git push origin :${{ steps.release-info.outputs.tag_name }} || true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Create GitHub Release with Assets
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v${{ needs.check-version.outputs.new-version }}
-        name: Release v${{ needs.check-version.outputs.new-version }}
+        tag_name: ${{ steps.release-info.outputs.tag_name }}
+        name: Moegi v${{ steps.release-info.outputs.version }}
         body: |
-          ## Moegi v${{ needs.check-version.outputs.new-version }}
+          ## Moegi v${{ steps.release-info.outputs.version }}
 
           Spotify lyrics extension for styling, translation, and romanization.
 
           ### Downloads
-          - **Chrome/Chromium**: Download the chrome.zip file below
-          - **Firefox**: Download the firefox.zip file below
+          - **Chrome/Chromium**: Download the `moegi-${{ steps.release-info.outputs.version }}-chrome.zip` file below
+          - **Firefox**: Download the `moegi-${{ steps.release-info.outputs.version }}-firefox.zip` file below
 
           ### Installation
           1. Download the appropriate zip file for your browser
           2. Extract the zip file
           3. Load the extension in developer mode
+
+          ${{ steps.release-info.outputs.is_prerelease == 'true' && format('**Built from commit:** {0}', github.sha) || '' }}
         files: |
-          .output/moegi-*-chrome.zip
-          .output/moegi-*-firefox.zip
+          .output/moegi-${{ steps.release-info.outputs.version }}-chrome.zip
+          .output/moegi-${{ steps.release-info.outputs.version }}-firefox.zip
         draft: false
-        prerelease: false
+        prerelease: ${{ steps.release-info.outputs.is_prerelease }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
