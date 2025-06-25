@@ -1,4 +1,5 @@
 import lyricsAutoScroll from './auto-scroll'
+import lyricsFullscreen from './fullscreen'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
@@ -48,6 +49,7 @@ export default async function lyricsInit() {
 
   // TODO: add auto scroll toggle
   lyricsAutoScroll()
+  lyricsFullscreen()
   lyricsStyling(storedOptions)
   lyricsRomanization(storedOptions.romanization)
   lyricsTranslation(storedOptions.translation)

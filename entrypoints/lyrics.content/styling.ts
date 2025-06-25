@@ -3,6 +3,7 @@ import {
   ORIGINAL_LYRIC as ORIGINAL,
   TRANSLATED_LYRIC as TRANSLATED,
   ROMANIZED_LYRIC as ROMANIZED,
+  FULLSCREEN_LYRIC,
 } from '@/utils/constants'
 import { MoegiOptions } from '@/utils/options'
 
@@ -30,6 +31,13 @@ export default function lyricsStyling(data: MoegiOptions): void {
     ${LYRIC} {
       margin-top: ${data.fonts.spacing}px;
       font-size: ${data.fonts.size}em;
+      text-align: ${data.fonts.align};
+      line-height: 1.5;
+    }
+
+    ${FULLSCREEN_LYRIC} {
+      margin-top: ${data.fonts.spacing * 1.5}px;
+      font-size: ${data.fonts.size * 1.5}em;
       text-align: ${data.fonts.align};
       line-height: 1.5;
     }
