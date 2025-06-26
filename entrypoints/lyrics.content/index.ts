@@ -3,7 +3,7 @@ import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { LYRIC_SELECTOR, LYRICS_CONTAINER } from '@/utils/constants'
+import { LYRIC_SELECTOR, LYRICS_CONTAINER, ORIGINAL_LYRIC } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
@@ -62,9 +62,9 @@ export default defineContentScript({
       if (!rootElement || !addedNodes) return
 
       // If there are lyrics, then there must be the container, simple
-      // Also prevent infinite loop by tracking initialization status
+      // Also prevent infinite loop by tracking original lyrics element
       const container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)
-      if (!container || container.hasAttribute('moegi-initialized')) return
+      if (!container || container.querySelector('.'+ORIGINAL_LYRIC)) return
 
       console.log('Found uninitialized lyrics container, starting...')
 
@@ -75,7 +75,6 @@ export default defineContentScript({
           return
         }
 
-        container.setAttribute('moegi-initialized', 'true')
         debouncedInitLyrics()
         clearInterval(intervalId)
       }, 500)
