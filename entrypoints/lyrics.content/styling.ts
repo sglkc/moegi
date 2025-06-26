@@ -3,6 +3,7 @@ import {
   ORIGINAL_LYRIC as ORIGINAL,
   TRANSLATED_LYRIC as TRANSLATED,
   ROMANIZED_LYRIC as ROMANIZED,
+  LYRICS_CONTAINER as CONTAINER
 } from '@/utils/constants'
 import { MoegiOptions } from '@/utils/options'
 
@@ -60,22 +61,17 @@ export default function lyricsStyling(data: MoegiOptions): void {
       --lyrics-color-passed: ${data.colors.passed};
     }
 
-    main > div > div:nth-child(1) {
+    ${CONTAINER} > div:nth-child(1) {
       --lyrics-color-background: ${data.colors.background};
     }
 
-    main div:has(${LYRIC}) {
+    ${CONTAINER} > div:nth-child(2) {
       --lyrics-color-active: ${data.colors.active};
       --lyrics-color-inactive: ${data.colors.inactive};
       --lyrics-color-romanization: ${data.colors.romanization};
       --lyrics-color-translation: ${data.colors.translation};
     }
     ${!colorsEnabled ? '*/' : ''}
-
-    /** TODO: full screen styling? */
-    .npv-lyrics__content--full-screen {
-      height: 70vh !important;
-    }
   `.trim();
 
   style.innerHTML = css

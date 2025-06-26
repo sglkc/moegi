@@ -12,22 +12,23 @@ import { Content } from '@/utils/messaging'
 import { optionsStorage } from '@/utils/storage'
 
 export default async function lyricsInit() {
+  // Select only uninitialized lyrics
+  const elements = document.querySelectorAll(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
+  const lyrics = Array.from(elements) as HTMLElement[]
+
+  if (lyrics.length === 0) {
+    // await Content.sendMessage('createToast', {
+    //   text: 'No lyrics found',
+    //   duration: 1000
+    // })
+    return
+  }
+
   const lyricElements = new Set<HTMLElement>()
 
   const toastId = await Content.sendMessage('createToast', {
     text: 'Processing lyrics...'
   })
-
-  const elements = document.querySelectorAll(LYRIC_SELECTOR)
-  const lyrics = Array.from(elements) as HTMLElement[]
-
-  if (lyrics.length === 0) {
-    await Content.sendMessage('createToast', {
-      text: 'No lyrics found',
-      duration: 1000
-    })
-    return
-  }
 
   // Clear previous elements and add new ones
   lyricElements.clear()

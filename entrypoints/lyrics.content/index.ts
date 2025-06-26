@@ -3,7 +3,7 @@ import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { LYRIC_SELECTOR, LYRICS_CONTAINER, ORIGINAL_LYRIC } from '@/utils/constants'
+import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER, ORIGINAL_LYRIC } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
@@ -63,7 +63,15 @@ export default defineContentScript({
 
       // If there are lyrics, then there must be the container, simple
       // Also prevent infinite loop by tracking original lyrics element
-      const container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)
+      let container: HTMLDivElement | null
+
+      // Detect fullscreen lyrics first
+      container = rootElement.querySelector<HTMLDivElement>(`${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`)
+
+      // Fallback to normal lyrics
+      if (!container)
+        container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)
+
       if (!container || container.querySelector('.'+ORIGINAL_LYRIC)) return
 
       console.log('Found uninitialized lyrics container, starting...')
