@@ -83,7 +83,7 @@ export default defineContentScript({
           return
         }
 
-        debouncedInitLyrics()
+        debouncedInitLyrics(container)
         clearInterval(intervalId)
       }, 500)
     })

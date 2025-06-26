@@ -1,12 +1,10 @@
-import { LYRICS_CONTAINER } from '@/utils/constants'
-
 let observer: MutationObserver | undefined
 
 /**
  * Scroll to active lyric element automatically
  * @see {@link https://github.com/sglkc/moegi/issues/18#issuecomment-2645727922|GitHub}
  */
-export default function lyricsAutoScroll() {
+export default function lyricsAutoScroll(container: HTMLElement) {
   if (observer) observer.disconnect()
 
   // Only scroll if the lyric changes, prevents jumping on song change
@@ -21,9 +19,8 @@ export default function lyricsAutoScroll() {
     activeLyric.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' })
   })
 
-  // Assume everything is ok since its initialized after lyrics processing
   observer.observe(
-    document.querySelector(LYRICS_CONTAINER)!,
+    container,
     { childList: true, subtree: true, attributeFilter: ['class'] }
   )
 }

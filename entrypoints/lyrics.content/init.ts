@@ -11,7 +11,7 @@ import {
 import { Content } from '@/utils/messaging'
 import { optionsStorage } from '@/utils/storage'
 
-export default async function lyricsInit() {
+export default async function lyricsInit(container: HTMLElement) {
   // Select only uninitialized lyrics
   const elements = document.querySelectorAll(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
   const lyrics = Array.from(elements) as HTMLElement[]
@@ -48,7 +48,7 @@ export default async function lyricsInit() {
   const storedOptions = await optionsStorage.getValue()
 
   // TODO: add auto scroll toggle
-  lyricsAutoScroll()
+  lyricsAutoScroll(container)
   lyricsStyling(storedOptions)
   lyricsRomanization(storedOptions.romanization)
   lyricsTranslation(storedOptions.translation)
