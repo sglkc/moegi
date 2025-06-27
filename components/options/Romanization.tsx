@@ -13,18 +13,10 @@ interface RomanizationOptionsProps {
 export default function RomanizationOption({ signal }: RomanizationOptionsProps) {
   return (
     <Container label="Romanization" signal={signal}>
-      <Select<RomanizationOptions['language']>
-        label="Language"
-        signal={signal.$language}
-        options={[
-          { text: 'Japanese', value: 'japanese' },
-          { text: 'Korean', value: 'korean' },
-          { text: 'Cyrillic', value: 'cyrillic' },
-          { text: 'Chinese', value: 'chinese' },
-          { text: 'Anything else', value: 'any' },
-        ]}
-      />
-
+      <div class="text-sm text-gray-600 mb-4">
+        Text will be automatically split by script and romanized accordingly.
+      </div>
+      
       <Slider
         label="Font Size"
         signal={signal.$size}
@@ -34,20 +26,63 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
         max={2.5}
       />
 
-      {/* Cyrillic-specific options */}
-      {signal.language === 'cyrillic' && (
-        <Select<RomanizationOptions['cyrillic']['lang']>
-          label="Language"
-          signal={signal.cyrillic.$lang}
+      {/* Japanese options */}
+      <div class="border-t pt-4 mt-4">
+        <h4 class="font-semibold mb-2">Japanese (Hiragana/Katakana/Kanji)</h4>
+        
+        <Select<RomanizationOptions['japanese']['to']>
+          label="To"
+          signal={signal.japanese.$to}
           options={[
-            { text: 'Russian', value: 'ru' },
-            { text: 'Ukrainian', value: 'uk' },
+            { text: 'Romaji', value: 'romaji' },
+            { text: 'Hiragana', value: 'hiragana' },
+            { text: 'Katakana', value: 'katakana' },
           ]}
         />
-      )}
 
-      {/* Korean-specific options */}
-      {signal.language === 'korean' && (
+        <Select<RomanizationOptions['japanese']['mode']>
+          label="Mode"
+          signal={signal.japanese.$mode}
+          options={[
+            { text: 'Normal', value: 'normal' },
+            { text: 'Spaced', value: 'spaced' },
+            { text: 'Okurigana', value: 'okurigana' },
+            { text: 'Furigana', value: 'furigana' },
+          ]}
+        />
+
+        <Select<RomanizationOptions['japanese']['system']>
+          label="Romaji System"
+          signal={signal.japanese.$system}
+          options={[
+            { text: 'Hepburn', value: 'hepburn' },
+            { text: 'Nippon', value: 'nippon' },
+            { text: 'Passport', value: 'passport' },
+          ]}
+        />
+
+        {/* Okurigana delimiter inputs - only show when mode is okurigana */}
+        {signal.japanese.mode === 'okurigana' && (
+          <div class="grid grid-cols-2 gap-2">
+            <div class="col-span-2 text-center font-bold">Okurigana Delimiter</div>
+            <Input
+              label="Start"
+              signal={signal.japanese.$okuStart}
+              placeholder="("
+            />
+            <Input
+              label="End"
+              signal={signal.japanese.$okuEnd}
+              placeholder=")"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Korean options */}
+      <div class="border-t pt-4 mt-4">
+        <h4 class="font-semibold mb-2">Korean (Hangul)</h4>
+        
         <Select<RomanizationOptions['korean']['system']>
           label="Hangul System"
           signal={signal.korean.$system}
@@ -57,67 +92,35 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
             { text: 'Yale', value: 'YL' },
           ]}
         />
-      )}
+      </div>
 
-      {/* Japanese-specific options */}
-      {signal.language === 'japanese' && (
-        <>
-          <Select<RomanizationOptions['japanese']['to']>
-            label="To"
-            signal={signal.japanese.$to}
-            options={[
-              { text: 'Romaji', value: 'romaji' },
-              { text: 'Hiragana', value: 'hiragana' },
-              { text: 'Katakana', value: 'katakana' },
-            ]}
-          />
-
-          <Select<RomanizationOptions['japanese']['mode']>
-            label="Mode"
-            signal={signal.japanese.$mode}
-            options={[
-              { text: 'Normal', value: 'normal' },
-              { text: 'Spaced', value: 'spaced' },
-              { text: 'Okurigana', value: 'okurigana' },
-              { text: 'Furigana', value: 'furigana' },
-            ]}
-          />
-
-          <Select<RomanizationOptions['japanese']['system']>
-            label="Romaji System"
-            signal={signal.japanese.$system}
-            options={[
-              { text: 'Hepburn', value: 'hepburn' },
-              { text: 'Nippon', value: 'nippon' },
-              { text: 'Passport', value: 'passport' },
-            ]}
-          />
-
-          {/* Okurigana delimiter inputs - only show when mode is okurigana */}
-          {signal.japanese.mode === 'okurigana' && (
-            <div class="grid grid-cols-2 gap-2">
-              <div class="col-span-2 text-center font-bold">Okurigana Delimiter</div>
-              <Input
-                label="Start"
-                signal={signal.japanese.$okuStart}
-                placeholder="("
-              />
-              <Input
-                label="End"
-                signal={signal.japanese.$okuEnd}
-                placeholder=")"
-              />
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Chinese-specific options */}
-      {signal.language === 'chinese' && (
+      {/* Chinese options */}
+      <div class="border-t pt-4 mt-4">
+        <h4 class="font-semibold mb-2">Chinese (Hanzi)</h4>
+        
         <Checkbox signal={signal.chinese.$ruby} mirror>
           Ruby Text:
         </Checkbox>
-      )}
+      </div>
+
+      {/* Cyrillic options */}
+      <div class="border-t pt-4 mt-4">
+        <h4 class="font-semibold mb-2">Cyrillic</h4>
+        
+        <Select<RomanizationOptions['cyrillic']['lang']>
+          label="Language"
+          signal={signal.cyrillic.$lang}
+          options={[
+            { text: 'Russian', value: 'ru' },
+            { text: 'Ukrainian', value: 'uk' },
+          ]}
+        />
+      </div>
+
+      {/* Note about fallback */}
+      <div class="border-t pt-4 mt-4 text-sm text-gray-600">
+        <strong>Note:</strong> Other scripts will use the "any-ascii" fallback romanization system.
+      </div>
     </Container>
   )
 }

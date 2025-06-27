@@ -37,7 +37,6 @@ export default defineContentScript({
 
       if (has(
         'romanization.enabled',
-        'romanization.language',
         'romanization.chinese',
         'romanization.cyrillic',
         'romanization.japanese',
