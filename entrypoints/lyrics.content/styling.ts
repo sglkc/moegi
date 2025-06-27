@@ -58,18 +58,18 @@ export default function lyricsStyling(data: MoegiOptions): void {
     }
 
     ${LYRIC}:has(~ .active-lyric) {
-      --lyrics-color-passed: ${data.colors.passed};
+      --lyrics-color-passed: ${data.colors.passed || 'inherit'};
     }
 
     ${CONTAINER} > div:nth-child(1) {
-      --lyrics-color-background: ${data.colors.background};
+      --lyrics-color-background: ${data.colors.background || 'inherit'};
     }
 
     ${CONTAINER} > div:nth-child(2) {
-      --lyrics-color-active: ${data.colors.active};
-      --lyrics-color-inactive: ${data.colors.inactive};
-      --lyrics-color-romanization: ${data.colors.romanization};
-      --lyrics-color-translation: ${data.colors.translation};
+      --lyrics-color-active: ${data.colors.active || 'inherit'};
+      --lyrics-color-inactive: ${data.colors.inactive || 'inherit'};
+      --lyrics-color-romanization: ${data.colors.romanization || 'inherit'};
+      --lyrics-color-translation: ${data.colors.translation || 'inherit'};
     }
     ${!colorsEnabled ? '*/' : ''}
   `.trim();
