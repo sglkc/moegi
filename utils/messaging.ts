@@ -1,6 +1,6 @@
 import { defineExtensionMessaging } from '@webext-core/messaging'
 import { defineCustomEventMessaging } from '@webext-core/messaging/page'
-import { MoegiOptions } from './options'
+import { MoegiOptions, TranslationOptions } from './options'
 import { DeepKeys } from './deep-keys'
 
 export interface ToastMessage {
@@ -13,6 +13,7 @@ export interface TranslateMessage {
   text: string
   from?: string
   to: string
+  provider?: TranslationOptions['provider']
 }
 
 export interface OptionsMessage {

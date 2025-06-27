@@ -1,0 +1,42 @@
+diff --git a/lib/translate.js b/lib/translate.js
+index 4e1cc0df623fe2f4821fd9643ede2da3b386bcf2..b0b66e795b26b9f1eeb2c45477c2f77f7c2ca435 100644
+--- a/lib/translate.js
++++ b/lib/translate.js
+@@ -1,5 +1,5 @@
+ import { createProxy } from 'node-fetch-native/proxy';
+-import { detectLang } from 'whatlang-node';
++// import { detectLang } from 'whatlang-node';
+ import { xfetch } from 'x-fetch';
+ import { API_URL, COMMON_HEADERS, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_SERVICE_UNAVAILABLE, } from "./constants.js";
+ import { abbreviateLanguage, formatPostString, getICount, getRandomNumber, getTimeStamp, } from "./utils.js";
+@@ -13,7 +13,16 @@ const makeRequest = async (postData, proxyUrl, dlSession) => {
+         ...createProxy({ url: proxyUrl }),
+     });
+ };
+-const splitAndProcess = (text) => text.split('\n').map(line => (line.trim() === '' ? '\n' : line));
++// chunks the text into multiple lines per request instead of 1 (too slow!)
++const textChunks = 6;
++const splitAndProcess = (text) => {
++    const lines = text.split('\n');
++    const chunks = [];
++    for (let i = 0; i < lines.length; i += textChunks) {
++        chunks.push(lines.slice(i, i + textChunks).join('\n'));
++    }
++    return chunks;
++};
+ export const translateByDeepLX = async (sourceLang, targetLang, text, formal, tagHandling = 'plaintext', proxyUrl, dlSession) => {
+     if (!text) {
+         return { code: HTTP_STATUS_NOT_FOUND, message: 'No text to translate' };
+@@ -28,7 +37,11 @@ export const translateByDeepLX = async (sourceLang, targetLang, text, formal, ta
+             continue;
+         }
+         if (!sourceLang || sourceLang === 'auto') {
+-            sourceLang = detectLang(part, true);
++            // sourceLang = detectLang(part, true);
++            return {
++              code: HTTP_STATUS_SERVICE_UNAVAILABLE,
++              message: 'LANGUAGE NOT SUPPORTED',
++            }
+         }
+         const sourceLangCode = abbreviateLanguage(sourceLang) ??
+             sourceLang.toUpperCase();

@@ -1,7 +1,8 @@
+import { SUPPORTED_LANGUAGES } from '@deeplx/core'
 import { DeepSignal } from 'deepsignal'
-import { languages } from 'google-translate-api-x'
+import { languages as GOOGLE_LANGUAGES } from 'google-translate-api-x'
 import Container from '@/components/Container'
-import Select from '@/components/Select'
+import Select, { SelectProps } from '@/components/Select'
 import Slider from '@/components/Slider'
 import { TranslationOptions } from '@/utils/options'
 
@@ -9,17 +10,37 @@ interface TranslationOptionsProps {
   signal: DeepSignal<TranslationOptions>
 }
 
-const options: { text: string, value: string }[] = Object.entries(languages)
-  .map(([ value, text ]) => ({ text, value }))
-  .filter((el) => el.value !== 'auto')
+const languages: Record<TranslationOptions['provider'], SelectProps<string>['options']> = {
+  google: Object.entries(GOOGLE_LANGUAGES)
+    .map(([ value, text ]) => ({ text, value }))
+    .filter((el) => el.value !== 'auto'),
+
+  deepl: (SUPPORTED_LANGUAGES)
+    .map(({ code, language }) => ({ text: language, value: code.toLowerCase() }))
+}
 
 export default function TranslationOption({ signal }: TranslationOptionsProps) {
   return (
     <Container label="Translation" signal={signal}>
       <Select
+        label="Provider"
+        signal={signal.$provider}
+        options={[
+          { text: 'Google', value: 'google' },
+          { text: 'DeepL', value: 'deepl' },
+        ]}
+      />
+      { signal.provider === 'deepl' &&
+        <Select
+          label="From"
+          signal={signal.$from}
+          options={languages['deepl']}
+        />
+      }
+      <Select
         label="Target"
         signal={signal.$target}
-        options={options}
+        options={languages[signal.provider ?? 'google']}
       />
       <Slider
         label="Font Size"

@@ -26,7 +26,9 @@ export interface ColorOptions {
 
 export interface TranslationOptions {
   enabled: boolean
+  provider: 'google' | 'deepl'
   size: number
+  from: string
   target: string // TODO: import language from google-translate-api-x?
 }
 
@@ -78,8 +80,10 @@ export const moegiDefaultOptions: MoegiOptions = {
   },
   translation: {
     enabled: false,
+    provider: 'google',
     size: 1,
-    target: 'auto',
+    from: 'en',
+    target: 'en',
   },
   romanization: {
     enabled: false,
