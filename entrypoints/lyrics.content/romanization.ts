@@ -16,7 +16,10 @@ const romanizations = {
   japanese: import('./romanizations/japanese'),
 }
 
-export default async function lyricsRomanization(data: RomanizationOptions): Promise<void> {
+export default async function lyricsRomanization(
+  lyrics: Iterable<HTMLDivElement>,
+  data: RomanizationOptions
+): Promise<void> {
   if (!data.enabled) {
     document.querySelectorAll('.'+ROMANIZED_LYRIC).forEach(el => el.textContent = '')
     return
@@ -24,7 +27,6 @@ export default async function lyricsRomanization(data: RomanizationOptions): Pro
 
   if (!(data.language in romanizations)) return
 
-  const lyrics = document.querySelectorAll(LYRIC_SELECTOR)
   const toastId = await Content.sendMessage('createToast', { text: 'Romanizing...' })
   const romanize = await romanizations[data.language].then(e => e.default)
 

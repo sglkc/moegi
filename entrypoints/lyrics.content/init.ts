@@ -13,16 +13,9 @@ import { optionsStorage } from '@/utils/storage'
 
 export default async function lyricsInit(container: HTMLElement) {
   // Select only uninitialized lyrics
-  const elements = document.querySelectorAll(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
-  const lyrics = Array.from(elements) as HTMLElement[]
+  const lyrics = document.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
 
-  if (lyrics.length === 0) {
-    // await Content.sendMessage('createToast', {
-    //   text: 'No lyrics found',
-    //   duration: 1000
-    // })
-    return
-  }
+  if (lyrics.length === 0) return
 
   const lyricElements = new Set<HTMLElement>()
 
@@ -50,8 +43,8 @@ export default async function lyricsInit(container: HTMLElement) {
   // TODO: add auto scroll toggle
   lyricsAutoScroll(container)
   lyricsStyling(storedOptions)
-  lyricsRomanization(storedOptions.romanization)
-  lyricsTranslation(storedOptions.translation)
+  lyricsRomanization(lyrics, storedOptions.romanization)
+  lyricsTranslation(lyrics, storedOptions.translation)
 }
 
 function processLyricElement(element: HTMLElement): void {

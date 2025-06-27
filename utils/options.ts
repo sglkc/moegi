@@ -79,7 +79,7 @@ export const moegiDefaultOptions: MoegiOptions = {
   translation: {
     enabled: false,
     size: 1,
-    target: 'auto',
+    target: 'en',
   },
   romanization: {
     enabled: false,

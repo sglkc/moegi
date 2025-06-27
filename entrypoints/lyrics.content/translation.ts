@@ -1,14 +1,16 @@
-import { LYRIC_SELECTOR, SONG_TITLE, TRANSLATED_LYRIC } from '@/utils/constants'
+import { SONG_TITLE, TRANSLATED_LYRIC } from '@/utils/constants'
 import { Background, Content } from '@/utils/messaging'
 import { TranslationOptions } from '@/utils/options'
 
-export default async function lyricsTranslation(data: TranslationOptions): Promise<void> {
+export default async function lyricsTranslation(
+  lyrics: Iterable<HTMLDivElement>,
+  data: TranslationOptions
+): Promise<void> {
   if (!data.enabled) {
     document.querySelectorAll('.'+TRANSLATED_LYRIC).forEach(el => el.textContent = '')
     return
   }
 
-  const lyrics = document.querySelectorAll(LYRIC_SELECTOR)
   const title = document.querySelector(SONG_TITLE)?.textContent
 
   // Concat every line to save translation rate limit

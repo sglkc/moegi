@@ -19,6 +19,7 @@ export default defineContentScript({
     // Since there's only one listener allowed, re-register options
     // TODO: duplicate in `init.ts` ??
     Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
+      const lyrics = document.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
       const has = createArrayHas(changes)
       console.log('Applying changes', changes, options)
 
@@ -42,14 +43,14 @@ export default defineContentScript({
         'romanization.japanese',
         'romanization.korean',
       )) {
-        lyricsRomanization(options.romanization)
+        lyricsRomanization(lyrics, options.romanization)
       }
 
       if (has(
         'translation.enabled',
         'translation.target'
       )) {
-        lyricsTranslation(options.translation)
+        lyricsTranslation(lyrics, options.translation)
       }
     })
 
