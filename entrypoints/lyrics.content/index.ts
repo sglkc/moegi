@@ -3,7 +3,7 @@ import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER, ORIGINAL_LYRIC } from '@/utils/constants'
+import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
@@ -16,10 +16,17 @@ export default defineContentScript({
     // Store react root element
     let rootElement: HTMLElement
 
+    // Store fullscreen lyrics state
+    let isFullscreen: boolean | null
+
     // Since there's only one listener allowed, re-register options
     // TODO: duplicate in `init.ts` ??
     Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
-      const lyrics = document.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
+      let container = rootElement.querySelector<HTMLDivElement>(`${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`)
+      if (!container)
+        container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)!
+
+      const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
       const has = createArrayHas(changes)
       console.log('Applying changes', changes, options)
 
@@ -63,23 +70,31 @@ export default defineContentScript({
 
       // If there are lyrics, then there must be the container, simple
       // Also prevent infinite loop by tracking original lyrics element
-      let container: HTMLDivElement | null
-
       // Detect fullscreen lyrics first
-      container = rootElement.querySelector<HTMLDivElement>(`${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`)
+      let container = rootElement.querySelector<HTMLDivElement>(`${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`)
+      let currentlyFullscreen = true
 
       // Fallback to normal lyrics
-      if (!container)
+      if (!container) {
         container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)
+        currentlyFullscreen = false
+      }
 
-      if (!container || container.querySelector('.'+ORIGINAL_LYRIC)) return
+      // If no container found or lyrics already initialized, stop,
+      // but when switching from fullscreen, normal lyrics might already
+      // initialized and we need to refresh them
+      if (!container || currentlyFullscreen === isFullscreen) {
+        if (!container) isFullscreen = null
+        return
+      }
 
       console.log('Found uninitialized lyrics container, starting...')
+      isFullscreen = currentlyFullscreen
 
       // Sometimes the lyrics doesn't show up instantly, probs network
       const intervalId = setInterval(() => {
         if (!container.querySelector(LYRIC_SELECTOR)) {
-          console.error('Container found but no lyrics, restarting in 500ms...')
+          console.debug('Container found but no lyrics, restarting in 500ms...')
           return
         }
 

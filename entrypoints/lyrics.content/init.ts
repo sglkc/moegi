@@ -12,22 +12,16 @@ import { Content } from '@/utils/messaging'
 import { optionsStorage } from '@/utils/storage'
 
 export default async function lyricsInit(container: HTMLElement) {
-  // Select only uninitialized lyrics
-  const lyrics = document.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:not(:has(.${ORIGINAL_LYRIC}))`)
+  // There are a couple of empty lines from Spotify
+  const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
 
   if (lyrics.length === 0) return
-
-  const lyricElements = new Set<HTMLElement>()
 
   const toastId = await Content.sendMessage('createToast', {
     text: 'Processing lyrics...'
   })
 
-  // Clear previous elements and add new ones
-  lyricElements.clear()
-
   for (const lyric of lyrics) {
-    lyricElements.add(lyric)
     processLyricElement(lyric)
   }
 
@@ -48,7 +42,12 @@ export default async function lyricsInit(container: HTMLElement) {
 }
 
 function processLyricElement(element: HTMLElement): void {
-  const originalLyric = element.textContent?.trim() || ''
+  // Clear previous lyrics if already initialized, then restart the process
+  if (element.children.length > 1) {
+    element.innerHTML = element.children[0].innerHTML
+  }
+
+  const originalLyric = element.textContent?.trim()
 
   if (!originalLyric) return
 
