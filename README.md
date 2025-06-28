@@ -93,19 +93,19 @@ Note that translations are not accurate and should not be used literally! [Read 
 
 ### Romanization
 
-Mainly supported languages:
-1. [Japanese](#japanese)
-2. [Korean](#korean)
-3. [Chinese](#chinese)
+Romanize lyrics automatically by detecting the script of each text segment. The extension will apply the appropriate romanization system based on the detected Unicode script.
+
+Supported scripts:
+1. [Japanese](#japanese) (Hiragana, Katakana, Kanji)
+2. [Korean](#korean) (Hangul)
+3. [Chinese](#chinese) (Hanzi)
 4. [Cyrillic](#cyrillic)
 
-Other than that, use [Anything else](#any).
-
-Romanize lyrics that has the selected language's characters, if none then it will skip to the next line.
+Other scripts will use the [Any-ASCII fallback](#any).
 
 | Feature | Default | Options |
 |--------|---------|------------------|
-| Language | Any | Japanese, Korean, Chinese, Cyrillic, Any |
+| Auto-detection | Enabled | Automatic based on Unicode script |
 | Font Size | 1em | 0.5-1.5em |
 
 #### Japanese

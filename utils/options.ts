@@ -1,10 +1,4 @@
-export const RomanizationScripts = [
-  'japanese',
-  'korean',
-  'cyrillic',
-  'chinese',
-  'any',
-] as const
+export type RomanizationScripts = 'japanese' | 'korean' | 'cyrillic' | 'chinese' | 'any'
 
 export interface FontOptions {
   enabled: boolean
@@ -33,7 +27,6 @@ export interface TranslationOptions {
 export interface RomanizationOptions {
   enabled: boolean
   size: number
-  language: typeof RomanizationScripts[number] // TODO: multiple romanizations?
   chinese: {
     ruby: boolean
   }
@@ -84,7 +77,6 @@ export const moegiDefaultOptions: MoegiOptions = {
   romanization: {
     enabled: false,
     size: 1,
-    language: 'any',
     chinese: {
       ruby: false,
     },

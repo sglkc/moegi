@@ -1,6 +1,7 @@
-import { LYRIC_SELECTOR, ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
+import { ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
 import { RomanizationOptions } from '@/utils/options'
+import { splitTextByScript, getProviderForScript } from '@/utils/script-detection'
 
 export interface RomanizationProvider {
   check: (text: string) => boolean
@@ -25,10 +26,7 @@ export default async function lyricsRomanization(
     return
   }
 
-  if (!(data.language in romanizations)) return
-
   const toastId = await Content.sendMessage('createToast', { text: 'Romanizing...' })
-  const romanize = await romanizations[data.language].then(e => e.default)
 
   for (const lyric of lyrics) {
     const original = lyric.querySelector('.'+ORIGINAL_LYRIC)
@@ -37,12 +35,40 @@ export default async function lyricsRomanization(
     const text = original.textContent
     if (!text) continue
 
-    // Korean romanization returns error for invalid characters
     try {
-      const romanized = await romanize.convert(text, data)
+      // Split text by Unicode scripts
+      const scriptSegments = splitTextByScript(text)
+      let romanizedResult = ''
 
-      // Japanese furigana uses ruby elements
-      lyric.querySelector('.'+ROMANIZED_LYRIC)!.innerHTML = romanized
+      for (const segment of scriptSegments) {
+        const providerName = getProviderForScript(segment.script)
+
+        if (providerName === 'none') {
+          // Don't romanize Latin or common characters, keep original
+          romanizedResult += segment.text
+          continue
+        }
+
+        if (!(providerName in romanizations)) {
+          // Fallback to original text if provider not found
+          romanizedResult += segment.text
+          continue
+        }
+
+        const romanize = await romanizations[providerName].then(e => e.default)
+
+        // Only romanize if the provider's check passes
+        if (romanize.check(segment.text)) {
+          const romanized = await romanize.convert(segment.text, data)
+          romanizedResult += romanized
+        } else {
+          // Keep original text if check fails
+          romanizedResult += segment.text
+        }
+      }
+
+      // Japanese furigana uses ruby elements, others use text
+      lyric.querySelector('.'+ROMANIZED_LYRIC)!.innerHTML = romanizedResult
     } catch (error) {
       console.error('Romanization error:', error)
       lyric.querySelector('.'+ROMANIZED_LYRIC)!.textContent = ''
