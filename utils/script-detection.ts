@@ -1,4 +1,5 @@
 import { getScript } from 'unicode-properties'
+import { RomanizationScripts } from './options'
 
 export interface ScriptSegment {
   text: string
@@ -10,7 +11,7 @@ function scriptsMergeable(script1: string, script2: string) {
   if (script1 === script2) {
     return { merge: true, resultScript: script1 }
   }
-  
+
   // Merge Han with Hiragana or Katakana for Japanese
   if (
     (script1 === "Han" && (script2 === "Hiragana" || script2 === "Katakana")) ||
@@ -19,7 +20,7 @@ function scriptsMergeable(script1: string, script2: string) {
     // Keep the Hiragana or Katakana script, not Han
     return { merge: true, resultScript: script1 === "Han" ? script2 : script1 }
   }
-  
+
   // Merge Hiragana with Katakana
   if (
     (script1 === "Hiragana" && script2 === "Katakana") ||
@@ -28,7 +29,7 @@ function scriptsMergeable(script1: string, script2: string) {
     // Keep the first script
     return { merge: true, resultScript: script1 }
   }
-  
+
   return { merge: false, resultScript: null }
 }
 
@@ -85,13 +86,13 @@ function mergeByScript(entries: { text: string }[]): ScriptSegment[] {
 export function splitTextByScript(text: string): ScriptSegment[] {
   // Split to characters first
   const charEntries = Array.from(text).map((char) => ({ text: char }))
-  
+
   // Merge by script using unicode-script library
   return mergeByScript(charEntries)
 }
 
 // Map Unicode script names to our romanization providers
-export function getProviderForScript(script: string): string {
+export function getProviderForScript(script: string): RomanizationScripts | 'none' {
   switch (script) {
     case 'Hiragana':
     case 'Katakana':

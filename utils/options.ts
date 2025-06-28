@@ -1,10 +1,4 @@
-export const RomanizationScripts = [
-  'japanese',
-  'korean',
-  'cyrillic',
-  'chinese',
-  'any',
-] as const
+export type RomanizationScripts = 'japanese' | 'korean' | 'cyrillic' | 'chinese' | 'any'
 
 export interface FontOptions {
   enabled: boolean

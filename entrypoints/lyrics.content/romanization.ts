@@ -1,4 +1,4 @@
-import { LYRIC_SELECTOR, ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
+import { ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
 import { RomanizationOptions } from '@/utils/options'
 import { splitTextByScript, getProviderForScript } from '@/utils/script-detection'
@@ -42,7 +42,7 @@ export default async function lyricsRomanization(
 
       for (const segment of scriptSegments) {
         const providerName = getProviderForScript(segment.script)
-        
+
         if (providerName === 'none') {
           // Don't romanize Latin or common characters, keep original
           romanizedResult += segment.text
@@ -56,7 +56,7 @@ export default async function lyricsRomanization(
         }
 
         const romanize = await romanizations[providerName].then(e => e.default)
-        
+
         // Only romanize if the provider's check passes
         if (romanize.check(segment.text)) {
           const romanized = await romanize.convert(segment.text, data)
