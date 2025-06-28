@@ -1,4 +1,5 @@
 import { DeepSignal } from 'deepsignal'
+import Accordion from '@/components/Accordion'
 import Checkbox from '@/components/Checkbox'
 import Container from '@/components/Container'
 import Input from '@/components/Input'
@@ -13,10 +14,6 @@ interface RomanizationOptionsProps {
 export default function RomanizationOption({ signal }: RomanizationOptionsProps) {
   return (
     <Container label="Romanization" signal={signal}>
-      <div class="text-sm text-gray-600 mb-4">
-        Text will be automatically split by script and romanized accordingly.
-      </div>
-      
       <Slider
         label="Font Size"
         signal={signal.$size}
@@ -27,9 +24,7 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
       />
 
       {/* Japanese options */}
-      <div class="border-t pt-4 mt-4">
-        <h4 class="font-semibold mb-2">Japanese (Hiragana/Katakana/Kanji)</h4>
-        
+      <Accordion title="Japanese">
         <Select<RomanizationOptions['japanese']['to']>
           label="To"
           signal={signal.japanese.$to}
@@ -77,12 +72,9 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
             />
           </div>
         )}
-      </div>
+      </Accordion>
 
-      {/* Korean options */}
-      <div class="border-t pt-4 mt-4">
-        <h4 class="font-semibold mb-2">Korean (Hangul)</h4>
-        
+      <Accordion title="Korean">
         <Select<RomanizationOptions['korean']['system']>
           label="Hangul System"
           signal={signal.korean.$system}
@@ -92,21 +84,15 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
             { text: 'Yale', value: 'YL' },
           ]}
         />
-      </div>
+      </Accordion>
 
-      {/* Chinese options */}
-      <div class="border-t pt-4 mt-4">
-        <h4 class="font-semibold mb-2">Chinese (Hanzi)</h4>
-        
+       <Accordion title="Chinese">
         <Checkbox signal={signal.chinese.$ruby} mirror>
           Ruby Text:
         </Checkbox>
-      </div>
+      </Accordion>
 
-      {/* Cyrillic options */}
-      <div class="border-t pt-4 mt-4">
-        <h4 class="font-semibold mb-2">Cyrillic</h4>
-        
+       <Accordion title="Cyrillic">
         <Select<RomanizationOptions['cyrillic']['lang']>
           label="Language"
           signal={signal.cyrillic.$lang}
@@ -115,12 +101,7 @@ export default function RomanizationOption({ signal }: RomanizationOptionsProps)
             { text: 'Ukrainian', value: 'uk' },
           ]}
         />
-      </div>
-
-      {/* Note about fallback */}
-      <div class="border-t pt-4 mt-4 text-sm text-gray-600">
-        <strong>Note:</strong> Other scripts will use the "any-ascii" fallback romanization system.
-      </div>
+      </Accordion>
     </Container>
   )
 }
