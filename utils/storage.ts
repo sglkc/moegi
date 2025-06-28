@@ -6,8 +6,14 @@ import { debounce } from './debounce'
 
 export const optionsStorage = storage.defineItem('sync:moegiOptions', {
   init: () => moegiDefaultOptions,
+  migrations: {
+    2: (options) => {
+      delete options.romanization?.language
+      return options
+    }
+  },
   fallback: moegiDefaultOptions,
-  version: 1,
+  version: 2,
 })
 
 // Make options reactive and save to storage on every change
