@@ -3,7 +3,7 @@ import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { ALBUM_ART, FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER } from '@/utils/constants'
+import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER, SONG_TITLE } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
@@ -18,10 +18,6 @@ export default defineContentScript({
 
     // Store fullscreen lyrics state
     let lastFullscreen: boolean | null
-
-    // Store unique song by its album art because there are songs that are
-    // re-released under the same name and artist
-    let lastSong = ''
 
     // Since there's only one listener allowed, re-register options
     // TODO: duplicate in `init.ts` ??
@@ -94,15 +90,16 @@ export default defineContentScript({
       if (!container) return lastFullscreen = null
 
       // If song changed, force initialization
-      let currentSong = rootElement.querySelector<HTMLImageElement>(ALBUM_ART)?.src ?? ''
+      const songChanged = mutations.some((mutation) => {
+        return mutation.target.parentElement?.parentElement?.matches(SONG_TITLE)
+      })
 
       // When switching from fullscreen, normal lyrics might already
       // initialized and we need to refresh them
-      if ((currentFullscreen === lastFullscreen) && (currentSong === lastSong)) return
+      if ((currentFullscreen === lastFullscreen) && !songChanged) return
 
       console.log('Found uninitialized lyrics container, starting...')
       lastFullscreen = currentFullscreen
-      lastSong = currentSong
 
       // Sometimes the lyrics doesn't show up instantly, probs network
       let i = 0
