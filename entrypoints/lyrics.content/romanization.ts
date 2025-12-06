@@ -1,3 +1,4 @@
+import { cacheLyricElement } from './cache'
 import { ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
 import { RomanizationOptions } from '@/utils/options'
@@ -69,6 +70,8 @@ export default async function lyricsRomanization(
 
       // Japanese furigana uses ruby elements, others use text
       lyric.querySelector('.'+ROMANIZED_LYRIC)!.innerHTML = romanizedResult
+      // Cache the processed lyric for restoration
+      cacheLyricElement(lyric)
     } catch (error) {
       console.error('Romanization error:', error)
       lyric.querySelector('.'+ROMANIZED_LYRIC)!.textContent = ''

@@ -1,3 +1,4 @@
+import { cacheLyricElement } from './cache'
 import { SONG_TITLE, TRANSLATED_LYRIC } from '@/utils/constants'
 import { Background, Content } from '@/utils/messaging'
 import { TranslationOptions } from '@/utils/options'
@@ -41,6 +42,8 @@ export default async function lyricsTranslation(
     if (!el) continue
 
     el.textContent = lines[i]
+    // Cache the processed lyric for restoration
+    cacheLyricElement(lyric)
     i++
   }
 

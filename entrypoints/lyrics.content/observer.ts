@@ -1,51 +1,33 @@
-import { LYRIC_SELECTOR } from "@/utils/constants"
+import { restoreLyricFromCache } from './cache'
+import { LYRIC_SELECTOR } from '@/utils/constants'
 
-const orphanStorage = new Map<string, string>()
 let observer: MutationObserver | undefined
 
 /**
  * Observes lyrics container for any changes in lyrics element
  *
- * - Restore custom elements on changes
+ * - Restore custom elements on changes using eagerly cached data
  *   @see {@link https://github.com/sglkc/moegi/issues/29#issuecomment-3546748205|GitHub}
+ *
+ * Spotify adds new elements before removing old ones, so we use an eager
+ * caching strategy: lyrics are cached immediately after processing in
+ * romanization.ts and translation.ts, allowing instant restoration here.
  */
 export default function lyricsObserver(container: HTMLElement) {
-  console.log('observer, contaner', observer, container)
   if (observer) {
     observer.disconnect()
-    orphanStorage.clear()
   }
 
   observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
+      if (mutation.addedNodes.length == 0) return
 
-      // Save deleted lyrics HTML, use original lyrics as key
-      if (mutation.removedNodes.length > 0) {
-        mutation.removedNodes.forEach((node) => {
-          if (node instanceof HTMLElement && node.matches(LYRIC_SELECTOR)) {
-            console.log('saved', node.firstElementChild?.textContent, node.innerHTML)
-            const id = node.firstElementChild?.textContent?.trim()
-            if (!id) return
-            orphanStorage.set(id, node.innerHTML)
-          }
-        })
-      }
-
-      // Restore deleted lyrics HTML
-      if (mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof HTMLElement && node.matches(LYRIC_SELECTOR)) {
-            console.log('restoered', node.firstElementChild?.textContent)
-            const id = node.textContent?.trim()
-            if (!id) return
-
-            const savedHTML = orphanStorage.get(id)
-            orphanStorage.delete(id)
-            if (!savedHTML) return
-            node.innerHTML = savedHTML
-          }
-        })
-      }
+      // Restore lyrics from cache when Spotify adds new elements
+      mutation.addedNodes.forEach((node) => {
+        if (node instanceof HTMLElement && node.matches(LYRIC_SELECTOR)) {
+          restoreLyricFromCache(node)
+        }
+      })
     }
   })
 
