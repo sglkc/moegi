@@ -1,4 +1,4 @@
-import lyricsAutoScroll from './auto-scroll'
+import lyricsObserver from './observer'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
@@ -35,7 +35,7 @@ export default async function lyricsInit(container: HTMLElement) {
   const storedOptions = await optionsStorage.getValue()
 
   // TODO: add auto scroll toggle
-  lyricsAutoScroll(container)
+  lyricsObserver(container)
   lyricsStyling(storedOptions)
   lyricsRomanization(lyrics, storedOptions.romanization)
   lyricsTranslation(lyrics, storedOptions.translation)
