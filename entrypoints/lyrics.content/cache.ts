@@ -1,4 +1,4 @@
-import { LYRIC_SELECTOR, ORIGINAL_LYRIC } from '@/utils/constants'
+import { ORIGINAL_LYRIC } from '@/utils/constants'
 
 /**
  * Cache for processed lyrics HTML, keyed by original lyric text.
@@ -18,22 +18,7 @@ export function cacheLyricElement(element: HTMLElement): void {
 }
 
 /**
- * Cache all lyric elements in a container.
- * Call this after romanization/translation processing completes.
- */
-export function cacheAllLyrics(container: HTMLElement): void {
-  const lyrics = container.querySelectorAll<HTMLDivElement>(
-    `${LYRIC_SELECTOR}:has( > :not(:empty))`
-  )
-  for (const lyric of lyrics) {
-    cacheLyricElement(lyric)
-  }
-}
-
-/**
  * Try to restore a lyric element from cache.
- * @param element The newly added lyric element
- * @returns true if restored, false if not in cache
  */
 export function restoreLyricFromCache(element: HTMLElement): boolean {
   const originalText = element.textContent?.trim()
@@ -44,12 +29,4 @@ export function restoreLyricFromCache(element: HTMLElement): boolean {
 
   element.innerHTML = cachedHTML
   return true
-}
-
-/**
- * Clear the lyrics cache.
- * Call this when switching songs or when a full re-initialization is needed.
- */
-export function clearLyricsCache(): void {
-  lyricsCache.clear()
 }

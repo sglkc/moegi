@@ -20,7 +20,7 @@ export default function lyricsObserver(container: HTMLElement) {
 
   observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
-      if (mutation.addedNodes.length == 0) return
+      if (mutation.addedNodes.length == 0) continue
 
       // Restore lyrics from cache when Spotify adds new elements
       mutation.addedNodes.forEach((node) => {
