@@ -1,14 +1,10 @@
 import { clearLyricsCache } from './cache'
 import lyricsObserver from './observer'
+import { processLyricElement } from './process-lyric'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import {
-  LYRIC_SELECTOR,
-  ORIGINAL_LYRIC,
-  ROMANIZED_LYRIC,
-  TRANSLATED_LYRIC,
-} from '@/utils/constants'
+import { LYRIC_SELECTOR } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
 import { optionsStorage } from '@/utils/storage'
 
@@ -43,33 +39,4 @@ export default async function lyricsInit(container: HTMLElement) {
   lyricsStyling(storedOptions)
   lyricsRomanization(lyrics, storedOptions.romanization)
   lyricsTranslation(lyrics, storedOptions.translation)
-}
-
-function processLyricElement(element: HTMLElement): void {
-  // Clear previous lyrics if already initialized, then restart the process
-  if (element.children.length > 1) {
-    element.innerHTML = element.children[0].innerHTML
-  }
-
-  const originalLyric = element.textContent?.trim()
-
-  if (!originalLyric) return
-
-  // Create containers for different lyric types
-  const originalElement = document.createElement('p')
-  originalElement.className = ORIGINAL_LYRIC
-  originalElement.textContent = originalLyric
-
-  const romanizedElement = document.createElement('p')
-  romanizedElement.className = ROMANIZED_LYRIC
-
-  const translatedElement = document.createElement('p')
-  translatedElement.className = TRANSLATED_LYRIC
-
-  // Add all elements to the container
-  element.replaceChildren(
-    originalElement,
-    romanizedElement,
-    translatedElement
-  )
 }
