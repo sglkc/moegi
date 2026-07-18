@@ -19,7 +19,7 @@ export default function Checkbox({ children, label, signal, mirror }: CheckboxPr
         id={id}
         class="peer sr-only"
         type="checkbox"
-        checked={signal}
+        checked={signal?.value ?? false}
         onChange={toggleChecked}
       />
       <span

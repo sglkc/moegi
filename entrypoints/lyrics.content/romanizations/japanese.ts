@@ -6,6 +6,19 @@ const dictPath = chrome.runtime.getURL('/dict')
 const kuroshiro = new Kuroshiro()
 const kuromojiAnalyzer = new KuromojiAnalyzer({ dictPath })
 
+let initPromise: Promise<void> | null = null
+
+function ensureInitialized(): Promise<void> {
+  if (!initPromise) {
+    initPromise = kuroshiro.init(kuromojiAnalyzer).catch((error) => {
+      // Allow retry on next convert if init fails once
+      initPromise = null
+      throw error
+    })
+  }
+  return initPromise
+}
+
 const JapaneseRomanization: RomanizationProvider = {
   check: (text) => kuroshiro.Util.hasJapanese(text),
   convert: async (text, { japanese }) => {
@@ -17,13 +30,8 @@ const JapaneseRomanization: RomanizationProvider = {
       romajiSystem: japanese.system,
     }
 
-    // No variables to track init, top-level await not supported
-    try {
-      return await kuroshiro.convert(text, newOptions)
-    } catch {
-      await kuroshiro.init(kuromojiAnalyzer)
-      return await kuroshiro.convert(text, newOptions)
-    }
+    await ensureInitialized()
+    return await kuroshiro.convert(text, newOptions)
   },
 }
 

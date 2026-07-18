@@ -6,10 +6,15 @@
     "jsxImportSource": "preact",
     "skipLibCheck": true,
     "paths": {
-      "react": ["./node_modules/preact/compat/"],
-      "react-dom": ["./node_modules/preact/compat/"],
-      "@api/types": ["./api/src/types.ts"],
-      "@/*": ["./*"]
+      "react": [
+        "./node_modules/preact/compat/"
+      ],
+      "react-dom": [
+        "./node_modules/preact/compat/"
+      ],
+      "@/*": [
+        "./*"
+      ]
     }
   }
 }
