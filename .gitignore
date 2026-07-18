@@ -32,4 +32,6 @@ dist
 
 # Project-local Chrome profile for real Spotify e2e (contains cookies/login)
 e2e/.chrome-user-data/
+# Screenshots / dumps from live Spotify runs
+e2e/artifacts/
 

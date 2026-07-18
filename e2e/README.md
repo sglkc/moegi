@@ -2,6 +2,16 @@
 
 Offline Vitest covers pipeline logic. Real Spotify e2e is a **separate, fragile** layer: it needs your login, network, and Spotify’s live DOM.
 
+## Preferred live target
+
+| Setting | Value |
+|---------|--------|
+| **Album** | [Collection 2 — kobasolo](https://open.spotify.com/album/0mYyY7YPeYMBWKms7lsO3C) (`0mYyY7YPeYMBWKms7lsO3C`) |
+| **Viewport** | **1280×720** (16:9; common laptop ratio) |
+| **Command** | `pnpm test:e2e` |
+
+Override album: `MOEGI_E2E_ALBUM=https://open.spotify.com/album/... pnpm test:e2e`
+
 ## Chrome profile for this project
 
 A dedicated Google Chrome user-data directory lives at:
@@ -14,8 +24,11 @@ It is **gitignored**. Use it only for Moegi e2e so Spotify login/cookies stay ou
 
 ### 1. Create / open the profile (you log in)
 
+**Important:** log in with the script below — not your normal Chrome window.  
+If the top-right still shows **Log in** / **Sign up**, the e2e runner will abort.
+
 ```sh
-# from repo root
+# from repo root — close other windows using this profile first
 pnpm e2e:chrome
 ```
 
@@ -30,11 +43,20 @@ What it does:
 - Uses `/usr/bin/google-chrome-stable`
 - `--user-data-dir=$REPO/e2e/.chrome-user-data`
 - Opens `https://open.spotify.com`
-- Optional remote debugging on **9222** (for later Playwright / CDP attach)
+- Remote debugging on **9222**
 
-**You:** sign into Spotify in that window. Session is stored under `e2e/.chrome-user-data`. Close Chrome when done.
+**You:** sign into Spotify in **that** window until your avatar replaces Log in. Close Chrome completely when done (so Playwright can open the same profile).
+### 2. Run automated live e2e
 
-### 2. Optional: load unpacked Moegi
+```sh
+pnpm test:e2e
+```
+
+This builds Moegi, launches the project Chrome profile at **1280×720**, opens the kobasolo album, plays a track, opens lyrics, and asserts Moegi slots (`.original-lyric`, `.romanized-lyric`, `.translated-lyric`).
+
+Screenshots land in `e2e/artifacts/` (gitignored).
+
+### 3. Optional: manual Chrome with extension
 
 ```sh
 pnpm build
@@ -43,7 +65,7 @@ pnpm e2e:chrome:ext
 
 Loads `.output/chrome-mv3` as an unpacked extension in the same profile.
 
-### 3. Attach automation later (not required for login)
+### 4. Attach automation later (CDP)
 
 With Chrome already running via the script (debug port 9222):
 

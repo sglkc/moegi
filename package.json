@@ -18,7 +18,8 @@
     "test:watch": "vitest",
     "e2e:chrome": "./e2e/scripts/launch-chrome-profile.sh default",
     "e2e:chrome:ext": "./e2e/scripts/launch-chrome-profile.sh ext",
-    "e2e:chrome:debug": "./e2e/scripts/launch-chrome-profile.sh debug"
+    "e2e:chrome:debug": "./e2e/scripts/launch-chrome-profile.sh debug",
+    "test:e2e": "pnpm build && node e2e/spotify-album.e2e.mjs"
   },
   "dependencies": {
     "@fontsource/quicksand": "^5.2.10",
@@ -48,6 +49,7 @@
     "@types/unicode-properties": "^1.3.2",
     "@wxt-dev/unocss": "^1.0.1",
     "happy-dom": "^20.10.6",
+    "playwright": "^1.61.1",
     "typescript": "~5.9.3",
     "unocss": "^66.7.5",
     "vitest": "^4.1.10",
