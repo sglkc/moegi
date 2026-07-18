@@ -1,4 +1,5 @@
 import { defineContentScript } from '#imports'
+import { clearLyricsCache } from './cache'
 import lyricsInit from './init'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
@@ -97,6 +98,8 @@ export default defineContentScript({
       // When switching from fullscreen, normal lyrics might already
       // initialized and we need to refresh them
       if ((currentFullscreen === lastFullscreen) && !songChanged) return
+
+      if (songChanged) clearLyricsCache()
 
       console.log('Found uninitialized lyrics container, starting...')
       lastFullscreen = currentFullscreen

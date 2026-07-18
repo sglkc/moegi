@@ -2,21 +2,23 @@ import { cacheLyricElement } from './cache'
 import { SONG_TITLE, TRANSLATED_LYRIC } from '@/utils/constants'
 import { Background, Content } from '@/utils/messaging'
 import { TranslationOptions } from '@/utils/options'
+import { splitTranslationLines } from '@/utils/translation-cache'
 
 export default async function lyricsTranslation(
   lyrics: Iterable<HTMLDivElement>,
   data: TranslationOptions
 ): Promise<void> {
   if (!data.enabled) {
-    document.querySelectorAll('.'+TRANSLATED_LYRIC).forEach(el => el.textContent = '')
+    document.querySelectorAll('.' + TRANSLATED_LYRIC).forEach(el => el.textContent = '')
     return
   }
 
   const title = document.querySelector(SONG_TITLE)?.textContent
+  const lyricElements = Array.from(lyrics)
 
   // Concat every line to save translation rate limit
-  const text = Array.from(lyrics)
-    .map(el => el.firstElementChild!.textContent)
+  const text = lyricElements
+    .map(el => el.firstElementChild?.textContent ?? '')
     .join('\n')
 
   if (!title || !text) return
@@ -29,23 +31,28 @@ export default async function lyricsTranslation(
   })
 
   if (!translated.length) {
-    Content.sendMessage('createToast', { text: 'Translation failed' })
+    await Content.sendMessage('createToast', { text: 'Translation failed', duration: 2000 })
+    await Content.sendMessage('destroyToast', toastId)
     return
   }
 
-  // There should be a better way or something IDK
-  const lines = translated.split('\n')
-  let i = 0
-  for (const lyric of lyrics) {
-    const el = lyric.querySelector('.'+TRANSLATED_LYRIC)
+  const lines = splitTranslationLines(translated, lyricElements.length)
+  if (!lines) {
+    await Content.sendMessage('createToast', {
+      text: 'Translation line count mismatch — skipped',
+      duration: 2500,
+    })
+    await Content.sendMessage('destroyToast', toastId)
+    return
+  }
 
-    if (!el) continue
+  lyricElements.forEach((lyric, i) => {
+    const el = lyric.querySelector('.' + TRANSLATED_LYRIC)
+    if (!el) return
 
     el.textContent = lines[i]
-    // Cache the processed lyric for restoration
     cacheLyricElement(lyric)
-    i++
-  }
+  })
 
   await Content.sendMessage('destroyToast', toastId)
 }

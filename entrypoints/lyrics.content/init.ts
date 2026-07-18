@@ -1,3 +1,4 @@
+import { clearLyricsCache } from './cache'
 import lyricsObserver from './observer'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
@@ -12,6 +13,9 @@ import { Content } from '@/utils/messaging'
 import { optionsStorage } from '@/utils/storage'
 
 export default async function lyricsInit(container: HTMLElement) {
+  // Fresh song/container: drop previous HTML snapshots
+  clearLyricsCache()
+
   // There are a couple of empty lines from Spotify
   const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
 
