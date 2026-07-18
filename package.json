@@ -15,7 +15,10 @@
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "e2e:chrome": "./e2e/scripts/launch-chrome-profile.sh default",
+    "e2e:chrome:ext": "./e2e/scripts/launch-chrome-profile.sh ext",
+    "e2e:chrome:debug": "./e2e/scripts/launch-chrome-profile.sh debug"
   },
   "dependencies": {
     "@fontsource/quicksand": "^5.2.10",

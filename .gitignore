@@ -30,3 +30,6 @@ dist
 *.sln
 *.sw?
 
+# Project-local Chrome profile for real Spotify e2e (contains cookies/login)
+e2e/.chrome-user-data/
+
