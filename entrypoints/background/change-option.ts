@@ -4,43 +4,56 @@ import { getDeepKeys } from '@/utils/deep-keys'
 import { Background, OptionsMessage } from '@/utils/messaging'
 import { MoegiOptions } from '@/utils/options'
 
-// store multiple changes
+// store multiple changes across rapid updates
 let changes: OptionsMessage['changes'] = []
 let oldOptions: MoegiOptions | undefined
+let pendingOptions: MoegiOptions | undefined
 
-const sendOptionsToContent = debounce((tabId: number, options: MoegiOptions) => {
-  if (!changes.length) return
+const flushOptionsToTabs = debounce(async () => {
+  if (!changes.length || !pendingOptions) return
 
-  Background.sendMessage('applyOptions', { changes, options }, { tabId })
-  console.log('Forward options to content', changes, options)
+  const snapshot = changes
+  const options = pendingOptions
   changes = []
-}, 500)
+  pendingOptions = undefined
 
-Background.onMessage('applyOptions', async ({ data: { options } }) => {
-  const [tab] = await chrome.tabs.query({
-    active: true,
+  const tabs = await chrome.tabs.query({
     url: 'https://open.spotify.com/*',
     windowType: 'normal',
   })
 
-  if (!tab?.id) return
+  await Promise.all(
+    tabs
+      .filter((tab): tab is chrome.tabs.Tab & { id: number } => typeof tab.id === 'number')
+      .map((tab) =>
+        Background.sendMessage(
+          'applyOptions',
+          { changes: snapshot, options },
+          { tabId: tab.id },
+        ).catch((error) => {
+          // Tab may have closed or lack the content script yet
+          console.debug('applyOptions forward failed for tab', tab.id, error)
+        }),
+      ),
+  )
+}, 500)
 
-  // set first option before diffing
-  // applyOptions messages from background always return complete data
-  if (!oldOptions)
+Background.onMessage('applyOptions', async ({ data: { options } }) => {
+  // First message seeds the baseline before diffing
+  if (!oldOptions) {
     oldOptions = options
+  }
 
-  // get updated keys then update old data
   const updates = updatedDiff(oldOptions, options)
   const newChanges = getDeepKeys(updates)
 
-  // merge with old changes
   for (const change of newChanges) {
     if (changes.includes(change)) continue
     changes.push(change)
   }
 
   oldOptions = options
+  pendingOptions = options
 
-  sendOptionsToContent(tab.id, options)
+  void flushOptionsToTabs()
 })

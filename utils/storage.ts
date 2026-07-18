@@ -1,8 +1,9 @@
 import { storage } from '#imports'
 import { effect, signal } from '@preact/signals'
 import { deepSignal } from 'deepsignal'
-import { moegiDefaultOptions, MoegiOptions } from './options'
 import { debounce } from './debounce'
+import { Background } from './messaging'
+import { moegiDefaultOptions, MoegiOptions } from './options'
 
 export const optionsStorage = storage.defineItem('sync:moegiOptions', {
   init: () => moegiDefaultOptions,
@@ -29,25 +30,33 @@ optionsStorage.getValue().then((storedOptions) => {
 
 const saveOptions = debounce(() => {
   optionsStorage.setValue(options)
-  console.log('Saving options...')
 }, 1000)
 
-// Save every changes to storage with debouncing
+const notifyOptions = debounce(() => {
+  // Background computes the change set and forwards to content scripts
+  void Background.sendMessage('applyOptions', {
+    changes: [],
+    options: JSON.parse(JSON.stringify(options)) as MoegiOptions,
+  })
+}, 300)
+
+// Save every change to storage and notify content scripts (debounced)
 effect(() => {
   if (!hasImported.value) return
 
-  // TODO: debounce sending message here if possible
-  chrome.runtime.sendMessage({
-    data: { options },
-    id: Math.round(Math.random() * 1000),
-    sender: {
-      id: chrome.runtime.id,
-      origin: window.origin
-    },
-    timestamp: Date.now(),
-    type: 'applyOptions'
-  })
+  // Touch nested fields so deepsignal tracks them for this effect
+  void options.fonts
+  void options.colors
+  void options.translation
+  void options.romanization
 
-  // Background.sendMessage('applyOptions', currentOptions)
+  notifyOptions()
   saveOptions()
 })
+
+/** Reset all options to defaults and persist immediately. */
+export async function resetOptionsToDefaults(): Promise<void> {
+  const defaults = structuredClone(moegiDefaultOptions)
+  Object.assign(options, defaults)
+  await optionsStorage.setValue(defaults)
+}
