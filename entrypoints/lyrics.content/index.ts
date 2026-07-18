@@ -1,12 +1,9 @@
 import { defineContentScript } from '#imports'
+import { applyOptionChanges } from './apply-options'
 import { clearLyricsCache } from './cache'
 import lyricsInit from './init'
-import lyricsRomanization from './romanization'
-import lyricsStyling from './styling'
-import lyricsTranslation from './translation'
 import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER, SONG_TITLE } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
-import { createArrayHas } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
 
 export default defineContentScript({
@@ -28,37 +25,8 @@ export default defineContentScript({
         container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)!
 
       const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
-      const has = createArrayHas(changes)
       console.log('Applying changes', changes, options)
-
-      // Must have dependency options to prevent multiple reloads
-      if (has(
-        'fonts',
-        'colors',
-        'translation.enabled',
-        'translation.size',
-        'romanization.enabled',
-        'romanization.size',
-      )) {
-        lyricsStyling(options)
-      }
-
-      if (has(
-        'romanization.enabled',
-        'romanization.chinese',
-        'romanization.cyrillic',
-        'romanization.japanese',
-        'romanization.korean',
-      )) {
-        lyricsRomanization(lyrics, options.romanization)
-      }
-
-      if (has(
-        'translation.enabled',
-        'translation.target'
-      )) {
-        lyricsTranslation(lyrics, options.translation)
-      }
+      applyOptionChanges(changes, options, lyrics)
     })
 
     // Debounced version of initLyrics in case of multiple mutation

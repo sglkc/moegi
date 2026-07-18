@@ -7,6 +7,8 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['utils/**/*.test.ts', 'entrypoints/**/*.test.ts'],
+    // Kuroshiro/kuromoji dictionary init can take a few seconds on cold start
+    testTimeout: 30_000,
   },
   resolve: {
     alias: {

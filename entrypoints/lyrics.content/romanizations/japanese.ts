@@ -2,9 +2,27 @@ import Kuroshiro from '@sglkc/kuroshiro'
 import KuromojiAnalyzer from '@sglkc/kuroshiro-analyzer-kuromoji'
 import { RomanizationProvider } from '../romanization'
 
-const dictPath = chrome.runtime.getURL('/dict')
+/**
+ * Extension builds use chrome.runtime.getURL.
+ * Under Vitest (Node), omit dictPath so kuromoji resolves package dict via fs.
+ */
+export function resolveJapaneseDictPath(): string | undefined {
+  if (typeof process !== 'undefined' && process.env.VITEST) {
+    // KuromojiAnalyzer defaults to node_modules/@sglkc/kuromoji/dict in Node
+    return undefined
+  }
+  return chrome.runtime.getURL('/dict')
+}
+
+function createAnalyzer(): KuromojiAnalyzer {
+  const dictPath = resolveJapaneseDictPath()
+  return dictPath === undefined
+    ? new KuromojiAnalyzer()
+    : new KuromojiAnalyzer({ dictPath })
+}
+
 const kuroshiro = new Kuroshiro()
-const kuromojiAnalyzer = new KuromojiAnalyzer({ dictPath })
+const kuromojiAnalyzer = createAnalyzer()
 
 let initPromise: Promise<void> | null = null
 

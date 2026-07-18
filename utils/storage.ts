@@ -4,6 +4,7 @@ import { deepSignal } from 'deepsignal'
 import { debounce } from './debounce'
 import { Background } from './messaging'
 import { moegiDefaultOptions, MoegiOptions } from './options'
+import { resetOptionsToDefaults as applyReset } from './reset-options'
 
 export const optionsStorage = storage.defineItem('sync:moegiOptions', {
   init: () => moegiDefaultOptions,
@@ -56,7 +57,5 @@ effect(() => {
 
 /** Reset all options to defaults and persist immediately. */
 export async function resetOptionsToDefaults(): Promise<void> {
-  const defaults = structuredClone(moegiDefaultOptions)
-  Object.assign(options, defaults)
-  await optionsStorage.setValue(defaults)
+  await applyReset(options, optionsStorage)
 }

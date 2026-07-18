@@ -6,37 +6,68 @@ import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
 import { LYRIC_SELECTOR } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
+import { MoegiOptions } from '@/utils/options'
 import { optionsStorage } from '@/utils/storage'
 
-export default async function lyricsInit(container: HTMLElement) {
-  // Fresh song/container: drop previous HTML snapshots
-  clearLyricsCache()
+export interface LyricsInitDeps {
+  clearCache: typeof clearLyricsCache
+  processLine: typeof processLyricElement
+  observe: typeof lyricsObserver
+  styling: typeof lyricsStyling
+  romanization: typeof lyricsRomanization
+  translation: typeof lyricsTranslation
+  getOptions: () => Promise<MoegiOptions>
+  createToast: (data: { text: string, duration?: number }) => Promise<number>
+  destroyToast: (id: number) => Promise<boolean>
+}
 
-  // There are a couple of empty lines from Spotify
-  const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
+const defaultDeps = (): LyricsInitDeps => ({
+  clearCache: clearLyricsCache,
+  processLine: processLyricElement,
+  observe: lyricsObserver,
+  styling: lyricsStyling,
+  romanization: lyricsRomanization,
+  translation: lyricsTranslation,
+  getOptions: () => optionsStorage.getValue(),
+  createToast: (data) => Content.sendMessage('createToast', data),
+  destroyToast: (id) => Content.sendMessage('destroyToast', id),
+})
+
+/**
+ * High-level lyrics open flow: process lines, toast, apply stored options.
+ * Deps are injectable for offline feature tests.
+ */
+export default async function lyricsInit(
+  container: HTMLElement,
+  deps: LyricsInitDeps = defaultDeps(),
+): Promise<void> {
+  deps.clearCache()
+
+  // Skip empty Spotify placeholder lines (avoid :has() for broader engine support)
+  const lyrics = [...container.querySelectorAll<HTMLDivElement>(LYRIC_SELECTOR)]
+    .filter((el) => Boolean(el.textContent?.trim()))
 
   if (lyrics.length === 0) return
 
-  const toastId = await Content.sendMessage('createToast', {
-    text: 'Processing lyrics...'
+  const toastId = await deps.createToast({
+    text: 'Processing lyrics...',
   })
 
   for (const lyric of lyrics) {
-    processLyricElement(lyric)
+    deps.processLine(lyric)
   }
 
-  await Content.sendMessage('destroyToast', toastId)
-  await Content.sendMessage('createToast', {
+  await deps.destroyToast(toastId)
+  await deps.createToast({
     text: `Found ${lyrics.length} lyric lines!`,
-    duration: 1000
+    duration: 1000,
   })
 
-  // Get latest options to apply on first open
-  const storedOptions = await optionsStorage.getValue()
+  const storedOptions = await deps.getOptions()
 
   // TODO: add auto scroll toggle
-  lyricsObserver(container)
-  lyricsStyling(storedOptions)
-  lyricsRomanization(lyrics, storedOptions.romanization)
-  lyricsTranslation(lyrics, storedOptions.translation)
+  deps.observe(container)
+  deps.styling(storedOptions)
+  void deps.romanization(lyrics, storedOptions.romanization)
+  void deps.translation(lyrics, storedOptions.translation)
 }
