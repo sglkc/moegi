@@ -1,9 +1,11 @@
 /**
  * Check whether the project Chrome profile has a real Spotify session.
- * Looks for auth cookies (sp_dc / sp_key) and optionally opens the album once.
  *
- * Usage: node e2e/scripts/verify-spotify-login.mjs
- *        pnpm e2e:verify-login
+ * Usage: pnpm e2e:verify-login
+ *
+ * Note: sp_dc / sp_key are usually *session* cookies (is_persistent=0).
+ * They disappear when Chrome fully exits. For e2e, keep Chrome open and
+ * attach via CDP (pnpm e2e:chrome:e2e → pnpm test:e2e).
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -35,8 +37,10 @@ rows = con.execute(
     "where host_key like '%spotify%' order by name"
 ).fetchall()
 auth = [r for r in rows if r[1] in ("sp_dc", "sp_key")]
+session_auth = [r for r in auth if r[2] == 0]
 print("COUNT", len(rows))
 print("AUTH", len(auth))
+print("SESSION_AUTH", len(session_auth))
 for r in rows:
     print("COOKIE", r[0], r[1], "persistent="+str(r[2]))
 for ext in ("", "-wal", "-shm"):
@@ -55,30 +59,41 @@ console.log('Moegi Spotify login check')
 console.log(`  profile: ${USER_DATA}`)
 console.log('')
 
-if (fs.existsSync(path.join(USER_DATA, 'SingletonLock'))) {
-  console.log('NOTE: Chrome may still be running with this profile.')
-  console.log('      Quit it fully so cookie files are flushed to disk.\n')
+const locked = fs.existsSync(path.join(USER_DATA, 'SingletonLock'))
+if (locked) {
+  console.log('NOTE: Chrome is running with this profile (good for CDP e2e).\n')
+} else {
+  console.log('NOTE: Chrome is not running. Session cookies (sp_dc) are often')
+  console.log('      deleted on Exit — verify may FAIL even after a good login.\n')
 }
 
 const out = readViaPython()
 console.log(out)
 
 const hasAuth = /AUTH [1-9]/.test(out) || /\bsp_dc\b/.test(out) || /\bsp_key\b/.test(out)
+const sessionOnly = /SESSION_AUTH [1-9]/.test(out)
 
 if (hasAuth) {
-  console.log('PASS: Spotify auth cookie (sp_dc / sp_key) found — session should persist.')
+  console.log('PASS: Spotify auth cookie (sp_dc / sp_key) found.')
+  if (sessionOnly) {
+    console.log('')
+    console.log('WARNING: auth cookies are session-only (persistent=0).')
+    console.log('  They usually vanish when Chrome exits completely.')
+    console.log('  For e2e, do NOT quit Chrome after login:')
+    console.log('    pnpm e2e:chrome:e2e   # log in, leave window open')
+    console.log('    pnpm test:e2e         # attaches over CDP :9222')
+  }
   process.exit(0)
 }
 
 console.log('FAIL: No Spotify auth cookie (sp_dc / sp_key).')
 console.log('')
-console.log('Fix:')
-console.log('  1. Quit ALL Chrome windows that use the Moegi e2e profile.')
-console.log('  2. pnpm e2e:chrome          # clean login mode (no CDP)')
-console.log('  3. In the MoegiE2E window: Log in until avatar shows (not Log in).')
-console.log('  4. Quit Chrome completely (menu → Exit).')
-console.log('  5. pnpm e2e:verify-login    # this script')
+console.log('Recommended e2e login (keep browser open):')
+console.log('  1. pnpm build && pnpm e2e:chrome:e2e')
+console.log('  2. Log in until avatar shows (window MoegiE2E)')
+console.log('  3. Leave Chrome open')
+console.log('  4. pnpm e2e:verify-login && pnpm test:e2e')
 console.log('')
-console.log('If login still does not stick, wipe and retry:')
-console.log('  rm -rf e2e/.chrome-user-data && pnpm e2e:chrome')
+console.log('If cookies never appear even while Chrome is open:')
+console.log('  pnpm e2e:reset-profile && pnpm e2e:chrome:e2e')
 process.exit(1)

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Launch a project-local Google Chrome profile for Moegi Spotify e2e.
+# Launch project-local Chrome for Moegi Spotify e2e.
+#
+# IMPORTANT: Spotify sp_dc / sp_key are usually *session* cookies.
+# They are removed when Chrome exits. For automation, log in with CDP
+# enabled and LEAVE THE WINDOW OPEN, then run pnpm test:e2e (CDP attach).
 #
 # Modes:
-#   login   — clean profile for manual Spotify sign-in (NO remote debugging)
-#   default — alias for login
-#   ext     — login profile + load unpacked Moegi (still no CDP)
-#   debug   — same profile WITH remote debugging (use only AFTER login works)
-#   e2e     — profile + extension + CDP (for attach/automation)
-#
-# Spotify will not keep sp_dc if you only ever open this profile with heavy
-# automation flags, or if a second Chrome steals a temporary copy of the profile.
+#   login — clean login, no CDP (manual browsing; cookies may die on Exit)
+#   e2e   — extension + CDP :9222 (use this for login + leave open + test:e2e)
+#   ext   — extension, no CDP
+#   debug — CDP only, about:blank
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -17,22 +17,20 @@ USER_DATA_DIR="${MOEGI_CHROME_USER_DATA:-$ROOT/e2e/.chrome-user-data}"
 CHROME_BIN="${MOEGI_CHROME_BIN:-/usr/bin/google-chrome-stable}"
 CDP_PORT="${MOEGI_CDP_PORT:-9222}"
 PROFILE_DIR="Default"
-MODE="${1:-login}"
+MODE="${1:-e2e}"
 
 if [[ ! -x "$CHROME_BIN" ]]; then
   echo "Chrome not found at: $CHROME_BIN" >&2
-  echo "Set MOEGI_CHROME_BIN to your google-chrome binary." >&2
   exit 1
 fi
 
 mkdir -p "$USER_DATA_DIR"
 
-# Refuse to start if this profile is already running (avoids throwaway temp profiles)
 if [[ -e "$USER_DATA_DIR/SingletonLock" ]] || [[ -e "$USER_DATA_DIR/SingletonSocket" ]]; then
-  echo "ERROR: Chrome profile appears locked (already running):" >&2
-  echo "  $USER_DATA_DIR" >&2
-  echo "Close that Chrome window fully, then retry. Logging into a *second*" >&2
-  echo "instance often uses a temporary profile that discards cookies on exit." >&2
+  echo "ERROR: Profile is already in use: $USER_DATA_DIR" >&2
+  echo "If that is your logged-in MoegiE2E window, leave it open and run:" >&2
+  echo "  pnpm test:e2e" >&2
+  echo "Otherwise close it fully and retry." >&2
   exit 1
 fi
 
@@ -41,19 +39,18 @@ ARGS=(
   --profile-directory="$PROFILE_DIR"
   --no-first-run
   --no-default-browser-check
-  # Distinct WM class so you can tell this window apart from daily Chrome
   --class=MoegiE2E
   --name=MoegiE2E
+  --window-size=1280,720
 )
 
-# Optional CDP — NOT enabled for plain login (Spotify/session reliability)
 with_cdp=0
 with_ext=0
 start_url="https://open.spotify.com"
 
 case "$MODE" in
   login|default)
-    # Cleanest path for credential persistence
+    start_url="https://open.spotify.com"
     ;;
   ext|extension)
     with_ext=1
@@ -63,12 +60,13 @@ case "$MODE" in
     start_url="about:blank"
     ;;
   e2e)
+    # Preferred: login here, leave open, pnpm test:e2e attaches
     with_ext=1
     with_cdp=1
     start_url="${MOEGI_E2E_ALBUM:-https://open.spotify.com/album/0mYyY7YPeYMBWKms7lsO3C}"
     ;;
   *)
-    echo "Usage: $0 [login|ext|debug|e2e]" >&2
+    echo "Usage: $0 [login|e2e|ext|debug]" >&2
     exit 1
     ;;
 esac
@@ -76,8 +74,7 @@ esac
 if [[ "$with_ext" -eq 1 ]]; then
   EXT_DIR="$ROOT/.output/chrome-mv3"
   if [[ ! -d "$EXT_DIR" ]]; then
-    echo "Extension build missing: $EXT_DIR" >&2
-    echo "Run: pnpm build" >&2
+    echo "Extension missing: $EXT_DIR — run pnpm build" >&2
     exit 1
   fi
   ARGS+=(--disable-extensions-except="$EXT_DIR")
@@ -94,15 +91,20 @@ ARGS+=("$start_url")
 echo "Chrome binary : $CHROME_BIN"
 echo "User data dir : $USER_DATA_DIR"
 echo "Mode          : $MODE"
+echo "Viewport hint : 1280x720"
 if [[ "$with_cdp" -eq 1 ]]; then
   echo "CDP endpoint  : http://127.0.0.1:$CDP_PORT"
+  echo ""
+  echo ">>> Log into Spotify in this MoegiE2E window (avatar top-right)."
+  echo ">>> Leave this window OPEN, then in another terminal:"
+  echo "      pnpm e2e:verify-login"
+  echo "      pnpm test:e2e"
+  echo ">>> Do NOT Exit Chrome before test:e2e (session cookies die on exit)."
 else
-  echo "CDP           : off (good for first-time Spotify login)"
+  echo "CDP           : off"
+  echo ""
+  echo "Session cookies often vanish after Exit. Prefer: pnpm e2e:chrome:e2e"
 fi
-echo ""
-echo "Look for window class/name MoegiE2E. Top-right must show your avatar, not Log in."
-echo "When finished logging in: quit Chrome completely (Ctrl+Shift+Q or menu → Exit)."
-echo "Then run:  pnpm e2e:verify-login"
 echo ""
 
 exec "$CHROME_BIN" "${ARGS[@]}"

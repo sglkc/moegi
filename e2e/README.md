@@ -22,57 +22,38 @@ e2e/.chrome-user-data/
 
 It is **gitignored**. Use it only for Moegi e2e so Spotify login/cookies stay out of your daily browser profile.
 
-### 1. Log in so credentials actually stick
+### 1. Why login “vanishes”
 
-A real Spotify session needs the **`sp_dc`** cookie. This profile currently had only analytics cookies — login never persisted.
+Spotify’s `sp_dc` / `sp_key` are almost always **session cookies** (`persistent=0`).  
+Chrome **deletes them when the browser process exits**. So:
 
-Common causes:
+- `pnpm e2e:verify-login` while Chrome is still open → **PASS**
+- Quit Chrome, then `pnpm test:e2e` (relaunches) → **logged out again**
 
-| Cause | What happens |
-|-------|----------------|
-| Profile already open | Second Chrome uses a **temporary** profile; cookies vanish on close |
-| Logging into daily Chrome | Wrong user-data-dir |
-| Always using CDP/automation flags | Session less likely to stick |
+That is expected, not a broken profile path.
 
-**Clean login path (recommended):**
-
-```sh
-# 1) Close every Moegi e2e / project-profile Chrome window
-pnpm e2e:reset-profile   # optional wipe if stuck
-pnpm e2e:chrome          # MoegiE2E window, NO remote debugging
-```
-
-In the **MoegiE2E** window (not your normal Chrome):
-
-1. Complete **Log in** until your **avatar** is top-right (not Log in / Sign up).  
-2. Quit Chrome fully (**Exit** / Ctrl+Shift+Q), not just close a tab.  
-3. Confirm:
-
-```sh
-pnpm e2e:verify-login    # must PASS (sp_dc / sp_key present)
-```
-
-Only after that is green, run e2e.
-
-### 2. Run automated live e2e
-
-**Option A — attach (best after login):**
+### 2. Working flow (keep Chrome open)
 
 ```sh
 pnpm build
-pnpm e2e:chrome:e2e    # profile + Moegi extension + CDP :9222
-# leave that Chrome open, then in another terminal:
-pnpm test:e2e          # attaches over CDP at 1280×720
+pnpm e2e:chrome          # MoegiE2E @ 1280x720 + extension + CDP :9222
 ```
 
-**Option B — Playwright launches the profile** (if nothing is on :9222):
+In **that** window only:
+
+1. Log in until **avatar** is top-right.  
+2. **Do not Exit Chrome.**  
+3. Other terminal:
 
 ```sh
-pnpm test:e2e
+pnpm e2e:verify-login    # should PASS while Chrome is open
+pnpm test:e2e            # attaches to :9222 — does not relaunch profile
 ```
 
-Asserts Moegi slots (`.original-lyric`, `.romanized-lyric`, `.translated-lyric`) on the kobasolo album.  
+Asserts Moegi slots on the kobasolo album at **1280×720**.  
 Screenshots: `e2e/artifacts/` (gitignored).
+
+If the profile is already open and locked, `e2e:chrome` refuses to start a second copy (good — run `test:e2e` against the open window instead).
 
 ### 3. Optional: manual Chrome with extension
 

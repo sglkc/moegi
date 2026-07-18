@@ -16,12 +16,13 @@
     "postinstall": "wxt prepare",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e:chrome": "./e2e/scripts/launch-chrome-profile.sh login",
+    "e2e:chrome": "./e2e/scripts/launch-chrome-profile.sh e2e",
+    "e2e:chrome:login": "./e2e/scripts/launch-chrome-profile.sh login",
     "e2e:chrome:ext": "./e2e/scripts/launch-chrome-profile.sh ext",
     "e2e:chrome:debug": "./e2e/scripts/launch-chrome-profile.sh debug",
     "e2e:chrome:e2e": "./e2e/scripts/launch-chrome-profile.sh e2e",
     "e2e:verify-login": "node e2e/scripts/verify-spotify-login.mjs",
-    "e2e:reset-profile": "rm -rf e2e/.chrome-user-data && mkdir -p e2e/.chrome-user-data && echo 'Profile wiped. Run pnpm e2e:chrome and log in.'",
+    "e2e:reset-profile": "rm -rf e2e/.chrome-user-data && mkdir -p e2e/.chrome-user-data && echo 'Profile wiped. Run: pnpm build && pnpm e2e:chrome'",
     "test:e2e": "pnpm build && node e2e/spotify-album.e2e.mjs"
   },
   "dependencies": {

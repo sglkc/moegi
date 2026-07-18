@@ -193,38 +193,25 @@ async function main() {
   // so Playwright does not re-spawn Chrome with automation-ish flags that can
   // drop Spotify's sp_dc session.
   const cdp = process.env.MOEGI_CDP_URL ?? `http://127.0.0.1:${process.env.MOEGI_CDP_PORT ?? '9222'}`
-  let context
-  let ownsBrowser = false
+  /** @type {import('playwright').Browser} */
+  let browser
 
   try {
-    context = await chromium.connectOverCDP(cdp)
+    browser = await chromium.connectOverCDP(cdp)
     ok(`attached over CDP ${cdp}`)
   } catch {
-    log(`CDP attach failed (${cdp}); launching persistent profile…`)
-    context = await chromium.launchPersistentContext(USER_DATA, {
-      executablePath: CHROME_BIN,
-      headless: !HEADED,
-      viewport: VIEWPORT,
-      screen: VIEWPORT,
-      // Do not wipe cookies; reduce automation fingerprint
-      ignoreDefaultArgs: ['--enable-automation', '--no-sandbox'],
-      args: [
-        `--disable-extensions-except=${EXT_DIR}`,
-        `--load-extension=${EXT_DIR}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-blink-features=AutomationControlled',
-        '--autoplay-policy=no-user-gesture-required',
-        `--window-size=${VIEWPORT.width},${VIEWPORT.height}`,
-        '--window-position=0,0',
-      ],
-    })
-    ownsBrowser = true
+    fail(
+      `Cannot attach to Chrome at ${cdp}.\n`
+      + '  Spotify session cookies die when Chrome exits, so e2e must attach to a\n'
+      + '  live window — do not rely on relaunching the profile.\n\n'
+      + '  1. pnpm build && pnpm e2e:chrome\n'
+      + '  2. Log in (avatar top-right), leave the window open\n'
+      + '  3. pnpm e2e:verify-login && pnpm test:e2e',
+    )
+    return
   }
 
-  // CDP returns a default browser context; pick an open page or create one
-  const browser = context.browser?.() ?? context
-  const ctx = context.contexts?.()[0] ?? context
+  const ctx = browser.contexts()[0] ?? await browser.newContext({ viewport: VIEWPORT })
   const page = ctx.pages()[0] ?? await ctx.newPage()
   await page.setViewportSize(VIEWPORT).catch(() => {})
 
@@ -305,12 +292,10 @@ async function main() {
     fail(err?.stack || String(err))
     await shot(page, 'spotify-error.png')
   } finally {
-    if (ownsBrowser) {
-      await context.close().catch(() => {})
-    } else {
-      // Leave the user's CDP Chrome running; only close pages we opened if needed
-      log('left CDP browser running (started outside Playwright)')
-    }
+    // Never browser.close() — that would kill the user's session Chrome
+    await browser.close().catch(() => {})
+    // Playwright's browser.close() on CDP disconnects without killing Chrome
+    log('disconnected from CDP (Chrome left running)')
   }
 }
 
