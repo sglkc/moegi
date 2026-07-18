@@ -36,24 +36,27 @@ That is expected, not a broken profile path.
 
 ```sh
 pnpm build
-pnpm e2e:chrome          # MoegiE2E @ 1280x720 + extension + CDP :9222
+pnpm e2e:chrome          # MoegiE2E @ 1280x720 + CDP :9222
 ```
 
 In **that** window only:
 
 1. Log in until **avatar** is top-right.  
-2. **Do not Exit Chrome.**  
-3. Other terminal:
+2. **Load Moegi once** (required on Chrome 137+ branded builds — CLI `--load-extension` is blocked):
+   - Open `chrome://extensions`
+   - Enable **Developer mode**
+   - **Load unpacked** → select  
+     `…/moegi/.output/chrome-mv3`  
+   - Moegi should stay enabled for this profile after that  
+3. **Do not Exit Chrome** while testing.  
+4. Other terminal:
 
 ```sh
-pnpm e2e:verify-login    # should PASS while Chrome is open
-pnpm test:e2e            # attaches to :9222 — does not relaunch profile
+pnpm e2e:verify-login
+pnpm test:e2e            # CDP attach @ 1280×720
 ```
 
-Asserts Moegi slots on the kobasolo album at **1280×720**.  
-Screenshots: `e2e/artifacts/` (gitignored).
-
-If the profile is already open and locked, `e2e:chrome` refuses to start a second copy (good — run `test:e2e` against the open window instead).
+Asserts Moegi slots on the kobasolo album. Screenshots: `e2e/artifacts/`.
 
 ### 3. Optional: manual Chrome with extension
 

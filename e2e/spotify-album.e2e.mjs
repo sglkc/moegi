@@ -249,10 +249,53 @@ async function main() {
       return
     }
 
+    // Spotify often keeps lyrics-line nodes in DOM but not "visible" (offscreen /
+    // opacity / virtualized). Wait for attached, then scroll one into view.
     const lyricLines = page.locator('[data-testid="lyrics-line"]')
-    await lyricLines.first().waitFor({ state: 'visible', timeout: 60_000 })
+    try {
+      await lyricLines.first().waitFor({ state: 'attached', timeout: 60_000 })
+    } catch {
+      fail('No [data-testid="lyrics-line"] in DOM — lyrics panel may not have opened')
+      await shot(page, 'no-lyrics-lines.png')
+      return
+    }
+
+    // Try to surface the lyrics panel (fullscreen / cinema if available)
+    for (const sel of [
+      'button[aria-label*="Full screen"]',
+      'button[aria-label*="Fullscreen"]',
+      'button[data-testid*="fullscreen"]',
+      'button[aria-label*="Cinema"]',
+    ]) {
+      const btn = page.locator(sel).first()
+      if (await btn.count() && await btn.isVisible().catch(() => false)) {
+        await btn.click().catch(() => {})
+        await page.waitForTimeout(1000)
+        ok(`clicked ${sel}`)
+        break
+      }
+    }
+
+    // Scroll first non-empty lyric into view
+    await lyricLines.first().evaluate((el) => {
+      el.scrollIntoView({ block: 'center', behavior: 'instant' })
+    }).catch(() => {})
+    await page.waitForTimeout(1500)
+
     const lineCount = await lyricLines.count()
-    ok(`Spotify lyrics lines visible: ${lineCount}`)
+    const visibleCount = await lyricLines.evaluateAll((els) =>
+      els.filter((el) => {
+        const r = el.getBoundingClientRect()
+        const s = getComputedStyle(el)
+        return r.height > 0 && r.width > 0 && s.visibility !== 'hidden' && s.display !== 'none' && s.opacity !== '0'
+      }).length,
+    )
+    ok(`Spotify lyrics lines in DOM: ${lineCount} (approx visible: ${visibleCount})`)
+
+    if (lineCount < 1) {
+      fail('No lyrics-line elements')
+      return
+    }
 
     // Moegi processed slots (debounced init ~1s + work)
     const original = page.locator('.original-lyric')
@@ -265,6 +308,9 @@ async function main() {
       const bg = typeof ctx.backgroundPages === 'function' ? ctx.backgroundPages() : []
       log(`serviceWorkers: ${sw.map((w) => w.url()).join(', ') || '(none)'}`)
       log(`backgroundPages: ${bg.map((p) => p.url()).join(', ') || '(none)'}`)
+      // Dump whether raw lyrics have children Moegi would process
+      const sample = await lyricLines.first().evaluate((el) => el.innerHTML.slice(0, 200)).catch(() => '')
+      log(`first lyrics-line innerHTML sample: ${sample}`)
       return
     }
 
