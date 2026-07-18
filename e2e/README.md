@@ -10,7 +10,12 @@ Offline Vitest covers pipeline logic. Real Spotify e2e is a **separate, fragile*
 | **Viewport** | **1280×720** (16:9; common laptop ratio) |
 | **Command** | `pnpm test:e2e` |
 
-Override album: `MOEGI_E2E_ALBUM=https://open.spotify.com/album/... pnpm test:e2e`
+Hard-coded targets live in `e2e/fixtures/spotify-targets.mjs` (album id, track id, anchor lyric text, extension id).
+
+```sh
+# optional overrides
+MOEGI_EXT_ID=... MOEGI_CDP_PORT=9222 pnpm test:e2e
+```
 
 ## Chrome profile for this project
 
