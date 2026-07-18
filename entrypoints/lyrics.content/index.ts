@@ -9,7 +9,7 @@ import { Background } from '@/utils/messaging'
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
   main() {
-    console.log('registered lyrics content script')
+    console.debug('registered lyrics content script')
 
     // Store react root element
     let rootElement: HTMLElement
@@ -25,7 +25,7 @@ export default defineContentScript({
         container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)!
 
       const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
-      console.log('Applying changes', changes, options)
+      console.debug('Applying changes', changes, options)
       applyOptionChanges(changes, options, lyrics)
     })
 
@@ -69,7 +69,7 @@ export default defineContentScript({
 
       if (songChanged) clearLyricsCache()
 
-      console.log('Found uninitialized lyrics container, starting...')
+      console.debug('Found uninitialized lyrics container, starting...')
       lastFullscreen = currentFullscreen
 
       // Sometimes the lyrics doesn't show up instantly, probs network

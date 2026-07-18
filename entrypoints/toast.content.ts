@@ -46,6 +46,6 @@ export default defineContentScript({
       messenger.onMessage('destroyToast', ({ data }) => destroyToast(data))
     })
 
-    console.log('registered toast content script')
+    console.debug('registered toast content script')
   },
 })
