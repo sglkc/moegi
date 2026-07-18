@@ -22,39 +22,57 @@ e2e/.chrome-user-data/
 
 It is **gitignored**. Use it only for Moegi e2e so Spotify login/cookies stay out of your daily browser profile.
 
-### 1. Create / open the profile (you log in)
+### 1. Log in so credentials actually stick
 
-**Important:** log in with the script below — not your normal Chrome window.  
-If the top-right still shows **Log in** / **Sign up**, the e2e runner will abort.
+A real Spotify session needs the **`sp_dc`** cookie. This profile currently had only analytics cookies — login never persisted.
+
+Common causes:
+
+| Cause | What happens |
+|-------|----------------|
+| Profile already open | Second Chrome uses a **temporary** profile; cookies vanish on close |
+| Logging into daily Chrome | Wrong user-data-dir |
+| Always using CDP/automation flags | Session less likely to stick |
+
+**Clean login path (recommended):**
 
 ```sh
-# from repo root — close other windows using this profile first
-pnpm e2e:chrome
+# 1) Close every Moegi e2e / project-profile Chrome window
+pnpm e2e:reset-profile   # optional wipe if stuck
+pnpm e2e:chrome          # MoegiE2E window, NO remote debugging
 ```
 
-Or:
+In the **MoegiE2E** window (not your normal Chrome):
+
+1. Complete **Log in** until your **avatar** is top-right (not Log in / Sign up).  
+2. Quit Chrome fully (**Exit** / Ctrl+Shift+Q), not just close a tab.  
+3. Confirm:
 
 ```sh
-./e2e/scripts/launch-chrome-profile.sh
+pnpm e2e:verify-login    # must PASS (sp_dc / sp_key present)
 ```
 
-What it does:
+Only after that is green, run e2e.
 
-- Uses `/usr/bin/google-chrome-stable`
-- `--user-data-dir=$REPO/e2e/.chrome-user-data`
-- Opens `https://open.spotify.com`
-- Remote debugging on **9222**
-
-**You:** sign into Spotify in **that** window until your avatar replaces Log in. Close Chrome completely when done (so Playwright can open the same profile).
 ### 2. Run automated live e2e
+
+**Option A — attach (best after login):**
+
+```sh
+pnpm build
+pnpm e2e:chrome:e2e    # profile + Moegi extension + CDP :9222
+# leave that Chrome open, then in another terminal:
+pnpm test:e2e          # attaches over CDP at 1280×720
+```
+
+**Option B — Playwright launches the profile** (if nothing is on :9222):
 
 ```sh
 pnpm test:e2e
 ```
 
-This builds Moegi, launches the project Chrome profile at **1280×720**, opens the kobasolo album, plays a track, opens lyrics, and asserts Moegi slots (`.original-lyric`, `.romanized-lyric`, `.translated-lyric`).
-
-Screenshots land in `e2e/artifacts/` (gitignored).
+Asserts Moegi slots (`.original-lyric`, `.romanized-lyric`, `.translated-lyric`) on the kobasolo album.  
+Screenshots: `e2e/artifacts/` (gitignored).
 
 ### 3. Optional: manual Chrome with extension
 

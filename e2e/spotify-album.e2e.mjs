@@ -189,28 +189,44 @@ async function main() {
     return
   }
 
-  const context = await chromium.launchPersistentContext(USER_DATA, {
-    executablePath: CHROME_BIN,
-    headless: !HEADED,
-    viewport: VIEWPORT,
-    screen: VIEWPORT,
-    ignoreDefaultArgs: ['--enable-automation'],
-    args: [
-      `--disable-extensions-except=${EXT_DIR}`,
-      `--load-extension=${EXT_DIR}`,
-      '--no-first-run',
-      '--no-default-browser-check',
-      '--autoplay-policy=no-user-gesture-required',
-      `--window-size=${VIEWPORT.width},${VIEWPORT.height}`,
-      '--window-position=0,0',
-    ],
-  })
+  // Prefer connecting to an already-running Moegi profile (pnpm e2e:chrome:e2e)
+  // so Playwright does not re-spawn Chrome with automation-ish flags that can
+  // drop Spotify's sp_dc session.
+  const cdp = process.env.MOEGI_CDP_URL ?? `http://127.0.0.1:${process.env.MOEGI_CDP_PORT ?? '9222'}`
+  let context
+  let ownsBrowser = false
 
-  const page = context.pages()[0] ?? await context.newPage()
-  for (const p of context.pages()) {
-    if (p !== page) await p.close().catch(() => {})
+  try {
+    context = await chromium.connectOverCDP(cdp)
+    ok(`attached over CDP ${cdp}`)
+  } catch {
+    log(`CDP attach failed (${cdp}); launching persistent profile…`)
+    context = await chromium.launchPersistentContext(USER_DATA, {
+      executablePath: CHROME_BIN,
+      headless: !HEADED,
+      viewport: VIEWPORT,
+      screen: VIEWPORT,
+      // Do not wipe cookies; reduce automation fingerprint
+      ignoreDefaultArgs: ['--enable-automation', '--no-sandbox'],
+      args: [
+        `--disable-extensions-except=${EXT_DIR}`,
+        `--load-extension=${EXT_DIR}`,
+        '--no-first-run',
+        '--no-default-browser-check',
+        '--disable-blink-features=AutomationControlled',
+        '--autoplay-policy=no-user-gesture-required',
+        `--window-size=${VIEWPORT.width},${VIEWPORT.height}`,
+        '--window-position=0,0',
+      ],
+    })
+    ownsBrowser = true
   }
-  await page.setViewportSize(VIEWPORT)
+
+  // CDP returns a default browser context; pick an open page or create one
+  const browser = context.browser?.() ?? context
+  const ctx = context.contexts?.()[0] ?? context
+  const page = ctx.pages()[0] ?? await ctx.newPage()
+  await page.setViewportSize(VIEWPORT).catch(() => {})
 
   try {
     await page.goto(ALBUM_URL, { waitUntil: 'domcontentloaded', timeout: 90_000 })
@@ -258,8 +274,10 @@ async function main() {
     } catch {
       fail('Moegi .original-lyric never appeared — extension may not be loaded')
       await shot(page, 'no-moegi.png')
-      log(`serviceWorkers: ${context.serviceWorkers().map((w) => w.url()).join(', ') || '(none)'}`)
-      log(`backgroundPages: ${context.backgroundPages().map((p) => p.url()).join(', ') || '(none)'}`)
+      const sw = typeof ctx.serviceWorkers === 'function' ? ctx.serviceWorkers() : []
+      const bg = typeof ctx.backgroundPages === 'function' ? ctx.backgroundPages() : []
+      log(`serviceWorkers: ${sw.map((w) => w.url()).join(', ') || '(none)'}`)
+      log(`backgroundPages: ${bg.map((p) => p.url()).join(', ') || '(none)'}`)
       return
     }
 
@@ -287,7 +305,12 @@ async function main() {
     fail(err?.stack || String(err))
     await shot(page, 'spotify-error.png')
   } finally {
-    await context.close().catch(() => {})
+    if (ownsBrowser) {
+      await context.close().catch(() => {})
+    } else {
+      // Leave the user's CDP Chrome running; only close pages we opened if needed
+      log('left CDP browser running (started outside Playwright)')
+    }
   }
 }
 
