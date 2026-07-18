@@ -4,14 +4,15 @@ import { defineConfig } from 'wxt'
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   manifest: {
-    permissions: ['activeTab', 'declarativeContent', 'storage'],
-    host_permissions: ['https://translate.google.com/*'],
-    // TODO: better security mybe
-    externally_connectable: {
-      ids: ['*'],
-      matches: ['https://open.spotify.com/*'],
-      accepts_tls_channel_id: false,
-    },
+    // activeTab: popup can read the active tab URL when opened
+    // storage: options persistence
+    permissions: ['activeTab', 'storage'],
+    host_permissions: [
+      // Google Translate API (background)
+      'https://translate.google.com/*',
+      // Query/message open Spotify tabs when options change
+      'https://open.spotify.com/*',
+    ],
   },
   modules: ['@wxt-dev/unocss'],
   imports: false,

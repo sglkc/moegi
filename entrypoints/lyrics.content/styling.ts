@@ -5,6 +5,7 @@ import {
   ROMANIZED_LYRIC as ROMANIZED,
   LYRICS_CONTAINER as CONTAINER
 } from '@/utils/constants'
+import { safeCssColor, safeCssNumber, safeTextAlign } from '@/utils/css-safe'
 import { MoegiOptions } from '@/utils/options'
 
 export default function lyricsStyling(data: MoegiOptions): void {
@@ -20,7 +21,20 @@ export default function lyricsStyling(data: MoegiOptions): void {
   const colorsEnabled = data.colors.enabled
 
   const hideOriginal =
-    (data.translation.enabled || data.romanization.enabled) && data.fonts.hideOriginal;
+    (data.translation.enabled || data.romanization.enabled) && data.fonts.hideOriginal
+
+  const fontSize = safeCssNumber(data.fonts.size, 1)
+  const fontSpacing = safeCssNumber(data.fonts.spacing, 0)
+  const textAlign = safeTextAlign(data.fonts.align)
+  const romanizationSize = safeCssNumber(data.romanization.size, 1)
+  const translationSize = safeCssNumber(data.translation.size, 1)
+
+  const colorPassed = safeCssColor(data.colors.passed)
+  const colorBackground = safeCssColor(data.colors.background)
+  const colorActive = safeCssColor(data.colors.active)
+  const colorInactive = safeCssColor(data.colors.inactive)
+  const colorRomanization = safeCssColor(data.colors.romanization)
+  const colorTranslation = safeCssColor(data.colors.translation)
 
   /**
    * TODO: passed lyric variable no longer used in latest Spotify
@@ -29,9 +43,9 @@ export default function lyricsStyling(data: MoegiOptions): void {
   const css = `
     ${!fontsEnabled ? '/*' : ''}
     ${LYRIC} {
-      margin-top: ${data.fonts.spacing}px;
-      font-size: ${data.fonts.size}em;
-      text-align: ${data.fonts.align};
+      margin-top: ${fontSpacing}px;
+      font-size: ${fontSize}em;
+      text-align: ${textAlign};
       line-height: 1.5;
     }
 
@@ -41,11 +55,11 @@ export default function lyricsStyling(data: MoegiOptions): void {
     ${!fontsEnabled ? '*/' : ''}
 
     .${ROMANIZED} {
-      font-size: ${data.romanization.size}em;
+      font-size: ${romanizationSize}em;
     }
 
     .${TRANSLATED} {
-      font-size: ${data.translation.size}em;
+      font-size: ${translationSize}em;
     }
 
     ${!colorsEnabled ? '/*' : ''}
@@ -58,21 +72,21 @@ export default function lyricsStyling(data: MoegiOptions): void {
     }
 
     ${LYRIC}:has(~ .active-lyric) {
-      --lyrics-color-passed: ${data.colors.passed || 'inherit'};
+      --lyrics-color-passed: ${colorPassed};
     }
 
     ${CONTAINER} > div:nth-child(1) {
-      --lyrics-color-background: ${data.colors.background || 'inherit'};
+      --lyrics-color-background: ${colorBackground};
     }
 
     ${CONTAINER} > div:nth-child(2) {
-      --lyrics-color-active: ${data.colors.active || 'inherit'};
-      --lyrics-color-inactive: ${data.colors.inactive || 'inherit'};
-      --lyrics-color-romanization: ${data.colors.romanization || 'inherit'};
-      --lyrics-color-translation: ${data.colors.translation || 'inherit'};
+      --lyrics-color-active: ${colorActive};
+      --lyrics-color-inactive: ${colorInactive};
+      --lyrics-color-romanization: ${colorRomanization};
+      --lyrics-color-translation: ${colorTranslation};
     }
     ${!colorsEnabled ? '*/' : ''}
-  `.trim();
+  `.trim()
 
-  style.innerHTML = css
+  style.textContent = css
 }
