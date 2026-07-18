@@ -103,14 +103,15 @@ if [[ "$with_cdp" -eq 1 ]]; then
   echo "CDP endpoint  : http://127.0.0.1:$CDP_PORT"
   echo ""
   echo ">>> Log into Spotify in this MoegiE2E window (avatar top-right)."
+  echo ">>> Load unpacked once if needed: chrome://extensions → .output/chrome-mv3"
   echo ">>> Leave this window OPEN, then in another terminal:"
-  echo "      pnpm e2e:verify-login"
-  echo "      pnpm test:e2e"
+  echo "      pnpm e2e:verify-login   # CDP check (not disk cookies)"
+  echo "      pnpm test:e2e           # smoke + option toggles"
   echo ">>> Do NOT Exit Chrome before test:e2e (session cookies die on exit)."
 else
   echo "CDP           : off"
   echo ""
-  echo "Session cookies often vanish after Exit. Prefer: pnpm e2e:chrome:e2e"
+  echo "Session cookies often vanish after Exit. Prefer: pnpm e2e:chrome"
 fi
 echo ""
 

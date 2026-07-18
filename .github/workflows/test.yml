@@ -1,3 +1,4 @@
+# Offline CI only. Live Spotify e2e (pnpm test:e2e) is manual — needs login + CDP Chrome.
 name: Test
 
 on:
@@ -5,39 +6,47 @@ on:
     paths-ignore:
       - 'docs/**'
       - 'README.md'
+      - 'e2e/**'
+      - 'LICENSE'
   pull_request:
     paths-ignore:
       - 'docs/**'
       - 'README.md'
+      - 'e2e/**'
+      - 'LICENSE'
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  ci:
-    name: Test
+  offline:
+    name: Offline (compile + test + build)
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 11.11.0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.11.0
 
-    - name: Setup Node.js 22
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.x'
-        cache: 'pnpm'
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'pnpm'
 
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: TypeScript compilation check
-      run: pnpm run compile
+      - name: TypeScript check
+        run: pnpm run compile
 
-    - name: Unit tests
-      run: pnpm run test
+      - name: Unit & feature tests (Vitest, no browser)
+        run: pnpm run test
 
-    - name: Build project (test build)
-      run: pnpm run build
+      - name: Production build
+        run: pnpm run build

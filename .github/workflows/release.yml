@@ -46,6 +46,9 @@ jobs:
     - name: TypeScript compilation check
       run: pnpm run compile
 
+    - name: Unit & feature tests (Vitest, no browser / no live e2e)
+      run: pnpm run test
+
     - name: Determine release info
       id: release-info
       run: |

@@ -32,10 +32,11 @@ It is **gitignored**. Use it only for Moegi e2e so Spotify login/cookies stay ou
 Spotify’s `sp_dc` / `sp_key` are almost always **session cookies** (`persistent=0`).  
 Chrome **deletes them when the browser process exits**. So:
 
-- `pnpm e2e:verify-login` while Chrome is still open → **PASS**
-- Quit Chrome, then `pnpm test:e2e` (relaunches) → **logged out again**
+- Log in with `pnpm e2e:chrome` running → leave the window open  
+- `pnpm e2e:verify-login` attaches over **CDP** (user widget + live cookies) → **PASS**  
+- Quit Chrome, then re-run verify / e2e → **logged out again**
 
-That is expected, not a broken profile path.
+That is expected. Do not trust the on-disk Cookies SQLite alone (it often misses session `sp_dc`).
 
 ### 2. Working flow (keep Chrome open)
 
@@ -58,11 +59,13 @@ In **that** window only:
 4. Other terminal:
 
 ```sh
-pnpm e2e:verify-login
-pnpm test:e2e            # CDP attach @ 1280×720 — smoke + option toggles
+pnpm e2e:verify-login    # CDP: widget + cookies + Moegi popup
+pnpm test:e2e            # full live suite: smoke + option toggles
 ```
 
-Asserts Moegi slots, fixed lyric anchor, then romanization / fonts / translation toggles (restored off at end). Screenshots: `e2e/artifacts/`.
+`test:e2e` asserts Moegi slots, fixed lyric anchor, then romanization / fonts / translation toggles (restored off at end). Screenshots: `e2e/artifacts/`.
+
+**CI** runs only offline Vitest + compile + build (`.github/workflows/test.yml`). Live Spotify e2e is manual.
 
 ### 3. Optional: manual Chrome with extension
 
@@ -71,7 +74,7 @@ pnpm build
 pnpm e2e:chrome:ext
 ```
 
-Loads `.output/chrome-mv3` as an unpacked extension in the same profile.
+Same profile; still load unpacked on branded Chrome if Moegi is missing.
 
 ### 4. Attach automation later (CDP)
 
