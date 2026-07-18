@@ -17,41 +17,38 @@
   },
   "dependencies": {
     "@fontsource/quicksand": "^5.2.10",
-    "@preact/signals": "^1.3.2",
+    "@preact/signals": "^2.9.4",
     "@romanize/korean": "^0.1.3",
     "@sglkc/kuromoji": "^1.1.0",
     "@sglkc/kuroshiro": "^1.0.1",
     "@sglkc/kuroshiro-analyzer-kuromoji": "^1.0.1",
-    "@unocss/reset": "^0.54.3",
-    "@webext-core/messaging": "^2.3.0",
+    "@unocss/reset": "^66.7.5",
+    "@webext-core/messaging": "^3.0.2",
     "any-ascii": "^0.3.3",
     "cyrillic-to-translit-js": "^3.2.1",
     "deep-object-diff": "^1.1.9",
     "deepsignal": "^1.6.0",
-    "google-translate-api-x": "^10.7.2",
-    "pinyin-pro": "^3.27.0",
-    "preact": "^10.27.2",
-    "react-colorful": "^5.6.1",
+    "google-translate-api-x": "^10.7.3",
+    "pinyin-pro": "^3.28.1",
+    "preact": "^10.29.7",
+    "react-colorful": "^5.8.0",
     "toastify-js": "^1.12.0",
     "unicode-properties": "^1.4.1"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.26",
-    "@preact/preset-vite": "^2.10.2",
-    "@types/chrome": "^0.0.242",
-    "@types/node": "^22.19.1",
+    "@preact/preset-vite": "^2.10.5",
+    "@types/chrome": "^0.2.2",
+    "@types/node": "^22.19.21",
     "@types/toastify-js": "^1.12.4",
     "@types/unicode-properties": "^1.3.2",
     "@wxt-dev/unocss": "^1.0.1",
-    "typescript": "^5.9.3",
-    "unocss": "^66.5.6",
-    "wxt": "^0.20.11"
+    "typescript": "~5.9.3",
+    "unocss": "^66.7.5",
+    "wxt": "^0.20.27"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "dtrace-provider",
-      "esbuild",
-      "spawn-sync"
-    ]
+  "packageManager": "pnpm@11.11.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
   }
 }

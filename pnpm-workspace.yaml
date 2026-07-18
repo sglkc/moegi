@@ -1,0 +1,6 @@
+# Single-package project; settings live here in pnpm 11+
+# (package.json "pnpm" field is no longer read).
+allowBuilds:
+  esbuild: true
+  spawn-sync: true
+  dtrace-provider: true
