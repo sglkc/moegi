@@ -34,4 +34,5 @@ dist
 e2e/.chrome-user-data/
 # Screenshots / dumps from live Spotify runs
 e2e/artifacts/
+.playwright-mcp/
 
