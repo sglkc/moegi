@@ -47,7 +47,8 @@ pnpm e2e:chrome          # MoegiE2E @ 1280x720 + CDP :9222
 In **that** window only:
 
 1. Log in until **avatar** is top-right.  
-2. **Load Moegi once** (required on Chrome 137+ branded builds — CLI `--load-extension` is blocked):
+2. **Load Moegi once** (required on Chrome 137+ branded builds — CLI `--load-extension` is blocked).  
+   **Do not** launch with `--disable-extensions-except` (our `e2e:chrome` script no longer does): that flag + a blocked CLI load blanks **all** extensions on `chrome://extensions`.
    - Open `chrome://extensions`
    - Enable **Developer mode**
    - **Load unpacked** → select  
@@ -58,10 +59,10 @@ In **that** window only:
 
 ```sh
 pnpm e2e:verify-login
-pnpm test:e2e            # CDP attach @ 1280×720
+pnpm test:e2e            # CDP attach @ 1280×720 — smoke + option toggles
 ```
 
-Asserts Moegi slots on the kobasolo album. Screenshots: `e2e/artifacts/`.
+Asserts Moegi slots, fixed lyric anchor, then romanization / fonts / translation toggles (restored off at end). Screenshots: `e2e/artifacts/`.
 
 ### 3. Optional: manual Chrome with extension
 

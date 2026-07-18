@@ -1,11 +1,10 @@
 /**
  * Live Spotify e2e (CDP attach only — keep MoegiE2E Chrome open & logged in).
  *
- * Default path does NOT enable features for you — options stay as the user set them
- * (product defaults are all off). Smoke-checks Moegi injection + fixed track lyric.
- *
- * Optional explicit toggles (simulates user flipping switches, then restores off):
- *   MOEGI_E2E_OPTIONS=1 pnpm test:e2e
+ * Full path:
+ *   1. Smoke: Moegi slots + fixed track lyric (defaults leave features off)
+ *   2. Options: enable romanization / fonts / translation like a user, assert,
+ *      then restore product defaults (all off)
  *
  * Usage:
  *   pnpm e2e:chrome   # leave open after login + Load unpacked Moegi
@@ -36,8 +35,6 @@ const EXT_DIR = path.join(ROOT, '.output', 'chrome-mv3')
 const CDP = process.env.MOEGI_CDP_URL
   ?? `http://127.0.0.1:${process.env.MOEGI_CDP_PORT ?? '9222'}`
 const EXT_ID = process.env.MOEGI_EXT_ID ?? DEFAULT_EXTENSION_ID
-/** When set, e2e explicitly toggles romanization/fonts/translation then restores defaults (all off). */
-const TEST_OPTIONS = process.env.MOEGI_E2E_OPTIONS === '1'
 
 fs.mkdirSync(ARTIFACTS, { recursive: true })
 
@@ -339,7 +336,7 @@ async function main() {
     }
     ok(`anchor original @ lyrics-line[${anchorHit.index}]: ${anchorHit.original.slice(0, 40)}`)
 
-    // With product defaults (all features off), romanized/translated stay empty unless user enabled them
+    // Before toggles: with product defaults, romanized/translated are usually empty
     const emptyExtras = await page.evaluate(() => {
       const rows = [...document.querySelectorAll('[data-testid="lyrics-line"]')].slice(0, 10)
       let romanNonEmpty = 0
@@ -350,74 +347,72 @@ async function main() {
       }
       return { romanNonEmpty, transNonEmpty }
     })
-    ok(`user options: romanized non-empty in sample=${emptyExtras.romanNonEmpty}, translated=${emptyExtras.transNonEmpty}`)
+    ok(`pre-toggle sample: romanized non-empty=${emptyExtras.romanNonEmpty}, translated=${emptyExtras.transNonEmpty}`)
 
-    if (TEST_OPTIONS) {
-      // Explicit user-like toggles (not product defaults); restore all-off at end
-      await setMoegiOptions(browser, ctx, { romanization: { enabled: true } })
-      await reinitLyrics(page)
+    // Explicit user-like toggles (not product defaults); restore all-off at end
+    await setMoegiOptions(browser, ctx, { romanization: { enabled: true } })
+    await reinitLyrics(page)
 
-      let romanized = null
-      const romanDeadline = Date.now() + 90_000
-      while (Date.now() < romanDeadline) {
-        const any = await page.evaluate(() => {
-          for (const row of document.querySelectorAll('[data-testid="lyrics-line"]')) {
-            const o = row.querySelector('.original-lyric')?.textContent || ''
-            const r = row.querySelector('.romanized-lyric')?.textContent
-              || row.querySelector('.romanized-lyric')?.innerHTML || ''
-            if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(o) && r.trim().length > 2) {
-              return { original: o.trim(), romanized: r.trim() }
-            }
-          }
-          return null
-        })
-        if (any) {
-          romanized = any
-          break
-        }
-        await page.waitForTimeout(1500)
-      }
-      if (!romanized) {
-        fail('romanization never filled after explicit enable')
-        await shot(page, 'no-romanization.png')
-        return
-      }
-      ok(`romanization (user toggle): "${romanized.romanized.slice(0, 60)}"`)
-
-      await setMoegiOptions(browser, ctx, {
-        fonts: { enabled: true, size: 1.2, align: 'center' },
-      })
-      await reinitLyrics(page)
-      const styleText = await page.locator('#moegi-style').textContent()
-      if (!styleText?.includes('font-size')) {
-        fail('#moegi-style missing font-size after fonts.enabled')
-        return
-      }
-      ok('fonts option reflected in #moegi-style')
-
-      await setMoegiOptions(browser, ctx, {
-        translation: { enabled: true, target: 'en' },
-      })
-      await reinitLyrics(page)
-      await page.waitForTimeout(8000)
-      const translated = await page.evaluate(() => {
+    let romanized = null
+    const romanDeadline = Date.now() + 90_000
+    while (Date.now() < romanDeadline) {
+      const any = await page.evaluate(() => {
         for (const row of document.querySelectorAll('[data-testid="lyrics-line"]')) {
-          const t = row.querySelector('.translated-lyric')?.textContent?.trim()
-          if (t) return t
+          const o = row.querySelector('.original-lyric')?.textContent || ''
+          const r = row.querySelector('.romanized-lyric')?.textContent
+            || row.querySelector('.romanized-lyric')?.innerHTML || ''
+          if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(o) && r.trim().length > 2) {
+            return { original: o.trim(), romanized: r.trim() }
+          }
         }
-        return ''
+        return null
       })
-      if (translated) ok(`translation (user toggle): ${translated.slice(0, 60)}`)
-      else log('WARN: translation empty — non-fatal')
-
-      // Restore product defaults (all features off) so we don't leave toggles on
-      await setMoegiOptions(browser, ctx, {
-        romanization: { enabled: false },
-        translation: { enabled: false },
-        fonts: { enabled: false, size: 1, align: 'left' },
-      })
-      ok('restored options to defaults (features off)')
+      if (any) {
+        romanized = any
+        break
+      }
+      await page.waitForTimeout(1500)
     }
+    if (!romanized) {
+      fail('romanization never filled after explicit enable')
+      await shot(page, 'no-romanization.png')
+      return
+    }
+    ok(`romanization (user toggle): "${romanized.romanized.slice(0, 60)}"`)
+
+    await setMoegiOptions(browser, ctx, {
+      fonts: { enabled: true, size: 1.2, align: 'center' },
+    })
+    await reinitLyrics(page)
+    const styleText = await page.locator('#moegi-style').textContent()
+    if (!styleText?.includes('font-size')) {
+      fail('#moegi-style missing font-size after fonts.enabled')
+      return
+    }
+    ok('fonts option reflected in #moegi-style')
+
+    await setMoegiOptions(browser, ctx, {
+      translation: { enabled: true, target: 'en' },
+    })
+    await reinitLyrics(page)
+    await page.waitForTimeout(8000)
+    const translated = await page.evaluate(() => {
+      for (const row of document.querySelectorAll('[data-testid="lyrics-line"]')) {
+        const t = row.querySelector('.translated-lyric')?.textContent?.trim()
+        if (t) return t
+      }
+      return ''
+    })
+    if (translated) ok(`translation (user toggle): ${translated.slice(0, 60)}`)
+    else log('WARN: translation empty — non-fatal')
+
+    // Restore product defaults (all features off) so we don't leave toggles on
+    await setMoegiOptions(browser, ctx, {
+      romanization: { enabled: false },
+      translation: { enabled: false },
+      fonts: { enabled: false, size: 1, align: 'left' },
+    })
+    ok('restored options to defaults (features off)')
 
     // --- fullscreen (optional UI control) ---
     const fsBtn = page.locator('[data-testid="fullscreen-mode-button"], button[aria-label*="Full screen"]')
@@ -431,7 +426,7 @@ async function main() {
     ok(`viewport ${JSON.stringify(page.viewportSize())}`)
 
     await shot(page, 'spotify-e2e-pass.png')
-    log(`\nPASS: Spotify e2e smoke (slots + anchor${TEST_OPTIONS ? ' + option toggles' : ''})`)
+    log('\nPASS: Spotify e2e (slots + anchor + option toggles)')
   } catch (err) {
     fail(err?.stack || String(err))
     await shot(page, 'spotify-e2e-error.png')

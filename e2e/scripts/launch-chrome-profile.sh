@@ -77,15 +77,15 @@ if [[ "$with_ext" -eq 1 ]]; then
     echo "Extension missing: $EXT_DIR — run pnpm build" >&2
     exit 1
   fi
-  # Branded Chrome 137+ removed --load-extension (and Chrome 142+ removed the
-  # DisableLoadExtensionCommandLineSwitch workaround). Load Moegi once via
-  # chrome://extensions → Developer mode → Load unpacked → EXT_DIR
-  # (persists in this profile). We still pass the flags for Chromium builds.
-  ARGS+=(--disable-features=DisableLoadExtensionCommandLineSwitch)
-  ARGS+=(--disable-extensions-except="$EXT_DIR")
-  ARGS+=(--load-extension="$EXT_DIR")
-  echo "NOTE: If Moegi does not appear in chrome://extensions, Load unpacked from:"
+  # Branded Chrome 137+ ignores --load-extension. Worse: pairing it with
+  # --disable-extensions-except hides *every* extension (including Load
+  # unpacked) when CLI load fails — empty chrome://extensions.
+  # Do not pass either flag on branded Chrome. Load once via:
+  #   chrome://extensions → Developer mode → Load unpacked → EXT_DIR
+  # That registration persists in this profile across restarts.
+  echo "NOTE: Moegi must be Load unpacked (persists in this profile):"
   echo "      $EXT_DIR"
+  echo "      Do not use --disable-extensions-except (it blanks the list)."
 fi
 
 if [[ "$with_cdp" -eq 1 ]]; then
