@@ -9,7 +9,10 @@ import {
 import lyricsInit from './init'
 import { LYRIC_SELECTOR } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
+import { DeepKeys } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
+import { MoegiOptions } from '@/utils/options'
+import { diffOptionChanges, FULL_OPTION_CHANGE_KEYS } from '@/utils/options-diff'
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
@@ -22,8 +25,7 @@ export default defineContentScript({
     // Store fullscreen lyrics state
     let lastFullscreen: boolean | null = null
 
-    // Since there's only one listener allowed, re-register options
-    Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
+    function applyToPage(options: MoegiOptions, changes: DeepKeys<MoegiOptions>[]): void {
       if (!rootElement) return
       const { container } = findLyricsContainer(rootElement)
       if (!container) return
@@ -31,8 +33,27 @@ export default defineContentScript({
       const lyrics = container.querySelectorAll<HTMLDivElement>(
         `${LYRIC_SELECTOR}:has( > :not(:empty))`,
       )
-      console.debug('Applying changes', changes, options)
-      applyOptionChanges(changes, options, lyrics)
+      const keys = changes.length > 0 ? changes : FULL_OPTION_CHANGE_KEYS
+      console.debug('Applying changes', keys, options)
+      applyOptionChanges(keys, options, lyrics)
+    }
+
+    // Primary path: background forwards popup changes
+    Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
+      applyToPage(options, changes)
+    })
+
+    // Backup path: storage write (survives SW message drops; slightly lagged)
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== 'sync') return
+      const entry = changes.moegiOptions
+      if (!entry || entry.newValue == null) return
+
+      const next = entry.newValue as MoegiOptions
+      const prev = entry.oldValue as MoegiOptions | undefined
+      const keys = diffOptionChanges(prev, next)
+      if (keys.length === 0) return
+      applyToPage(next, keys)
     })
 
     // Debounced version of initLyrics in case of multiple mutation

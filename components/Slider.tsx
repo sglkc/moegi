@@ -10,7 +10,7 @@ export interface SliderProps extends InputHTMLAttributes {
 
 export default function Slider({ label, signal, prefix, ...props }: SliderProps) {
   const id = useId()
-  const onChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const onInput = (e: ChangeEvent<HTMLInputElement>) =>
     signal && (signal.value = Number(e.currentTarget.value))
 
   return (
@@ -25,7 +25,9 @@ export default function Slider({ label, signal, prefix, ...props }: SliderProps)
         ].join(' ')}
         type="range"
         value={signal?.value}
-        onChange={onChange}
+        // onInput = live while dragging; onChange alone only fires on release in Chromium
+        onInput={onInput}
+        onChange={onInput}
         {...props}
       />
       <span class="col-span-2 text-right">
