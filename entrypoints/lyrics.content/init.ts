@@ -70,8 +70,7 @@ export default async function lyricsInit(
 
   deps.observe(container)
   deps.styling(storedOptions)
-  // Missing field on older stored profiles → default on (product default)
-  deps.autoScroll(container, storedOptions.fonts.autoScroll ?? true)
+  deps.autoScroll(container, storedOptions.fonts.autoScroll)
   void deps.romanization(lyrics, storedOptions.romanization)
   void deps.translation(lyrics, storedOptions.translation)
 }

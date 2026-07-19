@@ -46,7 +46,7 @@ export function applyOptionChanges(
   if (has('fonts', 'fonts.autoScroll')) {
     const first = lyricList[0]
     const container = first?.parentElement
-    if (container) deps.autoScroll(container, options.fonts.autoScroll ?? true)
+    if (container) deps.autoScroll(container, options.fonts.autoScroll)
   }
 
   if (has(
