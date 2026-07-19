@@ -12,10 +12,17 @@ export const optionsStorage = storage.defineItem('sync:moegiOptions', {
     2: (options) => {
       delete options.romanization?.language
       return options
-    }
+    },
+    // 2.2+: fonts.autoScroll (default on). Older profiles omit the key.
+    3: (options) => {
+      if (options?.fonts && options.fonts.autoScroll === undefined) {
+        options.fonts.autoScroll = true
+      }
+      return options
+    },
   },
   fallback: moegiDefaultOptions,
-  version: 2,
+  version: 3,
 })
 
 // Make options reactive and save to storage on every change

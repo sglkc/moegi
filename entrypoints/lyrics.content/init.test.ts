@@ -134,4 +134,16 @@ describe('lyricsInit (lyrics open orchestration)', () => {
 
     expect(autoScroll).toHaveBeenCalledWith(container, false)
   })
+
+  it('defaults autoScroll to true when the stored field is missing', async () => {
+    const container = mountContainer(['line'])
+    const options = structuredClone(moegiDefaultOptions)
+    // @ts-expect-error — simulate pre-2.2 stored profile without the key
+    delete options.fonts.autoScroll
+    getOptions.mockResolvedValue(options)
+
+    await lyricsInit(container, deps())
+
+    expect(autoScroll).toHaveBeenCalledWith(container, true)
+  })
 })

@@ -7,7 +7,7 @@ import {
   shouldReinitLyrics,
 } from './find-lyrics-container'
 import lyricsInit from './init'
-import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER } from '@/utils/constants'
+import { LYRIC_SELECTOR } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { Background } from '@/utils/messaging'
 
@@ -24,11 +24,9 @@ export default defineContentScript({
 
     // Since there's only one listener allowed, re-register options
     Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
-      let container = rootElement.querySelector<HTMLDivElement>(
-        `${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`,
-      )
-      if (!container)
-        container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)!
+      if (!rootElement) return
+      const { container } = findLyricsContainer(rootElement)
+      if (!container) return
 
       const lyrics = container.querySelectorAll<HTMLDivElement>(
         `${LYRIC_SELECTOR}:has( > :not(:empty))`,
