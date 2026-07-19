@@ -24,12 +24,13 @@
 
 ## What's New in Version 2?
 
-Most of the changes affects developer experience instead of users, you may not notice anything different from version 1 except some layout or text changes. My main focus is to migrate the framework from CRXJS to WXT for more streamlined development.
+Most of the early 2.x work affected developer experience instead of users (CRXJS → WXT). **2.2.0** is a stability / testability release: offline Vitest coverage, real Spotify e2e harness, safer CSS/caches/options messaging, and CI for non-browser tests. Product defaults stay off until you flip them.
 
 There are some things to do:
 - Rework to WXT 💚
 - Auto-release on new tags (ci/cd) 💚
-- Reset defaults button
+- Offline tests + live e2e harness 💚
+- Reset defaults button 💚
 - DeepL translation 💔 (https://github.com/sglkc/moegi/pull/20)
 - Reimplement fullscreen handling 💚
 - Implement active lyric listener
