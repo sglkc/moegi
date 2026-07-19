@@ -6,6 +6,8 @@ export interface FontOptions {
   spacing: number
   align: 'left' | 'center' | 'right'
   hideOriginal: boolean
+  /** Keep Spotify's active lyric line in view (helps when Moegi slots increase line height). */
+  autoScroll: boolean
 }
 
 export interface ColorOptions {
@@ -59,6 +61,7 @@ export const moegiDefaultOptions: MoegiOptions = {
     spacing: 5,
     align: 'left',
     hideOriginal: false,
+    autoScroll: true,
   },
   colors: {
     enabled: false,

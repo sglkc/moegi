@@ -40,6 +40,11 @@ export default function FontOption({ signal }: TextOptionsProps) {
         signal={signal.$hideOriginal}
         mirror
       />
+      <Checkbox
+        label="Auto-scroll Active Lyric"
+        signal={signal.$autoScroll}
+        mirror
+      />
     </Container>
   )
 }

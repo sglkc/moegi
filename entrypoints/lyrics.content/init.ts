@@ -1,3 +1,4 @@
+import { configureAutoScroll } from './auto-scroll'
 import { clearLyricsCache } from './cache'
 import lyricsObserver from './observer'
 import { processLyricElement } from './process-lyric'
@@ -19,6 +20,7 @@ export interface LyricsInitDeps {
   getOptions: () => Promise<MoegiOptions>
   createToast: (data: { text: string, duration?: number }) => Promise<number>
   destroyToast: (id: number) => Promise<boolean>
+  autoScroll: (container: HTMLElement, enabled: boolean) => void
 }
 
 const defaultDeps = (): LyricsInitDeps => ({
@@ -31,6 +33,7 @@ const defaultDeps = (): LyricsInitDeps => ({
   getOptions: () => optionsStorage.getValue(),
   createToast: (data) => Content.sendMessage('createToast', data),
   destroyToast: (id) => Content.sendMessage('destroyToast', id),
+  autoScroll: configureAutoScroll,
 })
 
 /**
@@ -65,9 +68,9 @@ export default async function lyricsInit(
 
   const storedOptions = await deps.getOptions()
 
-  // TODO: add auto scroll toggle
   deps.observe(container)
   deps.styling(storedOptions)
+  deps.autoScroll(container, storedOptions.fonts.autoScroll)
   void deps.romanization(lyrics, storedOptions.romanization)
   void deps.translation(lyrics, storedOptions.translation)
 }

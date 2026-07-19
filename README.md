@@ -33,7 +33,7 @@ There are some things to do:
 - Reset defaults button 💚
 - DeepL translation 💔 (https://github.com/sglkc/moegi/pull/20)
 - Reimplement fullscreen handling 💚
-- Implement active lyric listener
+- Active lyric auto-scroll (toggle under Font Style) 💚
 - Picture-in-picture lyrics
 - Update README, video, and screenshots
 

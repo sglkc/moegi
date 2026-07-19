@@ -1,8 +1,13 @@
 import { defineContentScript } from '#imports'
 import { applyOptionChanges } from './apply-options'
 import { clearLyricsCache } from './cache'
+import {
+  findLyricsContainer,
+  mutationIndicatesSongChange,
+  shouldReinitLyrics,
+} from './find-lyrics-container'
 import lyricsInit from './init'
-import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER, SONG_TITLE } from '@/utils/constants'
+import { FULLSCREEN_CONTAINER, LYRIC_SELECTOR, LYRICS_CONTAINER } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
 import { Background } from '@/utils/messaging'
 
@@ -15,16 +20,19 @@ export default defineContentScript({
     let rootElement: HTMLElement
 
     // Store fullscreen lyrics state
-    let lastFullscreen: boolean | null
+    let lastFullscreen: boolean | null = null
 
     // Since there's only one listener allowed, re-register options
-    // TODO: duplicate in `init.ts` ??
     Background.onMessage('applyOptions', ({ data: { options, changes } }) => {
-      let container = rootElement.querySelector<HTMLDivElement>(`${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`)
+      let container = rootElement.querySelector<HTMLDivElement>(
+        `${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`,
+      )
       if (!container)
         container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)!
 
-      const lyrics = container.querySelectorAll<HTMLDivElement>(`${LYRIC_SELECTOR}:has( > :not(:empty))`)
+      const lyrics = container.querySelectorAll<HTMLDivElement>(
+        `${LYRIC_SELECTOR}:has( > :not(:empty))`,
+      )
       console.debug('Applying changes', changes, options)
       applyOptionChanges(changes, options, lyrics)
     })
@@ -33,7 +41,6 @@ export default defineContentScript({
     const debouncedInitLyrics = debounce(lyricsInit, 1000)
 
     const lyricsObserver = new MutationObserver((mutations) => {
-      // TODO: early returns for anything else for performance ig
       const addedNodes = mutations.reduce((val, mut) => val + mut.addedNodes.length, 0)
       if (!rootElement || !addedNodes) return
 
@@ -44,32 +51,26 @@ export default defineContentScript({
           && mutations[0].addedNodes[0].nodeName === '#text'
       ) return
 
-      // If there are lyrics, then there must be the container, simple
-      // Also prevent infinite loop by tracking original lyrics element
-      // Detect fullscreen lyrics first
-      let container = rootElement.querySelector<HTMLDivElement>(`${FULLSCREEN_CONTAINER} ${LYRICS_CONTAINER}`)
-      let currentFullscreen = true
-
-      // Fallback to normal lyrics
-      if (!container) {
-        container = rootElement.querySelector<HTMLDivElement>(LYRICS_CONTAINER)
-        currentFullscreen = false
+      const { container, fullscreen: currentFullscreen } = findLyricsContainer(rootElement)
+      if (!container || currentFullscreen === null) {
+        lastFullscreen = null
+        return
       }
 
-      if (!container) return lastFullscreen = null
+      const songChanged = mutationIndicatesSongChange(mutations)
 
-      // If song changed, force initialization
-      const songChanged = mutations.some((mutation) => {
-        return mutation.target.parentElement?.parentElement?.matches(SONG_TITLE)
-      })
-
-      // When switching from fullscreen, normal lyrics might already
-      // initialized and we need to refresh them
-      if ((currentFullscreen === lastFullscreen) && !songChanged) return
+      if (!shouldReinitLyrics({
+        currentFullscreen,
+        lastFullscreen,
+        songChanged,
+      })) return
 
       if (songChanged) clearLyricsCache()
 
-      console.debug('Found uninitialized lyrics container, starting...')
+      console.debug(
+        'Found lyrics container (fullscreen=%s), starting...',
+        currentFullscreen,
+      )
       lastFullscreen = currentFullscreen
 
       // Sometimes the lyrics doesn't show up instantly, probs network

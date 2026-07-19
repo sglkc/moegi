@@ -1,3 +1,4 @@
+import { configureAutoScroll } from './auto-scroll'
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
@@ -8,12 +9,14 @@ export interface ApplyOptionsDeps {
   styling: typeof lyricsStyling
   romanization: typeof lyricsRomanization
   translation: typeof lyricsTranslation
+  autoScroll: typeof configureAutoScroll
 }
 
 const defaultDeps: ApplyOptionsDeps = {
   styling: lyricsStyling,
   romanization: lyricsRomanization,
   translation: lyricsTranslation,
+  autoScroll: configureAutoScroll,
 }
 
 /**
@@ -27,6 +30,7 @@ export function applyOptionChanges(
   deps: ApplyOptionsDeps = defaultDeps,
 ): void {
   const has = createArrayHas(changes)
+  const lyricList = [...lyrics]
 
   if (has(
     'fonts',
@@ -37,6 +41,12 @@ export function applyOptionChanges(
     'romanization.size',
   )) {
     deps.styling(options)
+  }
+
+  if (has('fonts', 'fonts.autoScroll')) {
+    const first = lyricList[0]
+    const container = first?.parentElement
+    if (container) deps.autoScroll(container, options.fonts.autoScroll)
   }
 
   if (has(
