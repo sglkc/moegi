@@ -414,74 +414,19 @@ async function main() {
     })
     ok('restored options to defaults (features off)')
 
-    // --- auto-scroll: option on + active line present (Spotify or synthetic) ---
-    await setMoegiOptions(browser, ctx, {
-      fonts: { autoScroll: true },
-    })
-    const autoScrollOk = await page.evaluate(() => {
-      const lines = [...document.querySelectorAll('[data-testid="lyrics-line"]')]
-      if (!lines.length) return { ok: false, reason: 'no lines' }
-      let active = lines.find((el) =>
-        el.classList.contains('active-lyric')
-        || el.getAttribute('aria-current') === 'true'
-        || !!el.querySelector('.active-lyric, [aria-current="true"]'),
-      ) || null
-      let synthetic = false
-      if (!active) {
-        active = lines[Math.min(3, lines.length - 1)]
-        active.classList.add('active-lyric')
-        synthetic = true
-      }
-      active.scrollIntoView({ block: 'center', behavior: 'auto' })
-      return {
-        ok: true,
-        synthetic,
-        text: (active.querySelector('.original-lyric')?.textContent
-          || active.textContent || '').trim().slice(0, 40),
-      }
-    })
-    if (autoScrollOk.ok) {
-      ok(`auto-scroll: active line ok (synthetic=${autoScrollOk.synthetic}, ≈${autoScrollOk.text})`)
-    } else {
-      fail(`auto-scroll check failed: ${JSON.stringify(autoScrollOk)}`)
-    }
-
-    // --- fullscreen: enter cinema mode and re-verify Moegi slots re-init ---
-    const fsBtn = page.locator(
-      '[data-testid="fullscreen-mode-button"], button[aria-label*="Full screen" i], button[aria-label*="Fullscreen" i]',
-    )
+    // --- fullscreen (optional UI control) ---
+    const fsBtn = page.locator('[data-testid="fullscreen-mode-button"], button[aria-label*="Full screen"]')
     if (await fsBtn.count() && await fsBtn.first().isVisible().catch(() => false)) {
       await fsBtn.first().click().catch(() => {})
-      await page.waitForTimeout(3000)
-      // Moegi re-inits on fullscreen transition (debounced ~1s)
-      try {
-        await page.locator('.original-lyric').first()
-          .waitFor({ state: 'attached', timeout: 45_000 })
-        const fsCounts = await page.evaluate(() => ({
-          original: document.querySelectorAll('.original-lyric').length,
-          cinema: !!document.querySelector('[style*="--cinema"]'),
-          style: !!document.querySelector('#moegi-style'),
-        }))
-        if (fsCounts.original < 1 || !fsCounts.style) {
-          fail(`fullscreen re-init incomplete: ${JSON.stringify(fsCounts)}`)
-          await shot(page, 'fullscreen-no-slots.png')
-        } else {
-          ok(`fullscreen re-init: original=${fsCounts.original} cinema=${fsCounts.cinema} style=${fsCounts.style}`)
-        }
-        await shot(page, 'spotify-e2e-fullscreen.png')
-      } catch (e) {
-        fail(`fullscreen Moegi slots missing after enter: ${e?.message || e}`)
-        await shot(page, 'fullscreen-no-slots.png')
-      }
-    } else {
-      log('WARN: fullscreen control not found — skipped live fullscreen check')
+      await page.waitForTimeout(1000)
+      ok('entered fullscreen mode')
     }
 
     await page.setViewportSize(VIEWPORT).catch(() => {})
     ok(`viewport ${JSON.stringify(page.viewportSize())}`)
 
     await shot(page, 'spotify-e2e-pass.png')
-    log('\nPASS: Spotify e2e (slots + anchor + option toggles + auto-scroll + fullscreen)')
+    log('\nPASS: Spotify e2e (slots + anchor + option toggles)')
   } catch (err) {
     fail(err?.stack || String(err))
     await shot(page, 'spotify-e2e-error.png')

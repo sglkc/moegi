@@ -42,7 +42,6 @@ describe('lyricsInit (lyrics open orchestration)', () => {
   const getOptions = vi.fn(async () => structuredClone(moegiDefaultOptions))
   const createToast = vi.fn(async () => 42)
   const destroyToast = vi.fn(async () => true)
-  const autoScroll = vi.fn()
 
   const deps = (): LyricsInitDeps => ({
     clearCache,
@@ -54,7 +53,6 @@ describe('lyricsInit (lyrics open orchestration)', () => {
     getOptions,
     createToast,
     destroyToast,
-    autoScroll,
   })
 
   beforeEach(() => {
@@ -68,7 +66,6 @@ describe('lyricsInit (lyrics open orchestration)', () => {
     getOptions.mockClear()
     createToast.mockClear()
     destroyToast.mockClear()
-    autoScroll.mockClear()
   })
 
   function mountContainer(texts: string[]): HTMLDivElement {
@@ -119,19 +116,7 @@ describe('lyricsInit (lyrics open orchestration)', () => {
 
     expect(observe).toHaveBeenCalledWith(container)
     expect(styling).toHaveBeenCalledWith(options)
-    expect(autoScroll).toHaveBeenCalledWith(container, options.fonts.autoScroll)
     expect(romanization).toHaveBeenCalledOnce()
     expect(translation).toHaveBeenCalledOnce()
-  })
-
-  it('passes fonts.autoScroll=false through to autoScroll', async () => {
-    const container = mountContainer(['line'])
-    const options = structuredClone(moegiDefaultOptions)
-    options.fonts.autoScroll = false
-    getOptions.mockResolvedValue(options)
-
-    await lyricsInit(container, deps())
-
-    expect(autoScroll).toHaveBeenCalledWith(container, false)
   })
 })
