@@ -12,7 +12,6 @@ describe('mergeStoredOptions', () => {
     expect(target.fonts.size).toBe(2)
     expect(target.fonts.enabled).toBe(true)
     // Unspecified nested keys keep target defaults
-    expect(target.fonts.autoScroll).toBe(true)
     expect(target.fonts.align).toBe('left')
   })
 

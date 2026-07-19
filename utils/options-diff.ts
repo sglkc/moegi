@@ -17,7 +17,6 @@ export const FULL_OPTION_CHANGE_KEYS = [
   'romanization.cyrillic',
   'romanization.japanese',
   'romanization.korean',
-  'fonts.autoScroll',
 ] as DeepKeys<MoegiOptions>[]
 
 /**
