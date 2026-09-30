@@ -26,6 +26,17 @@ export function claimOptionsApply(lastKey: string, options: MoegiOptions): strin
   return key === lastKey ? null : key
 }
 
+/**
+ * Empty changes are the popup's note to the service worker. The worker
+ * forwards the real diff. Applying the empty list would run every section.
+ */
+export function resolveOptionChangeKeys(
+  changes: DeepKeys<MoegiOptions>[],
+): DeepKeys<MoegiOptions>[] | null {
+  if (changes.length === 0) return null
+  return changes
+}
+
 export function applyOptionChanges(
   changes: DeepKeys<MoegiOptions>[],
   options: MoegiOptions,

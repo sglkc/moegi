@@ -1,5 +1,5 @@
 import { defineContentScript } from '#imports'
-import { applyOptionChanges, claimOptionsApply } from './apply-options'
+import { applyOptionChanges, claimOptionsApply, resolveOptionChangeKeys } from './apply-options'
 import { clearLyricsCache } from './cache'
 import {
   containerHasUnprocessedLines,
@@ -15,7 +15,7 @@ import { debounce } from '@/utils/debounce'
 import type { DeepKeys } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
 import type { MoegiOptions } from '@/utils/options'
-import { diffOptionChanges, FULL_OPTION_CHANGE_KEYS } from '@/utils/options-diff'
+import { diffOptionChanges } from '@/utils/options-diff'
 
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
@@ -32,23 +32,27 @@ export default defineContentScript({
       pendingSong: false,
     }
 
-    // Popup notifies over messaging and then writes storage. Both reach this
-    // script; the second call would romanize/translate again and toast twice.
-    let lastAppliedKey = ''
+    // Shared across reinjected content scripts so a second copy does not
+    // romanize again. `at` lets the storage echo of a message we just
+    // applied be ignored even when the stored object is not identical.
+    const applied = (globalThis as typeof globalThis & {
+      __moegiAppliedOptions?: { key: string, at: number }
+    }).__moegiAppliedOptions ??= { key: '', at: 0 }
 
     function applyToPage(options: MoegiOptions, changes: DeepKeys<MoegiOptions>[]): void {
-      if (!rootElement) return
+      const keys = resolveOptionChangeKeys(changes)
+      if (!keys || !rootElement) return
       const { container } = findLyricsContainer(rootElement)
       if (!container) return
 
-      const key = claimOptionsApply(lastAppliedKey, options)
+      const key = claimOptionsApply(applied.key, options)
       if (key === null) return
-      lastAppliedKey = key
+      applied.key = key
+      applied.at = Date.now()
 
       const lyrics = container.querySelectorAll<HTMLDivElement>(
         `${LYRIC_SELECTOR}:has( > :not(:empty))`,
       )
-      const keys = changes.length > 0 ? changes : FULL_OPTION_CHANGE_KEYS
       console.debug('Applying changes', keys, options)
       applyOptionChanges(keys, options, lyrics)
     }
@@ -63,6 +67,8 @@ export default defineContentScript({
       if (area !== 'sync') return
       const entry = changes.moegiOptions
       if (!entry || entry.newValue == null) return
+
+      if (Date.now() - applied.at < 500) return
 
       const next = entry.newValue as MoegiOptions
       const prev = entry.oldValue as MoegiOptions | undefined

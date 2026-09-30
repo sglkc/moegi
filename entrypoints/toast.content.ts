@@ -1,7 +1,7 @@
 import { defineContentScript } from '#imports'
 import Toastify from 'toastify-js'
 import StartToastifyInstance from 'toastify-js'
-import { Background, Content, type ToastMessage } from '@/utils/messaging'
+import { Content, type ToastMessage } from '@/utils/messaging'
 import 'toastify-js/src/toastify.css'
 
 const toasts = new Map<number, ReturnType<typeof StartToastifyInstance>>()
@@ -41,10 +41,12 @@ function destroyToast(id: number): boolean {
 export default defineContentScript({
   matches: ['https://open.spotify.com/*'],
   main() {
-    [Content, Background].forEach((messenger) => {
-      messenger.onMessage('createToast', ({ data }) => createToast(data))
-      messenger.onMessage('destroyToast', ({ data }) => destroyToast(data))
-    })
+    const flag = globalThis as typeof globalThis & { __moegiToast?: boolean }
+    if (flag.__moegiToast) return
+    flag.__moegiToast = true
+
+    Content.onMessage('createToast', ({ data }) => createToast(data))
+    Content.onMessage('destroyToast', ({ data }) => destroyToast(data))
 
     console.debug('registered toast content script')
   },

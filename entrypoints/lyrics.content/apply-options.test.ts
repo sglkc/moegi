@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { applyOptionChanges, claimOptionsApply } from './apply-options'
+import { applyOptionChanges, claimOptionsApply, resolveOptionChangeKeys } from './apply-options'
 import { createProcessedLyrics } from './test-fixtures'
 import { moegiDefaultOptions, type MoegiOptions } from '@/utils/options'
 
@@ -21,6 +21,12 @@ describe('applyOptionChanges (options fan-out flow)', () => {
   })
 
   const deps = () => ({ styling, romanization, translation })
+
+  it('drops the popup broadcast that has no diff yet', () => {
+    expect(resolveOptionChangeKeys([])).toBeNull()
+    expect(resolveOptionChangeKeys(['romanization.enabled'])).toEqual(['romanization.enabled'])
+    expect(resolveOptionChangeKeys(['translation.target'])).toEqual(['translation.target'])
+  })
 
   it('ignores a second apply of the same options', () => {
     const first = claimOptionsApply('', options)
