@@ -28,6 +28,7 @@ export default async function lyricsRomanization(
   }
 
   const toastId = await Content.sendMessage('createToast', { text: 'Romanizing...' })
+  const shownAt = Date.now()
 
   for (const lyric of lyrics) {
     const original = lyric.querySelector('.'+ORIGINAL_LYRIC)
@@ -78,5 +79,8 @@ export default async function lyricsRomanization(
     }
   }
 
+  // Option changes finish immediately. Leave the toast up long enough to read.
+  const remaining = 1000 - (Date.now() - shownAt)
+  if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining))
   await Content.sendMessage('destroyToast', toastId)
 }
