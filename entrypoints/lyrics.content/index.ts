@@ -2,9 +2,12 @@ import { defineContentScript } from '#imports'
 import { applyOptionChanges } from './apply-options'
 import { clearLyricsCache } from './cache'
 import {
+  containerHasUnprocessedLines,
   findLyricsContainer,
-  mutationIndicatesSongChange,
-  shouldReinitLyrics,
+  planLyricsReinit,
+  readNowPlayingTitle,
+  stripStaleLyricExtras,
+  type LyricsWatchState,
 } from './find-lyrics-container'
 import lyricsInit from './init'
 import { LYRIC_SELECTOR } from '@/utils/constants'
@@ -22,8 +25,12 @@ export default defineContentScript({
     // Store react root element
     let rootElement: HTMLElement
 
-    // Store fullscreen lyrics state
-    let lastFullscreen: boolean | null = null
+    // Title text is compared because Spotify edits it in place.
+    let watch: LyricsWatchState = {
+      lastSongTitle: '',
+      lastFullscreen: null,
+      pendingSong: false,
+    }
 
     function applyToPage(options: MoegiOptions, changes: DeepKeys<MoegiOptions>[]): void {
       if (!rootElement) return
@@ -56,57 +63,35 @@ export default defineContentScript({
       applyToPage(next, keys)
     })
 
-    // Debounced version of initLyrics in case of multiple mutation
-    const debouncedInitLyrics = debounce(lyricsInit, 1000)
+    // Re-query at fire time so a song change that swaps the line nodes
+    // is processed, not the detached lines from when the title first changed.
+    const debouncedInitLyrics = debounce(() => {
+      if (!rootElement) return
+      const { container } = findLyricsContainer(rootElement)
+      if (!container) return
+      void lyricsInit(container)
+    }, 1000)
 
-    const lyricsObserver = new MutationObserver((mutations) => {
-      const addedNodes = mutations.reduce((val, mut) => val + mut.addedNodes.length, 0)
-      if (!rootElement || !addedNodes) return
-
-      // If mutations are lyrics initialization, skip
-      const mutation = mutations[0]
-      const added = mutation?.addedNodes[0]
-      if (
-        mutations.length === 1
-          && mutation?.addedNodes.length === 1
-          && added?.nodeName === '#text'
-      ) return
-
-      const { container, fullscreen: currentFullscreen } = findLyricsContainer(rootElement)
-      if (!container || currentFullscreen === null) {
-        lastFullscreen = null
-        return
+    function followLyrics(): void {
+      if (!rootElement) return
+      const { container, fullscreen } = findLyricsContainer(rootElement)
+      const decision = planLyricsReinit(watch, {
+        title: readNowPlayingTitle(rootElement),
+        fullscreen,
+        hasUnprocessed: container ? containerHasUnprocessedLines(container) : false,
+        hasAnyLine: Boolean(container?.querySelector(LYRIC_SELECTOR)),
+      })
+      watch = decision.state
+      if (decision.clearCache) clearLyricsCache()
+      if (decision.stripStale && container) stripStaleLyricExtras(container)
+      if (decision.init) {
+        console.debug('Found lyrics container (fullscreen=%s), starting...', fullscreen)
+        debouncedInitLyrics()
       }
+    }
 
-      const songChanged = mutationIndicatesSongChange(mutations)
-
-      if (!shouldReinitLyrics({
-        currentFullscreen,
-        lastFullscreen,
-        songChanged,
-      })) return
-
-      if (songChanged) clearLyricsCache()
-
-      console.debug(
-        'Found lyrics container (fullscreen=%s), starting...',
-        currentFullscreen,
-      )
-      lastFullscreen = currentFullscreen
-
-      // Sometimes the lyrics doesn't show up instantly, probs network
-      let i = 0
-      const intervalId = setInterval(() => {
-        if (!container.querySelector(LYRIC_SELECTOR)) {
-          console.debug('Container found but no lyrics, restarting in 500ms...')
-          if (i > 10) clearInterval(intervalId)
-          i++
-          return
-        }
-
-        debouncedInitLyrics(container)
-        clearInterval(intervalId)
-      }, 500)
+    const lyricsObserver = new MutationObserver(() => {
+      followLyrics()
     })
 
     const intervalId = setInterval(() => {
@@ -116,6 +101,9 @@ export default defineContentScript({
 
       lyricsObserver.observe(rootElement, { childList: true, subtree: true })
       clearInterval(intervalId)
+      // Title text changes do not emit childList. Poll so a skip is noticed
+      // before the old lyric nodes are swapped out.
+      setInterval(followLyrics, 500)
     }, 500)
   }
 })
