@@ -197,11 +197,10 @@ Provides a lot of conversions at the cost of accuracy, read more from the packag
 ### Prerequisites
 
 - Node ^22
-- [pnpm](https://pnpm.io/installation) 11 (see `packageManager` in `package.json`)
+- [pnpm](https://pnpm.io/installation) 11 (any 11.x)
 
   ```sh
-  corepack enable
-  # or: npm install -g pnpm@11
+  npm install -g pnpm@11
   ```
 
 ### Steps

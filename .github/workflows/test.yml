@@ -31,7 +31,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.11.0
+          version: 11
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4

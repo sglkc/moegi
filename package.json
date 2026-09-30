@@ -26,42 +26,41 @@
     "test:e2e": "pnpm build && node e2e/spotify-album.e2e.mjs"
   },
   "dependencies": {
-    "@fontsource/quicksand": "^5.2.10",
-    "@preact/signals": "^2.9.4",
+    "@fontsource/quicksand": "^5.3.0",
+    "@preact/signals": "^2.11.2",
     "@romanize/korean": "^0.1.3",
     "@sglkc/kuromoji": "^1.1.0",
     "@sglkc/kuroshiro": "^1.0.1",
     "@sglkc/kuroshiro-analyzer-kuromoji": "^1.0.1",
-    "@unocss/reset": "^66.7.5",
-    "@webext-core/messaging": "^3.0.2",
+    "@unocss/reset": "^66.10.5",
+    "@webext-core/messaging": "^3.0.3",
     "any-ascii": "^0.3.3",
     "cyrillic-to-translit-js": "^3.2.1",
     "deep-object-diff": "^1.1.9",
     "deepsignal": "^1.6.0",
     "google-translate-api-x": "^10.7.3",
-    "pinyin-pro": "^3.28.1",
-    "preact": "^10.29.7",
-    "react-colorful": "^5.8.0",
+    "pinyin-pro": "^3.29.4",
+    "preact": "^10.29.8",
+    "react-colorful": "^5.8.1",
     "toastify-js": "^1.12.0",
     "unicode-properties": "^1.4.1"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.10.5",
-    "@types/chrome": "^0.2.2",
-    "@types/node": "^22.19.21",
+    "@preact/preset-vite": "^2.10.6",
+    "@types/chrome": "^0.2.9",
+    "@types/node": "^22.20.4",
     "@types/toastify-js": "^1.12.4",
     "@types/unicode-properties": "^1.3.2",
     "@wxt-dev/unocss": "^1.0.1",
-    "happy-dom": "^20.10.6",
-    "playwright": "^1.61.1",
+    "happy-dom": "^20.14.5",
+    "playwright": "^1.63.0",
     "typescript": "~5.9.3",
-    "unocss": "^66.7.5",
-    "vitest": "^4.1.10",
+    "unocss": "^66.10.5",
+    "vitest": "^4.1.11",
     "wxt": "^0.20.27"
   },
-  "packageManager": "pnpm@11.11.0",
   "engines": {
     "node": ">=22",
-    "pnpm": ">=10"
+    "pnpm": ">=11 <12"
   }
 }
