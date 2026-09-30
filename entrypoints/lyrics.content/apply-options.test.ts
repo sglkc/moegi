@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { applyOptionChanges } from './apply-options'
+import { applyOptionChanges, claimOptionsApply } from './apply-options'
 import { createProcessedLyrics } from './test-fixtures'
 import { moegiDefaultOptions, type MoegiOptions } from '@/utils/options'
 
@@ -21,6 +21,16 @@ describe('applyOptionChanges (options fan-out flow)', () => {
   })
 
   const deps = () => ({ styling, romanization, translation })
+
+  it('ignores a second apply of the same options', () => {
+    const first = claimOptionsApply('', options)
+    expect(first).toBeTypeOf('string')
+    expect(claimOptionsApply(first!, options)).toBeNull()
+
+    const next = structuredClone(options)
+    next.romanization.enabled = true
+    expect(claimOptionsApply(first!, next)).not.toBeNull()
+  })
 
   it('runs only styling for font/color related changes', () => {
     applyOptionChanges(['fonts', 'fonts.size'], options, lyrics, deps())

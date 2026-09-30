@@ -1,5 +1,5 @@
 import { defineContentScript } from '#imports'
-import { applyOptionChanges } from './apply-options'
+import { applyOptionChanges, claimOptionsApply } from './apply-options'
 import { clearLyricsCache } from './cache'
 import {
   containerHasUnprocessedLines,
@@ -32,10 +32,18 @@ export default defineContentScript({
       pendingSong: false,
     }
 
+    // Popup notifies over messaging and then writes storage. Both reach this
+    // script; the second call would romanize/translate again and toast twice.
+    let lastAppliedKey = ''
+
     function applyToPage(options: MoegiOptions, changes: DeepKeys<MoegiOptions>[]): void {
       if (!rootElement) return
       const { container } = findLyricsContainer(rootElement)
       if (!container) return
+
+      const key = claimOptionsApply(lastAppliedKey, options)
+      if (key === null) return
+      lastAppliedKey = key
 
       const lyrics = container.querySelectorAll<HTMLDivElement>(
         `${LYRIC_SELECTOR}:has( > :not(:empty))`,

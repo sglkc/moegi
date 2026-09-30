@@ -20,6 +20,12 @@ const defaultDeps: ApplyOptionsDeps = {
  * High-level options fan-out used by the content script when the popup
  * (via background) pushes applyOptions.
  */
+/** Same options object already applied (popup message, then the storage echo). */
+export function claimOptionsApply(lastKey: string, options: MoegiOptions): string | null {
+  const key = JSON.stringify(options)
+  return key === lastKey ? null : key
+}
+
 export function applyOptionChanges(
   changes: DeepKeys<MoegiOptions>[],
   options: MoegiOptions,
