@@ -4,7 +4,7 @@ import {
   ROMANIZED_LYRIC,
   TRANSLATED_LYRIC,
 } from '@/utils/constants'
-import { moegiDefaultOptions, MoegiOptions, RomanizationOptions, TranslationOptions } from '@/utils/options'
+import { moegiDefaultOptions, type MoegiOptions, type RomanizationOptions, type TranslationOptions } from '@/utils/options'
 
 /** Build a raw Spotify-shaped lyric line (single text child). */
 export function createRawLyricLine(text: string): HTMLDivElement {

@@ -1,6 +1,6 @@
 import { updatedDiff } from 'deep-object-diff'
-import { DeepKeys, getDeepKeys } from './deep-keys'
-import { MoegiOptions } from './options'
+import { type DeepKeys, getDeepKeys } from './deep-keys'
+import type { MoegiOptions } from './options'
 
 /** Sections content scripts need on a full re-apply (SW cold start / first message). */
 export const FULL_OPTION_CHANGE_KEYS = [

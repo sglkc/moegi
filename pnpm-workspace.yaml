@@ -4,3 +4,5 @@ allowBuilds:
   esbuild: true
   spawn-sync: true
   dtrace-provider: true
+minimumReleaseAgeExclude:
+  - '@types/chrome@0.3.4'

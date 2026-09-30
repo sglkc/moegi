@@ -10,7 +10,10 @@ import 'virtual:uno.css'
 
 // Detect if current tab is in Spotify lyrics page
 chrome.tabs.query({ active: true, currentWindow: true, windowType: 'normal' })
-  .then(([tab]) => {
+  .then((tabs) => {
+    const tab = tabs[0]
+    if (!tab) return
+
     const tabUrlNot = (url: string) => !tab.url?.includes(url);
 
     const Elem = tabUrlNot('open.spotify.com')

@@ -1,5 +1,5 @@
 import { romanize } from '@romanize/korean'
-import { RomanizationProvider } from '../romanization'
+import type { RomanizationProvider } from '../romanization'
 
 const KoreanRomanization: RomanizationProvider = {
   check: (text) => (

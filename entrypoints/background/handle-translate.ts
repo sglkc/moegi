@@ -1,5 +1,5 @@
 import { translate } from 'google-translate-api-x'
-import { TranslateMessage } from '@/utils/messaging'
+import type { TranslateMessage } from '@/utils/messaging'
 import {
   setTranslationCacheEntry,
   translationCacheKey,
@@ -34,7 +34,8 @@ export async function handleTranslate(
   const key = translationCacheKey(title, to)
   const cache = (await deps.storage.getItem(SESSION_KEY)) || {}
 
-  if (key in cache) return cache[key]
+  const cached = cache[key]
+  if (cached !== undefined) return cached
 
   try {
     const translation = await translateFn(data.text, {
@@ -46,7 +47,7 @@ export async function handleTranslate(
     setTranslationCacheEntry(cache, key, translation.text)
     await deps.storage.setItem(SESSION_KEY, cache)
 
-    return cache[key]
+    return translation.text
   } catch (error) {
     console.error(error)
     return ''

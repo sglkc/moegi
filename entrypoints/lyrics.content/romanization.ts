@@ -1,7 +1,7 @@
 import { cacheLyricElement } from './cache'
 import { ORIGINAL_LYRIC, ROMANIZED_LYRIC } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
-import { RomanizationOptions } from '@/utils/options'
+import type { RomanizationOptions } from '@/utils/options'
 import { splitTextByScript, getProviderForScript } from '@/utils/script-detection'
 
 export interface RomanizationProvider {

@@ -1,5 +1,5 @@
 import { Signal } from '@preact/signals'
-import { ChangeEvent, InputHTMLAttributes } from 'preact/compat'
+import type { ChangeEvent, InputHTMLAttributes } from 'preact/compat'
 import { useId } from 'preact/hooks'
 
 export interface SliderProps extends InputHTMLAttributes {

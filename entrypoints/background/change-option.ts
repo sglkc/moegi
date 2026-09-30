@@ -1,6 +1,6 @@
-import { DeepKeys } from '@/utils/deep-keys'
+import type { DeepKeys } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
-import { MoegiOptions } from '@/utils/options'
+import type { MoegiOptions } from '@/utils/options'
 import { diffOptionChanges } from '@/utils/options-diff'
 
 // --- background runtime state ---

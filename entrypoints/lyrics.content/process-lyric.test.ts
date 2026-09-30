@@ -22,9 +22,9 @@ describe('processLyricElement (lyric line normalization)', () => {
     processLyricElement(line)
 
     expect(line.children).toHaveLength(3)
-    expect(line.children[0].className).toBe(ORIGINAL_LYRIC)
-    expect(line.children[1].className).toBe(ROMANIZED_LYRIC)
-    expect(line.children[2].className).toBe(TRANSLATED_LYRIC)
+    expect(line.children[0]?.className).toBe(ORIGINAL_LYRIC)
+    expect(line.children[1]?.className).toBe(ROMANIZED_LYRIC)
+    expect(line.children[2]?.className).toBe(TRANSLATED_LYRIC)
 
     expect(getOriginal(line)).toBe('안녕하세요')
     expect(getRomanized(line)).toBe('')

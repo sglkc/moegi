@@ -1,5 +1,5 @@
 import { getScript } from 'unicode-properties'
-import { RomanizationScripts } from './options'
+import type { RomanizationScripts } from './options'
 
 export interface ScriptSegment {
   text: string
@@ -41,7 +41,8 @@ function mergeByScript(entries: { text: string }[]): ScriptSegment[] {
 
   for (const entry of entries) {
     const text = entry.text
-    const script = text.length > 0 ? getScript(text[0].charCodeAt(0)) : "Common"
+    const first = text[0]
+    const script = first !== undefined ? getScript(first.charCodeAt(0)) : "Common"
 
     if (script === "Common") {
       // Add common characters to current segment if exists

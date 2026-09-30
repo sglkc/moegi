@@ -18,8 +18,9 @@ describe('getProviderForScript', () => {
     expect(getProviderForScript('Han')).toBe('chinese')
     const segments = splitTextByScript('漢字')
     expect(segments).toHaveLength(1)
-    expect(segments[0].script).toBe('Han')
-    expect(getProviderForScript(segments[0].script)).toBe('chinese')
+    const segment = segments[0]
+    expect(segment?.script).toBe('Han')
+    expect(getProviderForScript(segment?.script ?? '')).toBe('chinese')
   })
 })
 

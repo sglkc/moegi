@@ -9,8 +9,9 @@ import {
  */
 export function processLyricElement(element: HTMLElement): void {
   // Clear previous lyrics if already initialized, then restart the process
-  if (element.children.length > 1) {
-    element.innerHTML = element.children[0].innerHTML
+  const first = element.children[0]
+  if (first && element.children.length > 1) {
+    element.innerHTML = first.innerHTML
   }
 
   const originalLyric = element.textContent?.trim()

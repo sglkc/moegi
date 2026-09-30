@@ -4,7 +4,7 @@ import { deepSignal } from 'deepsignal'
 import { debounce } from './debounce'
 import { Background } from './messaging'
 import { mergeStoredOptions } from './merge-options'
-import { moegiDefaultOptions, MoegiOptions } from './options'
+import { moegiDefaultOptions, type MoegiOptions } from './options'
 import { resetOptionsToDefaults as applyReset } from './reset-options'
 
 export const optionsStorage = storage.defineItem('sync:moegiOptions', {

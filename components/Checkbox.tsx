@@ -1,4 +1,4 @@
-import { ComponentChildren } from 'preact'
+import type { ComponentChildren } from 'preact'
 import { Signal } from '@preact/signals'
 import { useId } from 'preact/hooks'
 

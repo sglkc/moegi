@@ -1,5 +1,5 @@
 import { html, pinyin } from 'pinyin-pro'
-import { RomanizationProvider } from '../romanization'
+import type { RomanizationProvider } from '../romanization'
 
 const ChineseRomanization: RomanizationProvider = {
   check: (text) =>

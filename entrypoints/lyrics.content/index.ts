@@ -9,9 +9,9 @@ import {
 import lyricsInit from './init'
 import { LYRIC_SELECTOR } from '@/utils/constants'
 import { debounce } from '@/utils/debounce'
-import { DeepKeys } from '@/utils/deep-keys'
+import type { DeepKeys } from '@/utils/deep-keys'
 import { Background } from '@/utils/messaging'
-import { MoegiOptions } from '@/utils/options'
+import type { MoegiOptions } from '@/utils/options'
 import { diffOptionChanges, FULL_OPTION_CHANGE_KEYS } from '@/utils/options-diff'
 
 export default defineContentScript({
@@ -64,10 +64,12 @@ export default defineContentScript({
       if (!rootElement || !addedNodes) return
 
       // If mutations are lyrics initialization, skip
+      const mutation = mutations[0]
+      const added = mutation?.addedNodes[0]
       if (
         mutations.length === 1
-          && mutations[0].addedNodes.length === 1
-          && mutations[0].addedNodes[0].nodeName === '#text'
+          && mutation?.addedNodes.length === 1
+          && added?.nodeName === '#text'
       ) return
 
       const { container, fullscreen: currentFullscreen } = findLyricsContainer(rootElement)

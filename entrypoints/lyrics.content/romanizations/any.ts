@@ -1,5 +1,5 @@
 import anyAscii from 'any-ascii'
-import { RomanizationProvider } from '../romanization'
+import type { RomanizationProvider } from '../romanization'
 
 const AnyRomanization: RomanizationProvider = {
   check: (text) => (/([\p{L}\p{N}\s])+/u).test(text),

@@ -1,4 +1,4 @@
-import { moegiDefaultOptions, MoegiOptions } from './options'
+import { moegiDefaultOptions, type MoegiOptions } from './options'
 
 /** Merge stored sections into a live options object without replacing whole sections. */
 export function mergeStoredOptions(

@@ -2,6 +2,7 @@
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
+    "types": ["chrome", "node"],
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "skipLibCheck": true,

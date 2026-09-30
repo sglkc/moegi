@@ -22,16 +22,16 @@ describe('lyricsTranslation (feature)', () => {
 
   it('clears translated slots when translation is disabled', async () => {
     const { lyrics } = mountLyricsPage({ lines: ['one', 'two'], title: 'Song' })
-    lyrics[0].querySelector('.translated-lyric')!.textContent = 'stale'
-    lyrics[1].querySelector('.translated-lyric')!.textContent = 'stale'
+    lyrics[0]!.querySelector('.translated-lyric')!.textContent = 'stale'
+    lyrics[1]!.querySelector('.translated-lyric')!.textContent = 'stale'
 
     await lyricsTranslation(lyrics, {
       ...structuredClone(moegiDefaultOptions.translation),
       enabled: false,
     })
 
-    expect(getTranslated(lyrics[0])).toBe('')
-    expect(getTranslated(lyrics[1])).toBe('')
+    expect(getTranslated(lyrics[0]!)).toBe('')
+    expect(getTranslated(lyrics[1]!)).toBe('')
     expect(backgroundSendMessage).not.toHaveBeenCalled()
   })
 
@@ -53,8 +53,8 @@ describe('lyricsTranslation (feature)', () => {
       title: 'Test Track',
       to: 'en',
     })
-    expect(getTranslated(lyrics[0])).toBe('translated one')
-    expect(getTranslated(lyrics[1])).toBe('translated two')
+    expect(getTranslated(lyrics[0]!)).toBe('translated one')
+    expect(getTranslated(lyrics[1]!)).toBe('translated two')
     expect(contentSendMessage).toHaveBeenCalledWith('destroyToast', 1)
   })
 
@@ -71,9 +71,9 @@ describe('lyricsTranslation (feature)', () => {
 
     await lyricsTranslation(lyrics, enabledTranslation())
 
-    expect(getTranslated(lyrics[0])).toBe('')
-    expect(getTranslated(lyrics[1])).toBe('')
-    expect(getTranslated(lyrics[2])).toBe('')
+    expect(getTranslated(lyrics[0]!)).toBe('')
+    expect(getTranslated(lyrics[1]!)).toBe('')
+    expect(getTranslated(lyrics[2]!)).toBe('')
     expect(contentSendMessage).toHaveBeenCalledWith(
       'createToast',
       expect.objectContaining({
@@ -92,7 +92,7 @@ describe('lyricsTranslation (feature)', () => {
 
     await lyricsTranslation(lyrics, enabledTranslation())
 
-    expect(getTranslated(lyrics[0])).toBe('')
+    expect(getTranslated(lyrics[0]!)).toBe('')
     expect(contentSendMessage).toHaveBeenCalledWith(
       'createToast',
       expect.objectContaining({ text: 'Translation failed' }),
@@ -108,6 +108,6 @@ describe('lyricsTranslation (feature)', () => {
     await lyricsTranslation(lyrics, enabledTranslation())
 
     expect(backgroundSendMessage).not.toHaveBeenCalled()
-    expect(getTranslated(lyrics[0])).toBe('')
+    expect(getTranslated(lyrics[0]!)).toBe('')
   })
 })

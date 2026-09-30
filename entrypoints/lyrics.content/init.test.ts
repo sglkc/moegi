@@ -22,7 +22,7 @@ vi.mock('./observer', () => ({
   default: vi.fn(),
 }))
 
-import lyricsInit, { LyricsInitDeps } from './init'
+import lyricsInit, { type LyricsInitDeps } from './init'
 import { processLyricElement } from './process-lyric'
 import { createRawLyricLine } from './test-fixtures'
 import {

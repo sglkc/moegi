@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { applyOptionChanges } from './apply-options'
 import { createProcessedLyrics } from './test-fixtures'
-import { moegiDefaultOptions, MoegiOptions } from '@/utils/options'
+import { moegiDefaultOptions, type MoegiOptions } from '@/utils/options'
 
 describe('applyOptionChanges (options fan-out flow)', () => {
   const styling = vi.fn()

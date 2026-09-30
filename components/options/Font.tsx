@@ -1,9 +1,9 @@
-import { DeepSignal } from 'deepsignal'
+import type { DeepSignal } from 'deepsignal'
 import Checkbox from '@/components/Checkbox'
 import Container from '@/components/Container'
 import Select from '@/components/Select'
 import Slider from '@/components/Slider'
-import { FontOptions } from '@/utils/options'
+import type { FontOptions } from '@/utils/options'
 
 interface TextOptionsProps {
   signal: DeepSignal<FontOptions>

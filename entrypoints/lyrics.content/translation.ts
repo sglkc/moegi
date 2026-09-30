@@ -1,7 +1,7 @@
 import { cacheLyricElement } from './cache'
 import { SONG_TITLE, TRANSLATED_LYRIC } from '@/utils/constants'
 import { Background, Content } from '@/utils/messaging'
-import { TranslationOptions } from '@/utils/options'
+import type { TranslationOptions } from '@/utils/options'
 import { splitTranslationLines } from '@/utils/translation-cache'
 
 export default async function lyricsTranslation(
@@ -50,7 +50,10 @@ export default async function lyricsTranslation(
     const el = lyric.querySelector('.' + TRANSLATED_LYRIC)
     if (!el) return
 
-    el.textContent = lines[i]
+    const line = lines[i]
+    if (line === undefined) return
+
+    el.textContent = line
     cacheLyricElement(lyric)
   })
 

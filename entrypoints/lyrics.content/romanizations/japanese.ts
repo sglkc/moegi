@@ -1,6 +1,6 @@
 import Kuroshiro from '@sglkc/kuroshiro'
 import KuromojiAnalyzer from '@sglkc/kuroshiro-analyzer-kuromoji'
-import { RomanizationProvider } from '../romanization'
+import type { RomanizationProvider } from '../romanization'
 
 /**
  * Extension builds use chrome.runtime.getURL.

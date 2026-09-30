@@ -32,7 +32,8 @@ export function setTranslationCacheEntry(
 
   const excess = keys.length - limit
   for (let i = 0; i < excess; i++) {
-    delete cache[keys[i]]
+    const stale = keys[i]
+    if (stale !== undefined) delete cache[stale]
   }
   return cache
 }

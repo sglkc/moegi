@@ -1,4 +1,4 @@
-import { moegiDefaultOptions, MoegiOptions } from './options'
+import { moegiDefaultOptions, type MoegiOptions } from './options'
 
 export interface OptionsPersister {
   setValue: (value: MoegiOptions) => void | Promise<void>

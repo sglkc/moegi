@@ -1,5 +1,5 @@
 import { Signal } from '@preact/signals'
-import { InputHTMLAttributes } from 'preact/compat'
+import type { InputHTMLAttributes } from 'preact/compat'
 import { useId } from 'preact/hooks'
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onInput'> {

@@ -6,7 +6,7 @@ import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
 import { LYRIC_SELECTOR } from '@/utils/constants'
 import { Content } from '@/utils/messaging'
-import { MoegiOptions } from '@/utils/options'
+import type { MoegiOptions } from '@/utils/options'
 import { optionsStorage } from '@/utils/storage'
 
 export interface LyricsInitDeps {

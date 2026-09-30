@@ -48,7 +48,7 @@ describe('Japanese romanization (Kuroshiro major feature)', () => {
       },
     }))
 
-    const out = getRomanized(lyrics[0])
+    const out = getRomanized(lyrics[0]!)
     expect(out.length).toBeGreaterThan(0)
     // Hepburn-ish reading of こんにちは
     expect(out.toLowerCase().replace(/\s+/g, '')).toMatch(/konnichiwa|konnichiha/)
@@ -67,7 +67,7 @@ describe('Japanese romanization (Kuroshiro major feature)', () => {
       },
     }))
 
-    const out = getRomanized(lyrics[0])
+    const out = getRomanized(lyrics[0]!)
     expect(out.length).toBeGreaterThan(0)
     // Should be latin romaji, not raw kanji-only passthrough
     expect(out).toMatch(/[A-Za-z]/)

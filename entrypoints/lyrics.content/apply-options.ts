@@ -1,8 +1,8 @@
 import lyricsRomanization from './romanization'
 import lyricsStyling from './styling'
 import lyricsTranslation from './translation'
-import { createArrayHas, DeepKeys } from '@/utils/deep-keys'
-import { MoegiOptions } from '@/utils/options'
+import { createArrayHas, type DeepKeys } from '@/utils/deep-keys'
+import type { MoegiOptions } from '@/utils/options'
 
 export interface ApplyOptionsDeps {
   styling: typeof lyricsStyling

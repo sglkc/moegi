@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'preact/compat'
+import type { PropsWithChildren } from 'preact/compat'
 import moegiText from '@/assets/moegi-text.svg'
 
 export default function Main({ children }: PropsWithChildren) {

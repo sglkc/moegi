@@ -1,11 +1,11 @@
-import { DeepSignal } from 'deepsignal'
+import type { DeepSignal } from 'deepsignal'
 import Accordion from '@/components/Accordion'
 import Checkbox from '@/components/Checkbox'
 import Container from '@/components/Container'
 import Input from '@/components/Input'
 import Select from '@/components/Select'
 import Slider from '@/components/Slider'
-import { RomanizationOptions } from '@/utils/options'
+import type { RomanizationOptions } from '@/utils/options'
 
 interface RomanizationOptionsProps {
   signal: DeepSignal<RomanizationOptions>

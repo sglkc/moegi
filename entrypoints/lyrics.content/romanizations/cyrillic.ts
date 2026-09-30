@@ -1,5 +1,5 @@
 import cyrillicToTranslit from 'cyrillic-to-translit-js';
-import { RomanizationProvider } from '../romanization';
+import type { RomanizationProvider } from '../romanization';
 
 const CyrillicRomanization: RomanizationProvider = {
   check: (text) => /[\u0430-\u044f]+/igu.test(text),

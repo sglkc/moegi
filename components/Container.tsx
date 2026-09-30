@@ -1,6 +1,6 @@
-import { ComponentChildren } from 'preact'
-import { DeepSignal } from 'deepsignal'
-import { MoegiOptions } from '@/utils/options'
+import type { ComponentChildren } from 'preact'
+import type { DeepSignal } from 'deepsignal'
+import type { MoegiOptions } from '@/utils/options'
 import Checkbox from './Checkbox'
 
 interface ContainerProps {

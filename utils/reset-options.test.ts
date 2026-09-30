@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { moegiDefaultOptions, MoegiOptions } from './options'
+import { moegiDefaultOptions, type MoegiOptions } from './options'
 import { resetOptionsToDefaults } from './reset-options'
 
 describe('resetOptionsToDefaults (options reset flow)', () => {

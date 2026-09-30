@@ -22,14 +22,14 @@ describe('lyricsRomanization (feature)', () => {
   it('clears romanized slots when romanization is disabled', async () => {
     // Disabled path uses document.querySelectorAll — lines must be mounted
     const { lyrics } = mountLyricsPage({ lines: ['안녕'] })
-    lyrics[0].querySelector('.romanized-lyric')!.textContent = 'stale'
+    lyrics[0]!.querySelector('.romanized-lyric')!.textContent = 'stale'
 
     await lyricsRomanization(lyrics, {
       ...structuredClone(moegiDefaultOptions.romanization),
       enabled: false,
     })
 
-    expect(getRomanized(lyrics[0])).toBe('')
+    expect(getRomanized(lyrics[0]!)).toBe('')
     expect(contentSendMessage).not.toHaveBeenCalled()
   })
 
@@ -40,7 +40,7 @@ describe('lyricsRomanization (feature)', () => {
       korean: { system: 'RR' },
     }))
 
-    const out = getRomanized(lyrics[0])
+    const out = getRomanized(lyrics[0]!)
     expect(out.length).toBeGreaterThan(0)
     // Revised Romanization of 안녕 is typically "annyeong"
     expect(out.toLowerCase()).toMatch(/ann?yeong|an nyeong|annyeong/)
@@ -55,7 +55,7 @@ describe('lyricsRomanization (feature)', () => {
       cyrillic: { lang: 'ru' },
     }))
 
-    const out = getRomanized(lyrics[0])
+    const out = getRomanized(lyrics[0]!)
     expect(out.length).toBeGreaterThan(0)
     expect(out.toLowerCase()).toMatch(/privet|привет/i)
     // translit should produce latin letters
@@ -69,7 +69,7 @@ describe('lyricsRomanization (feature)', () => {
       chinese: { ruby: false },
     }))
 
-    const out = getRomanized(lyrics[0])
+    const out = getRomanized(lyrics[0]!)
     expect(out.length).toBeGreaterThan(0)
     // pinyin-pro default is spaced pinyin with tones or without depending on version
     expect(out.toLowerCase()).toMatch(/ni|hao|nǐ|hǎo/)
@@ -80,7 +80,7 @@ describe('lyricsRomanization (feature)', () => {
 
     await lyricsRomanization(lyrics, enabledRomanization())
 
-    expect(getRomanized(lyrics[0])).toBe('Hello world')
+    expect(getRomanized(lyrics[0]!)).toBe('Hello world')
   })
 
   it('handles mixed Hangul + Latin in one line', async () => {
@@ -88,7 +88,7 @@ describe('lyricsRomanization (feature)', () => {
 
     await lyricsRomanization(lyrics, enabledRomanization())
 
-    const out = getRomanized(lyrics[0])
+    const out = getRomanized(lyrics[0]!)
     expect(out).toContain('Hello')
     expect(out.toLowerCase()).toMatch(/ann?yeong|annyeong/)
   })

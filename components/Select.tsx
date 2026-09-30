@@ -1,5 +1,5 @@
 import { Signal } from '@preact/signals'
-import { ChangeEvent, useId } from 'preact/compat'
+import { type ChangeEvent, useId } from 'preact/compat'
 
 export interface SelectProps<T extends string> {
   label: string

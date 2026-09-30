@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { handleTranslate, TranslateStorage } from './handle-translate'
+import { handleTranslate, type TranslateStorage } from './handle-translate'
 import { translationCacheKey } from '@/utils/translation-cache'
 
 describe('handleTranslate (background translate flow)', () => {

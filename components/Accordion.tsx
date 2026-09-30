@@ -1,4 +1,4 @@
-import { PropsWithChildren, useRef } from 'preact/compat'
+import { type PropsWithChildren, useRef } from 'preact/compat'
 
 interface AccordionProps extends PropsWithChildren {
   title: string

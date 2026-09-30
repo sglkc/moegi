@@ -6,7 +6,7 @@ import {
   LYRICS_CONTAINER as CONTAINER
 } from '@/utils/constants'
 import { safeCssColor, safeCssNumber, safeTextAlign } from '@/utils/css-safe'
-import { MoegiOptions } from '@/utils/options'
+import type { MoegiOptions } from '@/utils/options'
 
 export default function lyricsStyling(data: MoegiOptions): void {
   let style = document.querySelector<HTMLStyleElement>('#moegi-style')
